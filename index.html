@@ -1,27 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="utf-8"><title>ETH/UZH Nutrition 2026-08-05</title>
+<head>
+<meta charset="utf-8">
+<title>ETH/UZH Nutrition 2026-08-05</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<style>body{font-family:monospace;white-space:pre-wrap;padding:1em;max-width:900px;margin:0 auto;line-height:1.4}</style>
+<style>
+*,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}
+:root{{
+  --bg:#f5f1ed;--card:#ffffff;--text:#1d1d1f;--sub:#6e6e73;--radius:20px;--radius-sm:12px;
+  --eth:#e8f0fe;--eth-accent:#4a7dce;--uzh:#fce4ec;--uzh-accent:#d4687c;
+  --kcal:#f97316;--protein:#3b82f6;--fat:#eab308;--carbs:#22c55e;--sugar:#ec4899;
+  --salt:#94a3b8;--fiber:#84cc16;--weight:#8b5cf6;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 6px rgba(0,0,0,.04),0 2px 4px rgba(0,0,0,.03);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.05),0 4px 6px rgba(0,0,0,.03);
+}}
+@media(prefers-color-scheme:dark){{
+  :root{{--bg:#1c1c1e;--card:#2c2c2e;--text:#f5f5f7;--sub:#98989d;
+    --eth:#1e2a3a;--uzh:#3a1e2a;--shadow:0 1px 3px rgba(0,0,0,.3);--shadow-md:0 4px 6px rgba(0,0,0,.2);--shadow-lg:0 10px 15px rgba(0,0,0,.25);
+  }}
+}}
+body{{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;min-height:100vh}}
+.container{{max-width:960px;margin:0 auto;padding:clamp(16px,4vw,40px)}}
+
+/* Header */
+.header{{text-align:center;padding:clamp(24px,5vw,48px) 0 clamp(16px,3vw,32px);position:relative}}
+.header::before{{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,182,193,.15),rgba(135,206,250,.15),rgba(255,255,255,0));border-radius:0 0 48px 48px;z-index:-1}}
+.header h1{{font-size:clamp(24px,5vw,36px);font-weight:700;letter-spacing:-0.5px;background:linear-gradient(135deg,var(--text) 0%,#888 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}}
+.header .date{{font-size:14px;color:var(--sub);margin-top:4px;font-weight:500}}
+.header .stats{{font-size:13px;color:var(--sub);margin-top:8px}}
+
+/* Mensa section */
+.mensa-section{{margin-bottom:clamp(16px,3vw,28px)}}
+.mensa-header{{display:flex;align-items:center;gap:10px;padding:14px 20px;border-radius:var(--radius-sm);font-weight:600;font-size:15px;margin-bottom:12px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}}
+.mensa-header.eth{{background:var(--eth);color:var(--eth-accent)}}
+.mensa-header.uzh{{background:var(--uzh);color:var(--uzh-accent)}}
+.mensa-header .icon{{font-size:18px}}
+.mensa-header .count{{margin-left:auto;font-size:12px;opacity:.7}}
+
+/* Dish cards */
+.dish-grid{{display:flex;flex-direction:column;gap:10px}}
+.dish-card{{background:var(--card);border-radius:var(--radius-sm);padding:clamp(14px,3vw,18px) clamp(14px,3vw,20px);box-shadow:var(--shadow);transition:box-shadow .2s,transform .2s;border:1px solid rgba(0,0,0,.04);position:relative;overflow:hidden}}
+.dish-card:hover{{box-shadow:var(--shadow-lg);transform:translateY(-1px)}}
+.dish-card .card-line{{position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px 0 0 4px}}
+.dish-card .card-line.meat{{background:var(--kcal)}}
+.dish-card .card-line.veggie{{background:var(--carbs)}}
+.dish-card .card-line.vegan{{background:var(--fiber)}}
+.dish-card .card-line.fish{{background:var(--protein)}}
+
+.dish-top{{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}}
+.dish-line{{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--sub);white-space:nowrap;padding-top:3px}}
+.dish-name{{font-size:clamp(15px,2.5vw,17px);font-weight:600;line-height:1.3;flex:1}}
+.dish-desc{{font-size:13px;color:var(--sub);margin-bottom:12px;line-height:1.5;padding-left:calc(clamp(14px,3vw,18px) + 4px)}}
+
+/* Nutrition pills */
+.nutrition-row{{display:flex;flex-wrap:wrap;gap:6px;padding-left:calc(clamp(14px,3vw,18px) + 4px)}}
+.nutrition-pill{{display:inline-flex;align-items:center;gap:3px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;white-space:nowrap}}
+.nutrition-pill .val{{font-weight:700}}
+.nutrition-pill .unit{{font-size:10px;opacity:.7}}
+.nutrition-pill.kcal-tag{{background:rgba(249,115,22,.1);color:var(--kcal)}}
+.nutrition-pill.protein-tag{{background:rgba(59,130,246,.1);color:var(--protein)}}
+.nutrition-pill.fat-tag{{background:rgba(234,179,8,.1);color:var(--fat)}}
+.nutrition-pill.carbs-tag{{background:rgba(34,197,94,.1);color:var(--carbs)}}
+.nutrition-pill.sugar-tag{{background:rgba(236,72,153,.1);color:var(--sugar)}}
+.nutrition-pill.salt-tag{{background:rgba(148,163,184,.15);color:var(--salt)}}
+.nutrition-pill.fiber-tag{{background:rgba(132,204,22,.1);color:var(--fiber)}}
+.nutrition-pill.weight-tag{{background:rgba(139,92,246,.1);color:var(--weight)}}
+
+/* No meals notice */
+.no-meals{{padding:20px;text-align:center;color:var(--sub);font-size:14px;font-style:italic}}
+
+/* Raw text toggle */
+.raw-toggle-btn{{display:block;margin:clamp(20px,4vw,32px) auto 0;padding:10px 24px;background:var(--card);border:1px solid rgba(0,0,0,.08);border-radius:24px;font-size:13px;font-weight:500;color:var(--sub);cursor:pointer;transition:all .2s;box-shadow:var(--shadow);font-family:inherit}}
+.raw-toggle-btn:hover{{color:var(--text);box-shadow:var(--shadow-md)}}
+.raw-content{{margin-top:16px;background:var(--card);border-radius:var(--radius-sm);padding:clamp(16px,3vw,24px);box-shadow:var(--shadow);font-family:"SF Mono",SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;font-size:12px;line-height:1.6;white-space:pre-wrap;max-height:0;overflow:hidden;opacity:0;transition:max-height .4s ease,opacity .3s ease,padding .3s ease;border:1px solid rgba(0,0,0,.04)}}
+.raw-content.open{{max-height:5000px;opacity:1;padding:clamp(16px,3vw,24px)}}
+
+/* Footer */
+.footer{{text-align:center;padding:32px 0;color:var(--sub);font-size:11px;opacity:.6}}
+
+/* Loading / error */
+.loading{{text-align:center;padding:60px 20px;color:var(--sub)}}
+.error{{text-align:center;padding:40px 20px;color:var(--kcal);font-weight:500}}
+
+/* Sparkle overlay (subtle 二次元) */
+.sparkle{{position:fixed;pointer-events:none;z-index:-1;opacity:.15}}
+.sparkle.top-right{{top:10%;right:5%;width:200px;height:200px;background:radial-gradient(circle,rgba(255,182,193,.4),transparent 70%)}}
+.sparkle.bottom-left{{bottom:5%;left:3%;width:160px;height:160px;background:radial-gradient(circle,rgba(135,206,250,.3),transparent 70%)}}
+
+/* Media queries */
+@media(max-width:600px){{
+  .dish-card{{padding:12px 14px}}
+  .nutrition-pill{{padding:3px 8px;font-size:11px}}
+  .dish-line{{font-size:10px}}
+}}
+</style>
 </head>
-<body>ETH/UZH Mensa Menus — 2026-08-05
-============================================================
+<body>
+<div class="sparkle top-right"></div>
+<div class="sparkle bottom-left"></div>
+<div class="container">
+  <header class="header">
+    <h1>Today's Menu</h1>
+    <div class="date">2026-08-05</div>
+    <div class="stats" id="dish-count">Loading...</div>
+  </header>
+  <div id="content"><div class="loading">Loading menu data...</div></div>
+  <button class="raw-toggle-btn" id="raw-toggle" onclick="toggleRaw()">Show Raw Data</button>
+  <div class="raw-content" id="raw-content"></div>
+  <div class="footer">Updated daily at 06:00 Zurich time &middot; <a href="https://github.com/LukasAxelsen/eth-uzh-nutrition" style="color:inherit">GitHub</a></div>
+</div>
+<script>
+async function init(){{
+  try{{
+    const resp = await fetch('index.txt');
+    if(!resp.ok) throw new Error('HTTP '+resp.status);
+    const text = await resp.text();
+    document.getElementById('raw-content').textContent = text;
+    parseAndRender(text);
+  }}catch(e){{
+    document.getElementById('content').innerHTML = '<div class="error">Failed to load menu data</div>';
+    console.error(e);
+  }}
+}}
 
-ETH Mensa Clausiusbar: no meals today (closed or on break)
-ETH Mensa Archimedes/Mittag: The Gardener — Paneer Tikka Masala: Curry Sauce | Indischer Frischkäse | Asia Gemüse | Zitronenreis | Ingwerraita | kcal=554, protein=5.6g, fat=5.1g, saturated=2.8g, carbs=16g, sugar=1.2g, salt=0.68g
-ETH Mensa Archimedes/Mittag: The Chef — Tortellini 5 Pi: Rind | Tomaten | Rahm | Peterli | Reibkäse | Tagessalat | kcal=742, protein=6.5g, fat=6.9g, saturated=1.7g, carbs=21g, sugar=1.7g, salt=1.19g
-ETH Mensa Archimedes/Mittag: The Expert — Randenfalafel: Brottasche | Kabis | Rüebli | Tzaziki | Tabouleh | kcal=829, protein=6.4g, fat=5.1g, saturated=0.7g, carbs=32g, sugar=1.6g, salt=1.33g
-ETH Mensa Polyterrasse/Mittag: STREET — Cheese Bacon Burger: Rindsburger / Vegi-Burger | BBQ-Sauce | Sesam Bun | Röstzwiebeln | Cheddar | Speck | Farmer Pommes | kcal=834, protein=8.3g, fat=9.2g, saturated=2.8g, carbs=20g, sugar=3.4g, salt=1.43g
-ETH Mensa Polyterrasse/Mittag: VEGAN — Penne al Arrabiatta: Pikante Tomatensauce | Peperonistreifen | Veganer Reibkäse | Saisonsalat | kcal=546, protein=3.8g, fat=3.1g, saturated=0.5g, carbs=21g, sugar=2.5g, salt=0.45g
-ETH Mensa Polyterrasse/Mittag: GARDEN — Falafel: Marokkanischer Linseneintopf | Bulgur | Sultaninen | Mandeln | kcal=630, protein=5.4g, fat=3.3g, saturated=0.4g, carbs=23g, sugar=3.2g, salt=0.70g
-ETH Mensa Polyterrasse/Mittag: HOME — Poulet Sweet & Sour: Poulet | Süsssauer-Sauce | Ananas | Peperoni | Basmatireis | Mungsprossen | Edamame | kcal=480, protein=5.3g, fat=1.9g, saturated=0.1g, carbs=19g, sugar=2.3g, salt=0.90g
-ETH Mensa Polyterrasse/Abend: STREET ABEND — Pasta Plausch: Teigwaren | Sauce alla carbonara oder Sauce Bolognese |
-Reibkäse | Blattsalat | kcal=564, protein=5.5g, fat=4.8g, saturated=1.6g, carbs=16g, sugar=1.5g, salt=0.48g
-ETH Mensa Polyterrasse/Abend: GARDEN ABEND — Minced Balls: Hackbällchen | Champignonssauce | Rösti | Blumenkohl | Karotten | Bohnen | kcal=380, protein=4.0g, fat=3.8g, saturated=0.7g, carbs=9.1g, sugar=1.3g, salt=0.69g
-ETH Mensa Polyterrasse/Abend: HOME ABEND — Rinds Tätschli: Champignonsauce | Rösti | Blumenkohl | Karotten | Bohnen | kcal=436, protein=5.2g, fat=5.1g, saturated=1.8g, carbs=8.5g, sugar=1.1g, salt=0.92g
+function parseAndRender(text){{
+  const lines = text.split('
+');
+  const mensas = {};
+  let currentMensa = null;
 
-UZH Obere Mensa/Mittag: farm — LINSEN DAAL, Paratha Brot, Ofengemüse | kcal=598, protein=21g, fat=22g, carbs=70g, sugar=17g, salt=3g, fibers=12g, weight=545g
-UZH Obere Mensa/Mittag: butcher — PULLED PORK BURGER, BBQ Sauce, Cole Slaw, Röstzwiebeln, Pommes Frites, Menüsalat / Apfelmus | kcal=835, protein=21g, fat=23g, carbs=127g, sugar=34g, salt=4g, fibers=11g, weight=625g
-UZH Obere Mensa/Mittag: voll anders — PANIERTES SCHNITZEL, Ketchup Mayo Zitrone, Pommes frites, Menüsalat / Apfelmus | kcal=929, protein=27g, fat=52g, carbs=82g, sugar=20g, salt=4g, fibers=5g, weight=420g
+  for(const line of lines){
+    // Match: "Mensa Name/MealTime: Line — Dish: Desc | kcal=X, protein=Xg, ..."
+    const m = line.match(/^(.+?)\/(.+?):\s+(.+?)\s+—\s+(.+?):\s+(.+?)\s*\|\s+(.+)$/);
+    if(m){{
+      const [,mensaName,mealTime,lineName,dish,desc,nutrStr] = m;
+      const key = mensaName.trim();
+      if(!mensas[key]) mensas[key] = {{name:key,dishes:[],isETH:key.startsWith('ETH')}};
+      
+      // Parse nutrition
+      const nutrition = {{}};
+      for(const part of nutrStr.split(', ')){{
+        const eq = part.indexOf('=');
+        if(eq > 0){{
+          const k = part.substring(0,eq).trim();
+          const v = part.substring(eq+1).trim();
+          nutrition[k] = v;
+        }}
+      }}
+
+      mensas[key].dishes.push({{
+        mealTime:mealTime.trim(),line:lineName.trim(),dish:dish.trim(),
+        desc:desc.trim(),nutrition,isETH:key.startsWith('ETH')
+      }});
+    }}else if(line.includes(': no meals today')||line.includes(': no dishes for today')){{
+      const colonIdx = line.indexOf(':');
+      const name = line.substring(0,colonIdx).trim();
+      if(!mensas[name]) mensas[name] = {{name,dishes:[],isETH:name.startsWith('ETH'),closed:true}};
+    }}
+  }}
+
+  const totalDishes = Object.values(mensas).reduce((s,m)=>s+(m.closed?0:m.dishes.length),0);
+  document.getElementById('dish-count').textContent = totalDishes+' dishes across '+Object.keys(mensas).length+' mensas';
+
+  if(Object.keys(mensas).length===0){{
+    document.getElementById('content').innerHTML = '<div class="no-meals">No menu data available for today</div>';
+    return;
+  }}
+
+  let html = '';
+  for(const [name,mensa] of Object.entries(mensas)){{
+    const isETH = mensa.isETH;
+    const icon = isETH ? '' : '';
+    html += '<section class="mensa-section">';
+    html += '<div class="mensa-header '+(isETH?'eth':'uzh')+'">';
+    html += '<span class="icon">'+icon+'</span>'+name;
+    if(!mensa.closed) html += '<span class="count">'+mensa.dishes.length+' dishes</span>';
+    html += '</div>';
+
+    if(mensa.closed){{
+      html += '<div class="no-meals">Closed today</div>';
+    }}else{{
+      html += '<div class="dish-grid">';
+      for(const dish of mensa.dishes){{
+        // Determine card line color
+        const dn = dish.dish.toLowerCase();
+        let cls = 'veggie';
+        if(/fleisch|poulet|huhn|rind|schwein|burger|wurst|bacon|speck|pulled pork|lomo|pollo|truten/.test(dn)) cls = 'meat';
+        else if(/vegan/.test(dn)) cls = 'vegan';
+        else if(/fisch|crevette|fish|shrimp/.test(dn)) cls = 'fish';
+
+        html += '<div class="dish-card">';
+        html += '<div class="card-line '+cls+'"></div>';
+        html += '<div class="dish-top"><span class="dish-line">'+dish.line+' &middot; '+dish.mealTime+'</span>';
+        html += '<span class="dish-name">'+dish.dish+'</span></div>';
+        html += '<div class="dish-desc">'+dish.desc+'</div>';
+        html += '<div class="nutrition-row">';
+
+        const nutrOrder = ['kcal','protein','fat','saturated','carbs','sugar','salt','fibers','weight'];
+        const nutrTags = {{kcal:'kcal-tag',protein:'protein-tag',fat:'fat-tag',saturated:'fat-tag',
+          carbs:'carbs-tag',sugar:'sugar-tag',salt:'salt-tag',fibers:'fiber-tag',weight:'weight-tag'}};
+        for(const key of nutrOrder){{
+          const val = dish.nutrition[key];
+          if(val){{
+            const tagCls = nutrTags[key] || '';
+            const num = val.replace(/[^0-9.]/g,'');
+            const unit = val.replace(/[0-9.]/g,'');
+            html += '<span class="nutrition-pill '+tagCls+'"><span class="val">'+num+'</span><span class="unit">'+unit+'</span></span>';
+          }}
+        }}
+        html += '</div></div>';
+      }}
+      html += '</div>';
+    }}
+    html += '</section>';
+  }}
+  document.getElementById('content').innerHTML = html;
+}}
+
+function toggleRaw(){{
+  const raw = document.getElementById('raw-content');
+  const btn = document.getElementById('raw-toggle');
+  const isOpen = raw.classList.toggle('open');
+  btn.textContent = isOpen ? 'Hide Raw Data' : 'Show Raw Data';
+}}
+
+init();
+</script>
 </body>
 </html>

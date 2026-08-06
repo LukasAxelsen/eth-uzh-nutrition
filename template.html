@@ -104,7 +104,7 @@ function parseText(text){
   const mensas = {};
 
   for(const line of lines){
-    const m = line.match(/^(.+?)\/(.+?):\s+(.+?)\s+—\s+(.+?):\s+(.+?)\s*\|\s+(.+)$/);
+    const m = line.match(/^(.+?)\/(.+?):\s+(.+?)\s+—\s+(.+?)(?::\s+(.*?))?\s*\|\s+kcal=(.+)$/);
     if(m){
       const [,mensaName,mealTime,lineName,dish,desc,nutrStr] = m;
       const key = mensaName.trim();
@@ -118,7 +118,7 @@ function parseText(text){
 
       mensas[key].dishes.push({
         mealTime:mealTime.trim(),line:lineName.trim(),dish:dish.trim(),
-        desc:desc.trim(),nutrition
+        desc:(desc||'').trim(),nutrition
       });
     }else if(line.includes(': no meals today')||line.includes(': no dishes for today')){
       const name = line.substring(0,line.indexOf(':')).trim();

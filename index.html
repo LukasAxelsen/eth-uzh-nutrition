@@ -6,20 +6,33 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--text:#1d1d1f;--sub:#86868b;--body:#515154;
+  --border:#d2d2d7;--raw-bg:#f5f5f7;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#000000;--text:#f5f5f7;--sub:#98989d;--body:#d2d2d7;
+    --border:#424245;--raw-bg:#1d1d1f;
+  }
+}
 body{
-  background-color:#ffffff;color:#1d1d1f;
+  background-color:var(--bg);color:var(--text);
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Icons","Helvetica Neue",Helvetica,Arial,sans-serif;
   line-height:1.5;min-height:100vh;
+  transition:background-color .3s ease,color .3s ease;
 }
 ::selection{background:rgba(0,0,0,.1)}
+@media(prefers-color-scheme:dark){::selection{background:rgba(255,255,255,.15)}}
 .app{min-height:100vh;padding-bottom:64px}
 
 /* Header */
 .header{padding-top:96px;padding-bottom:64px;padding-left:24px;padding-right:24px;display:flex;flex-direction:column;align-items:center;text-align:center}
-.header h1{font-size:40px;font-weight:600;letter-spacing:-0.02em;line-height:1.1;color:#1d1d1f}
-.header p{margin-top:12px;font-size:21px;color:#86868b;font-weight:500}
+.header h1{font-size:40px;font-weight:600;letter-spacing:-0.02em;line-height:1.1;color:var(--text)}
+.header p{margin-top:12px;font-size:21px;color:var(--sub);font-weight:500}
 @media(min-width:768px){.header h1{font-size:56px}}
+@media(max-width:600px){.header{padding-top:64px;padding-bottom:40px}.header h1{font-size:32px}.header p{font-size:17px}}
 
 /* Main */
 .main{max-width:980px;margin:0 auto;padding:0 24px}
@@ -27,37 +40,60 @@ body{
 
 /* Mensa section */
 .mensa-section{margin-bottom:80px}
-.mensa-title{font-size:32px;font-weight:600;letter-spacing:-0.02em;color:#1d1d1f;margin-bottom:24px}
+.mensa-title{font-size:32px;font-weight:600;letter-spacing:-0.02em;color:var(--text);margin-bottom:24px}
 @media(min-width:768px){.mensa-title{font-size:40px}}
+@media(max-width:600px){.mensa-section{margin-bottom:48px}.mensa-title{font-size:26px;margin-bottom:16px}}
 
-.no-meals{padding:48px 0;border-top:1px solid #d2d2d7;color:#86868b;font-size:17px}
+.no-meals{padding:48px 0;border-top:1px solid var(--border);color:var(--sub);font-size:17px}
+@media(max-width:600px){.no-meals{font-size:15px;padding:32px 0}}
 
 /* Dish list */
-.dish-list{border-top:1px solid #d2d2d7}
-.dish-card{padding:40px 0;border-bottom:1px solid #d2d2d7}
+.dish-list{border-top:1px solid var(--border)}
+.dish-card{padding:40px 0;border-bottom:1px solid var(--border)}
 .dish-card:last-child{border-bottom:none}
 .dish-inner{display:flex;flex-direction:column;gap:24px}
 @media(min-width:768px){.dish-inner{flex-direction:row;gap:48px}}
+@media(max-width:600px){.dish-card{padding:28px 0}}
 .dish-main{flex:1}
-.dish-label{font-size:12px;font-weight:600;color:#86868b;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px}
-.dish-name{font-size:24px;font-weight:600;color:#1d1d1f;line-height:1.2;margin-bottom:12px;letter-spacing:-0.01em}
+.dish-label{font-size:12px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px}
+.dish-name{font-size:24px;font-weight:600;color:var(--text);line-height:1.2;margin-bottom:12px;letter-spacing:-0.01em}
 @media(min-width:768px){.dish-name{font-size:28px}}
-.dish-desc{font-size:17px;color:#515154;line-height:1.6;max-width:44rem}
+.dish-desc{font-size:17px;color:var(--body);line-height:1.6;max-width:44rem}
+@media(max-width:600px){.dish-desc{font-size:15px}}
 
 /* Nutrition table */
 .nutrition-col{width:100%;flex-shrink:0}
 @media(min-width:768px){.nutrition-col{width:280px}}
-.nutrition-table{border-top:1px solid #d2d2d7;margin-top:24px}
+.nutrition-table{border-top:1px solid var(--border);margin-top:24px}
 @media(min-width:768px){.nutrition-table{margin-top:0}}
-.nutrition-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #d2d2d7}
-.nutrition-label{font-size:14px;color:#86868b}
-.nutrition-value{font-size:14px;font-weight:500;color:#1d1d1f}
+.nutrition-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
+.nutrition-label{font-size:14px;color:var(--sub)}
+.nutrition-value{font-size:14px;font-weight:500;color:var(--text)}
+
+/* Raw data toggle */
+.raw-section{max-width:980px;margin:0 auto;padding:0 24px 40px}
+@media(min-width:768px){.raw-section{padding:0 32px 48px}}
+.raw-toggle-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.raw-btn{padding:12px 28px;background:var(--bg);border:1px solid var(--border);border-radius:24px;font-size:14px;font-weight:500;color:var(--text);cursor:pointer;transition:all .2s;font-family:inherit;-webkit-tap-highlight-color:transparent}
+.raw-btn:hover{background:var(--raw-bg)}
+.raw-btn:active{transform:scale(.97)}
+.raw-panel{margin-top:20px;background:var(--raw-bg);border-radius:16px;padding:20px;display:none}
+.raw-panel.open{display:block}
+.raw-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.raw-title{font-size:13px;font-weight:600;color:var(--sub);letter-spacing:.05em;text-transform:uppercase}
+.copy-btn{padding:6px 16px;background:var(--bg);border:1px solid var(--border);border-radius:16px;font-size:12px;font-weight:500;color:var(--text);cursor:pointer;transition:all .2s;font-family:inherit}
+.copy-btn:hover{background:var(--bg);border-color:var(--text)}
+.copy-btn:active{transform:scale(.96)}
+.copy-btn.copied{color:#34c759;border-color:#34c759}
+.raw-text{font-family:"SF Mono",SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;font-size:12px;line-height:1.6;white-space:pre-wrap;word-break:break-word;color:var(--body);max-height:400px;overflow-y:auto}
+@media(max-width:600px){.raw-text{font-size:11px;max-height:300px}.raw-btn{width:100%;padding:14px}}
 
 /* Footer */
-.footer{text-align:center;padding:48px 0 32px;color:#86868b;font-size:12px;max-width:980px;margin:0 auto;border-top:1px solid #d2d2d7}
+.footer{text-align:center;padding:48px 0 32px;color:var(--sub);font-size:12px;max-width:980px;margin:0 auto;border-top:1px solid var(--border)}
+@media(max-width:600px){.footer{font-size:11px}}
 
 /* Loading / error */
-.loading{padding:80px 20px;text-align:center;color:#86868b}
+.loading{padding:80px 20px;text-align:center;color:var(--sub)}
 .error{padding:48px 20px;text-align:center;color:#d70015;font-weight:500}
 </style>
 </head>
@@ -72,11 +108,25 @@ body{
     <div class="loading">Loading menu data…</div>
   </main>
 
+  <div class="raw-section">
+    <div class="raw-toggle-row">
+      <button class="raw-btn" id="raw-toggle" onclick="toggleRaw()">Show Raw Data</button>
+    </div>
+    <div class="raw-panel" id="raw-panel">
+      <div class="raw-head">
+        <span class="raw-title">Raw Data</span>
+        <button class="copy-btn" id="copy-btn" onclick="copyRaw()">Copy</button>
+      </div>
+      <div class="raw-text" id="raw-text"></div>
+    </div>
+  </div>
+
   <footer class="footer">Updated daily at 06:00 Zurich time</footer>
 </div>
 
 <script>
 const DATE_STR = '2026-08-06';
+let RAW_TEXT = '';
 
 // ---- date formatting (matches React toLocaleDateString) ----
 function formatDate(iso){
@@ -90,9 +140,9 @@ async function init(){
   try{
     const resp = await fetch('index.txt');
     if(!resp.ok) throw new Error('HTTP '+resp.status);
-    const text = await resp.text();
-    const mensas = parseText(text);
-    render(mensas);
+    RAW_TEXT = await resp.text();
+    document.getElementById('raw-text').textContent = RAW_TEXT;
+    render(parseText(RAW_TEXT));
   }catch(e){
     document.getElementById('content').innerHTML = '<div class="error">Failed to load menu data</div>';
     console.error(e);
@@ -104,7 +154,7 @@ function parseText(text){
   const mensas = {};
 
   for(const line of lines){
-    const m = line.match(/^(.+?)\/(.+?):\s+(.+?)\s+—\s+(.+?):\s+(.+?)\s*\|\s+(.+)$/);
+    const m = line.match(/^(.+?)\/(.+?):\s+(.+?)\s+—\s+(.+?)(?::\s+(.*?))?\s*\|\s+kcal=(.+)$/);
     if(m){
       const [,mensaName,mealTime,lineName,dish,desc,nutrStr] = m;
       const key = mensaName.trim();
@@ -118,7 +168,7 @@ function parseText(text){
 
       mensas[key].dishes.push({
         mealTime:mealTime.trim(),line:lineName.trim(),dish:dish.trim(),
-        desc:desc.trim(),nutrition
+        desc:(desc||'').trim(),nutrition
       });
     }else if(line.includes(': no meals today')||line.includes(': no dishes for today')){
       const name = line.substring(0,line.indexOf(':')).trim();
@@ -168,7 +218,7 @@ function dishCardHTML(dish){
       '<div class="dish-main">' +
         '<div class="dish-label">'+dish.line+' &middot; '+dish.mealTime+'</div>' +
         '<h3 class="dish-name">'+dish.dish+'</h3>' +
-        '<p class="dish-desc">'+dish.desc+'</p>' +
+        (dish.desc ? '<p class="dish-desc">'+dish.desc+'</p>' : '') +
       '</div>' +
       '<div class="nutrition-col">'+nutritionTableHTML(dish.nutrition)+'</div>' +
     '</div>' +
@@ -194,6 +244,41 @@ function render(mensas){
   }).join('');
 
   document.getElementById('content').innerHTML = html;
+}
+
+// ---- raw toggle + copy ----
+function toggleRaw(){
+  const panel = document.getElementById('raw-panel');
+  const btn = document.getElementById('raw-toggle');
+  const isOpen = panel.classList.toggle('open');
+  btn.textContent = isOpen ? 'Hide Raw Data' : 'Show Raw Data';
+}
+
+function copyRaw(){
+  const btn = document.getElementById('copy-btn');
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(RAW_TEXT).then(()=>flashCopied(btn)).catch(()=>fallbackCopy(btn));
+  }else{
+    fallbackCopy(btn);
+  }
+}
+
+function fallbackCopy(btn){
+  const ta = document.createElement('textarea');
+  ta.value = RAW_TEXT;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try{ document.execCommand('copy'); flashCopied(btn); }catch(e){}
+  document.body.removeChild(ta);
+}
+
+function flashCopied(btn){
+  const orig = btn.textContent;
+  btn.textContent = 'Copied';
+  btn.classList.add('copied');
+  setTimeout(()=>{ btn.textContent = orig; btn.classList.remove('copied'); }, 1500);
 }
 
 init();

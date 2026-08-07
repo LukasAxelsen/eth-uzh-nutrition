@@ -1,2 +1,4 @@
-__pycache__/
 output/
+__pycache__/
+*.pyc
+.DS_Store

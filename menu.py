@@ -134,6 +134,105 @@ def _keep_number(value):
     return int(f) if f.is_integer() else f
 
 
+# --------------------------------------------------------------------------
+# Text normalization (name/desc formatting sync)
+#
+# Sources disagree wildly: UZH dishes are ALL-CAPS blobs ("HUMMUS BOWL,
+# Ofengemüse, Süsskartoffeln"), ETH sometimes stores names in caps too
+# (Flavour Kitchen, some Abend entries), separators vary (' | ', ', ', '/'),
+# and line names are lowercase slugs ('farm') or brand caps ('STREET').
+# These helpers normalize everything to the Polyterrasse-lunch style:
+#   line — Dish | Ingredient | Ingredient …
+# --------------------------------------------------------------------------
+
+# Words kept lowercase when title-casing ALL-CAPS names (de/en/fr/it).
+TITLE_CASE_STOPWORDS = {
+    "mit", "und", "of", "and", "the", "a", "an", "de", "la", "le", "les",
+    "en", "au", "aux", "du", "des", "in", "im", "auf", "aus", "für", "fuer",
+    "bei", "von", "zum", "zur", "am", "zu", "an", "da", "del", "di", "della",
+    "on", "at", "&",
+}
+
+# Category words that sometimes leak into UZH dish names ("FARM SHAKSHUKA").
+UZH_NAME_PREFIXES = ("FARM ", "BUTCHER ", "GARDEN ", "VEGAN ")
+
+
+def clean_text(s):
+    """Strip and collapse internal whitespace ('a  |  b' -> 'a | b')."""
+    return " ".join(str(s or "").split())
+
+
+def title_case(s):
+    """Title-case an ALL-CAPS name: 'HUMMUS BOWL' -> 'Hummus Bowl'."""
+    words = []
+    for w in s.split():
+        low = w.lower()
+        if low in TITLE_CASE_STOPWORDS:
+            words.append(low)
+        else:
+            words.append(w[0].upper() + w[1:].lower())
+    return " ".join(words)
+
+
+def clean_dish_name(name):
+    """Trim a dish name and de-CAPSIFY it when the source is all caps."""
+    name = clean_text(name)
+    if name.isupper():
+        name = title_case(name)
+    return name
+
+
+def title_slug(line):
+    """Line names: title-case lowercase slugs ('farm' -> 'Farm'); keep brand caps."""
+    line = clean_text(line)
+    if line.islower():
+        return title_case(line)
+    return line
+
+
+def normalize_desc(desc):
+    """Unify ingredient lists to ' | ' separators regardless of source style
+    (ETH pipes, UZH commas, Tannenbar slashes)."""
+    desc = clean_text(desc)
+    if not desc:
+        return ""
+    chunks = []
+    for part in re.split(r"[,/|]", desc):
+        part = part.strip()
+        if part:
+            chunks.append(part)
+    return " | ".join(chunks)
+
+
+def split_uzh_name(name):
+    """Split a UZH blob into (head, rest): 'HUMMUS BOWL, Ofengemüse, ...'
+    -> ('HUMMUS BOWL', 'Ofengemüse, ...'). No comma -> (name, '')."""
+    if "," in name:
+        head, rest = name.split(",", 1)
+        return head.strip(), rest.strip()
+    return name.strip(), ""
+
+
+def strip_uzh_prefix(head):
+    """Drop a category word that leaked into the name ('FARM SHAKSHUKA' -> 'SHAKSHUKA')."""
+    upper = head.upper()
+    for p in UZH_NAME_PREFIXES:
+        if upper.startswith(p) and len(upper) > len(p) + 1:
+            return head[len(p):].strip()
+    return head
+
+
+def build_uzh_dish(name, line) -> dict:
+    """One UZH dish with the name/desc split + normalized casing."""
+    head, rest = split_uzh_name(name)
+    head = strip_uzh_prefix(head)
+    return {
+        "line": title_slug(line),
+        "dish": clean_dish_name(head),
+        "desc": normalize_desc(rest),
+    }
+
+
 def _curl(args, timeout=30):
     """Run curl and return stdout text, or '' after attempts with backoff."""
     cmd = ["curl", "-s", "-A", USER_AGENT] + args
@@ -214,10 +313,18 @@ def fetch_eth():
         if slot is None:
             continue
 
+        # ETH occasionally packs "Main dish | Side" into meal-name — fold
+        # the side part into the desc so the dish name stays clean.
+        name_parts = [p for p in m["meal-name"].split("|")]
+        extra = " | ".join(p.strip() for p in name_parts[1:])
+        raw_desc = m.get("description", "")
+        if extra:
+            raw_desc = f"{extra} | {raw_desc}"
+
         dish = {
-            "line": m.get("line-name", ""),
-            "dish": m["meal-name"],
-            "desc": m.get("description", "").strip(),
+            "line": title_slug(m.get("line-name", "")),
+            "dish": clean_dish_name(name_parts[0]),
+            "desc": normalize_desc(raw_desc),
             "nutrition": {},
         }
         # ETH reports energy in kJ — convert to kcal. Missing/zero values
@@ -310,15 +417,12 @@ def uzh_dishes_from_list(today_offer):
         for item in offer.get("digitalMenuItems") or []:
             recipe = item.get("recipe") or {}
             title = (recipe.get("title") or {}).get("de") or ""
-            name = (title or item.get("displayName") or "").strip()
-            if not name:
+            name = title or item.get("displayName") or ""
+            if not clean_text(name):
                 continue
-            dishes.append({
-                "line": "",
-                "dish": name,
-                "desc": "",
-                "nutrition": {"p100": {}, "total": {}},
-            })
+            d = build_uzh_dish(name, "")
+            d["nutrition"] = {"p100": {}, "total": {}}
+            dishes.append(d)
     return dishes
 
 
@@ -357,14 +461,11 @@ def scrape_uzh_weekly(slug):
     dishes = []
     for item in items:
         dish_name = (item.get("dish") or {}).get("name", "")
-        if not dish_name:
+        if not clean_text(dish_name):
             continue
-        dishes.append({
-            "line": (item.get("category") or {}).get("name", ""),
-            "dish": dish_name,
-            "desc": "",
-            "nutrition": scrape_uzh_stats(item.get("detailUrl")),
-        })
+        d = build_uzh_dish(dish_name, (item.get("category") or {}).get("name", ""))
+        d["nutrition"] = scrape_uzh_stats(item.get("detailUrl"))
+        dishes.append(d)
     return dishes
 
 
@@ -406,19 +507,42 @@ def scrape_uzh_stats(detail_url):
 # Plain-text dump (raw data for AI consumption)
 # --------------------------------------------------------------------------
 
+def _fmt_num(v):
+    """Render a number the way JS String(n) does: whole floats lose the
+    trailing '.0' (18.0 -> '18', 0.58 -> '0.58'). Keeps index.txt byte-
+    identical with the frontend copy button (JSON round-trip drops .0)."""
+    if isinstance(v, int):
+        return str(v)
+    s = str(v)
+    return s.rstrip("0").rstrip(".") if "." in s else s
+
+
 def format_nutrition(nutr):
-    """One nutrition segment, e.g. 'kcal=152.0, protein=5.3g' ('' when empty)."""
+    """One nutrition segment, e.g. 'kcal=152, protein=5.3g' ('' when empty)."""
     parts = []
     for key in NUTRITION_KEYS:
         v = nutr.get(key)
         if v:
             unit = "" if key == "kcal" else "g"
-            parts.append(f"{key}={v}{unit}")
+            parts.append(f"{key}={_fmt_num(v)}{unit}")
     return ", ".join(parts)
 
 
+def dish_body(line, dish, desc):
+    """'line — dish | desc' with empty segments and line==dish duplicates dropped."""
+    line = clean_text(line)
+    dish = clean_text(dish)
+    if line and line.lower() != dish.lower():
+        head = f"{line} — {dish}"
+    else:
+        head = dish
+    if desc:
+        return f"{head} | {desc}"
+    return head
+
+
 def render_txt(mensas):
-    """One physical line per dish: NAME/SLOT: line — dish: desc | per100g: … | total: …"""
+    """One physical line per dish: NAME/SLOT: line — dish | desc | per100g: … | total: …"""
     lines = [f"ETH/UZH Mensa Menus — {TODAY}", "=" * 60, ""]
     for m in mensas:
         for slot in ("Lunch", "Dinner"):
@@ -433,7 +557,7 @@ def render_txt(mensas):
                 nutr_str = " | ".join(segs) if segs else "nutrition=N/A"
                 # Collapse embedded whitespace/newlines (ETH descriptions
                 # contain them) so index.txt stays one physical line per dish.
-                body = " ".join(f'{d["line"]} — {d["dish"]}: {d["desc"]}'.split())
+                body = " ".join(dish_body(d["line"], d["dish"], d["desc"]).split())
                 lines.append(f'{m["name"]}/{slot}: {body} | {nutr_str}')
     return "\n".join(lines) + "\n"
 

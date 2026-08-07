@@ -24,7 +24,9 @@
 - meal slots: "Lunch" | "Dinner"
 
 ## index.txt (backend produces, AI raw text)
-One line per dish: `NAME/SLOT: line — dish: desc | per100g: kcal=152.0, protein=5.3g, ... | total: ...`
+One line per dish: `NAME/SLOT: line — dish | desc | per100g: kcal=152.0, protein=5.3g, ... | total: ...`
+- `line` is dropped when empty or identical to `dish`; `desc` is a pipe-separated ingredient list (always " | ").
+- Names are title-cased when the source is ALL CAPS (UZH blobs, some ETH entries); UZH blobs are split at the first comma into `dish` (main dish) + `desc` (ingredients).
 
 ## DOM class contract (frontend generates, design styles)
 ```

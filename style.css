@@ -194,8 +194,11 @@ body.menu-open #menu-btn {
    will-change keeps the big DOM on a permanent compositor layer so the
    first frame of the slide doesn't stall while the layer is promoted
    (this is what made the return "stick" before). Desktop: the content
-   glides aside too (margin-left/width transition in the desktop query). */
-.app { transition: transform .3s cubic-bezier(.4, 0, .2, 1); }
+   glides aside too (margin-left/width transition in the desktop query).
+   width: 100% is declared EXPLICITLY: transitioning from auto to
+   calc(100% - 380px) cannot be interpolated (auto↔length snaps), which
+   was the desktop "flash". */
+.app { width: 100%; transition: transform .3s cubic-bezier(.4, 0, .2, 1); }
 @media (max-width: 767px) {
   #selector { width: 100%; }
   .app { will-change: transform; }
@@ -344,8 +347,13 @@ body.menu-open #menu-btn {
 }
 .group-add button:hover { background: var(--raw-bg); }
 
-/* 5. Content: sections & dishes */
-#content { max-width: var(--content-w); margin: 0 auto; padding: 8px 24px 80px; }
+/* 5. Content: sections & dishes.
+   max-width is a RELATIVE value (min(content, 100%)) so it follows the
+   .app container's animated width — no max-width: none switch needed on
+   drawer open. An absolute→none max-width change cannot be interpolated
+   (that was the desktop "flash": the content snapped to full width in
+   one frame, then the margin/width animation caught up). */
+#content { max-width: min(var(--content-w), 100%); margin: 0 auto; padding: 8px 24px 80px; }
 .mensa-section { padding: 40px 0 8px; }
 
 .mensa-title {
@@ -437,7 +445,7 @@ body.menu-open #menu-btn {
 }
 
 /* 6. Raw data section */
-.raw-section { max-width: var(--content-w); margin: 0 auto; padding: 0 24px 48px; }
+.raw-section { max-width: min(var(--content-w), 100%); margin: 0 auto; padding: 0 24px 48px; }
 
 #raw-toggle {
   display: block;
@@ -529,8 +537,6 @@ body.menu-open #menu-btn {
   /* Drawer open on desktop: the hamburger slides just right of the
      380px sidebar (12px + 380px) and stays visible/tappable. */
   body.menu-open #menu-btn { transform: translateX(392px); }
-  body.menu-open #content,
-  body.menu-open .raw-section { max-width: none; }
   .selector-mensas { max-height: 55vh; }
   #content { padding: 16px 32px 96px; }
   .mensa-section { padding: 48px 0 12px; }

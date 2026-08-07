@@ -136,21 +136,37 @@ input:focus-visible { outline: none; }
   transform: translateX(100%);
 }
 
-/* 4. Selector panel (#selector) */
+/* 4. Selector drawer (#selector) — fixed left drawer.
+   Mobile: slides in and pushes .app aside (push pattern).
+   Desktop: overlays the empty left margin (content stays put). */
 #selector {
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height .45s var(--ease);
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 200;
+  width: min(340px, 85vw);
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  transform: translateX(-100%);
+  visibility: hidden;                    /* no tab focus while closed */
+  transition: transform .35s var(--ease), visibility 0s linear .35s;
 }
-#selector.open { max-height: 88vh; }
+#selector.open {
+  transform: translateX(0);
+  visibility: visible;
+  transition: transform .35s var(--ease);
+}
+
+/* Mobile: pushing the app aside reveals the drawer. */
+.app { transition: transform .35s var(--ease); }
+body.menu-open .app { transform: translateX(min(340px, 85vw)); }
 
 .selector-columns {
   display: grid;
   grid-template-columns: 1fr;      /* stacks on mobile */
-  gap: 28px;
-  max-width: var(--content-w);
-  margin: 0 auto;
-  padding: 20px 24px 32px;
+  gap: 24px;
+  padding: 20px 22px 32px;
 }
 
 /* 4a. Mensa list (scrollable) */
@@ -190,7 +206,6 @@ input:focus-visible { outline: none; }
 }
 
 .mensa-label { font-size: 14px; color: var(--text); }
-.mensa-group { margin-left: auto; font-size: 11px; color: var(--sub); }
 
 /* 4b. Groups */
 .group-row {
@@ -201,6 +216,17 @@ input:focus-visible { outline: none; }
   font-size: 13px;
   font-weight: 600;
 }
+.group-name {                    /* looks like plain text, acts as apply button */
+  padding: 0;
+  font: inherit;
+  font-weight: inherit;
+  color: var(--text);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+.group-name:hover { text-decoration: underline; }
 .group-select-all {
   margin-left: auto;
   padding: 0;
@@ -421,7 +447,11 @@ input:focus-visible { outline: none; }
 /* 9. Responsive */
 @media (min-width: 768px) {          /* desktop layout */
   .header { padding: 72px 32px 48px; }
-  .selector-columns { grid-template-columns: 1fr 1fr; gap: 48px; padding: 24px 32px 36px; }
+  /* Wide screens: the drawer overlays the left margin; content stays put. */
+  body.menu-open .app { transform: none; }
+  #selector { width: 380px; }
+  .selector-columns { grid-template-columns: 1fr 1fr; gap: 32px; padding: 24px 28px 36px; }
+  .selector-mensas { max-height: 62vh; }
   #content { padding: 16px 32px 96px; }
   .mensa-section { padding: 48px 0 12px; }
   .dish { flex-direction: row; gap: 48px; padding: 44px 0; }

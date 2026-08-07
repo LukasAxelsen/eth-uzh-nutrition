@@ -279,9 +279,8 @@ function mensaRowHTML(m) {
   const sel = prefs.selected.has(m.id);
   return '<div class="mensa-row' + (sel ? ' selected' : '') + '" data-mensa="' + esc(m.id) + '"' +
     ' role="button" tabindex="0" aria-pressed="' + sel + '">' +
-    '<span class="mensa-check" aria-hidden="true">' + (sel ? '&bull;' : '') + '</span>' +
-    '<span class="mensa-name">' + esc(m.name) + '</span>' +
-    '<span class="mensa-group">' + esc(m.group) + '</span>' +
+    '<span class="mensa-check" aria-hidden="true"></span>' +
+    '<span class="mensa-label">' + esc(m.name) + '</span>' +
     '</div>';
 }
 
@@ -290,29 +289,27 @@ function renderMensaList() {
   container.innerHTML = data.mensas.map(mensaRowHTML).join('');
 }
 
-/** In-place update of every mensa row (preserves scroll position). */
+/** In-place update of every mensa row (preserves scroll position).
+    The filled dot is drawn by CSS (.mensa-check::after) — no text. */
 function refreshMensaRows() {
   document.querySelectorAll('.mensa-row').forEach((row) => {
     const sel = prefs.selected.has(row.dataset.mensa);
     row.classList.toggle('selected', sel);
     row.setAttribute('aria-pressed', String(sel));
-    row.querySelector('.mensa-check').textContent = sel ? '•' : '';
   });
 }
 
 /* ---------- selector: group rows (right column) ---------- */
 
 function groupRowHTML(g) {
-  const allSelected = g.members.length > 0 && g.members.every((id) => prefs.selected.has(id));
-  const selectAllLabel = allSelected ? 'Deselect all' : 'Select all';
-  const nameHTML = g.custom
-    ? '<button class="group-name" type="button" aria-label="Select group ' + esc(g.name) + '">' + esc(g.name) + '</button>'
-    : '<span class="group-name">' + esc(g.name) + '</span>';
+  // Every group name is a button; clicking it (or "Select all")
+  // APPLIES the group — the current selection is replaced by its members.
+  const nameHTML = '<button class="group-name" type="button" aria-label="Apply group ' + esc(g.name) + '">' + esc(g.name) + '</button>';
 
   return '<div class="group-row' + (g.custom ? ' custom' : '') + '" data-group="' + esc(g.name) + '">' +
     nameHTML +
     '<button class="group-select-all" type="button"' +
-    (g.members.length ? '' : ' disabled') + '>' + selectAllLabel + '</button>' +
+    (g.members.length ? '' : ' disabled') + '>Select all</button>' +
     '<span class="group-count">' + g.members.length + '</span>' +
     (g.custom ? '<button class="group-delete" type="button" aria-label="Delete group ' + esc(g.name) + '">&times;</button>' : '') +
     '</div>';
@@ -484,12 +481,32 @@ function bindEvents() {
 
   window.addEventListener('resize', positionThumb);
   window.addEventListener('load', positionThumb); // fonts/layout settle
+
+  // Esc closes the drawer (accessibility best practice).
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && document.body.classList.contains('menu-open')) {
+      closeSelector();
+    }
+  });
 }
 
-/** Hamburger: slide the #selector panel in/out (.open class). */
+/** Hamburger: slide the #selector drawer in/out.
+    Mobile: the .app content is pushed aside (CSS body.menu-open .app).
+    Desktop: the drawer overlays the left margin. */
 function toggleSelector() {
+  const open = document.body.classList.toggle('menu-open');
+  setSelectorOpen(open);
+}
+
+function closeSelector() {
+  document.body.classList.remove('menu-open');
+  setSelectorOpen(false);
+}
+
+function setSelectorOpen(open) {
   const panel = document.getElementById('selector');
-  const open = panel.classList.toggle('open');
+  panel.classList.toggle('open', open);
+  panel.setAttribute('aria-hidden', String(!open));
   document.getElementById('menu-btn').setAttribute('aria-expanded', String(open));
 }
 
@@ -524,50 +541,38 @@ function toggleMensa(id) {
   renderGroupList();
   renderContent();
   updateRawText();
+  // Mobile push-drawer pattern: close after picking a mensa.
+  if (window.matchMedia('(max-width: 767px)').matches) closeSelector();
 }
 
 function onGroupsClick(e) {
   const row = e.target.closest('.group-row');
   if (!row) return;
 
-  if (e.target.closest('.group-select-all')) {
-    setGroupSelection(row);
-    return;
-  }
   if (e.target.closest('.group-delete')) {
     deleteCustomGroup(row.dataset.group);
     return;
   }
-  // Only custom groups select on name click (default names are spans).
-  if (e.target.closest('.group-name') && row.classList.contains('custom')) {
-    selectCustomGroup(row.dataset.group);
+  // Clicking the group name OR "Select all" applies the group:
+  // the selection is replaced by that group's members.
+  if (e.target.closest('.group-name') || e.target.closest('.group-select-all')) {
+    applyGroup(row.dataset.group);
   }
 }
 
-/** Select all / deselect all mensas in the group (toggle by current state). */
-function setGroupSelection(row) {
-  const members = groupMembers(row.dataset.group);
+/** Apply a group (default or custom): REPLACE the current selection
+    with the group's members (not a union). */
+function applyGroup(name) {
+  const members = groupMembers(name);
   if (!members.length) return;
-  const allSelected = members.every((id) => prefs.selected.has(id));
-  members.forEach((id) => {
-    if (allSelected) prefs.selected.delete(id);
-    else prefs.selected.add(id);
-  });
+  prefs.selected = new Set(members);
   savePrefs();
   refreshMensaRows();
   renderGroupList();
   renderContent();
   updateRawText();
-}
-
-/** Clicking a custom group name selects exactly its members. */
-function selectCustomGroup(name) {
-  prefs.selected = new Set(groupMembers(name));
-  savePrefs();
-  refreshMensaRows();
-  renderGroupList();
-  renderContent();
-  updateRawText();
+  // Mobile push-drawer pattern: close after applying a group.
+  if (window.matchMedia('(max-width: 767px)').matches) closeSelector();
 }
 
 function deleteCustomGroup(name) {

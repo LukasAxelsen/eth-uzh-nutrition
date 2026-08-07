@@ -29,7 +29,7 @@ const DATE_STR = 'DATE_PLACEHOLDER';
 const STORAGE_KEY = 'eth-uzh-nutrition-prefs';
 
 // Default groups, in display order (custom groups are appended after).
-const DEFAULT_GROUPS = ['Central', 'Medizin', 'Hoengg', 'Irchel', 'Oerlikon', 'City', 'Other'];
+const DEFAULT_GROUPS = ['Central', 'Hoengg', 'Irchel'];
 
 // Fixed nutrition keys, in display order. kcal is unitless, everything
 // else is grams; weight only ever appears in "total".

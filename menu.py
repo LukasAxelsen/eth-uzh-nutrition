@@ -42,11 +42,11 @@ ETH_FACILITIES = {
     5: ("Dozentenfoyer", "Central"),
     6: ("Einstein & Zweistein", "Central"),
     7: ("food&lab", "Central"),
-    8: ("Archimedes", "Medizin"),
+    8: ("Archimedes", "Central"),
     9: ("Mensa Polyterrasse", "Central"),
     10: ("Polysnack", "Central"),
     11: ("Tannenbar", "Central"),
-    12: ("Eureka Take Away", "Medizin"),
+    12: ("Eureka Take Away", "Central"),
     13: ("Zwei Grad Bistro", "Central"),
     14: ("Alumni quattro Lounge", "Central"),
     15: ("Bellavista", "Hoengg"),
@@ -76,7 +76,7 @@ UZH_LOCATIONS = {
     "6c3a3659-a85b-4224-b340-a342396626b3": ("Oerlikon", {
         "uzh-binzmuehle": "Mensa Oerlikon",
     }),
-    "2f761b0c-5a03-43dc-8cdc-378df8536d01": ("City", {
+    "2f761b0c-5a03-43dc-8cdc-378df8536d01": ("Other", {
         "uzh-cityport": "Cityport Mensa",
     }),
     "0663eb48-5f4d-4ca0-bdd7-238257009003": ("Other", {

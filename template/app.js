@@ -461,6 +461,7 @@ function collapseBody(body) {
 
 function bindEvents() {
   document.getElementById('menu-btn').addEventListener('click', toggleSelector);
+  document.getElementById('drawer-close').addEventListener('click', closeSelector);
   document.querySelector('.segmented').addEventListener('click', onSegmentedClick);
 
   const mensaList = document.querySelector('.selector-mensas');
@@ -546,8 +547,8 @@ function toggleMensa(id) {
   renderGroupList();
   renderContent();
   updateRawText();
-  // Mobile push-drawer pattern: close after picking a mensa.
-  if (window.matchMedia('(max-width: 767px)').matches) closeSelector();
+  // NOTE: no auto-close — the drawer stays usable for multi-select;
+  // the user closes it via the hamburger in the drawer header.
 }
 
 function onGroupsClick(e) {
@@ -575,8 +576,8 @@ function applyGroup(name) {
   renderGroupList();
   renderContent();
   updateRawText();
-  // Mobile push-drawer pattern: close after applying a group.
-  if (window.matchMedia('(max-width: 767px)').matches) closeSelector();
+  // NOTE: no auto-close (same as toggleMensa) — drawer stays usable
+  // until the user closes it via the drawer-header hamburger.
 }
 
 function deleteCustomGroup(name) {

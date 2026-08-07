@@ -158,6 +158,29 @@ input:focus-visible { outline: none; }
   transition: transform .35s var(--ease);
 }
 
+/* Drawer header: hamburger to close the drawer. Hidden on desktop where
+   the main hamburger stays visible (the app content is not moved away). */
+.drawer-head { display: none; }
+.drawer-close {
+  position: relative;
+  width: 40px; height: 40px;
+  padding: 0;
+  background: linear-gradient(var(--text), var(--text)) center / 18px 1px no-repeat;
+  border: none;
+  cursor: pointer;
+}
+.drawer-close::before,
+.drawer-close::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px; height: 1px;
+  background: var(--text);
+}
+.drawer-close::before { top: 11.5px; }
+.drawer-close::after  { bottom: 11.5px; }
+
 /* Mobile: the drawer becomes a FULL-SCREEN picker — the app content
    slides completely off-screen (translateX 100%), leaving only the
    mensa/group selection visible. Picking a mensa or group closes it
@@ -167,6 +190,20 @@ input:focus-visible { outline: none; }
 @media (max-width: 767px) {
   #selector { width: 100%; will-change: transform; }
   body.menu-open .app { transform: translateX(100%); }
+  /* Drawer header visible on mobile: sticky hamburger to close. */
+  .drawer-head {
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 10px 14px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .drawer-close { width: 36px; height: 36px; }
+  .drawer-close::before { top: 9.5px; }
+  .drawer-close::after  { bottom: 9.5px; }
 }
 
 /* Scroll lock while the drawer is open (Bootstrap-offcanvas pattern).

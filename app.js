@@ -506,6 +506,8 @@ function closeSelector() {
   setSelectorOpen(false);
 }
 
+let unlockScrollTimer = null;
+
 function setSelectorOpen(open) {
   const panel = document.getElementById('selector');
   panel.classList.toggle('open', open);
@@ -514,7 +516,18 @@ function setSelectorOpen(open) {
   // Scroll lock while the drawer is open (Bootstrap-offcanvas pattern).
   // Prevents background scrolling that breaks position:fixed on iOS
   // (drawer would "jump" to the scroll position instead of the left edge).
-  document.documentElement.classList.toggle('scroll-locked', open);
+  // On close, the lock is removed ONLY after the slide-out finishes:
+  // removing it mid-animation forces a full layout reflow that janks the
+  // return transition (the "return sticks" bug).
+  const root = document.documentElement;
+  if (open) {
+    clearTimeout(unlockScrollTimer);
+    root.classList.add('scroll-locked');
+  } else {
+    clearTimeout(unlockScrollTimer);
+    // 320ms > 300ms transition + small margin; cleared on reopen.
+    unlockScrollTimer = setTimeout(() => root.classList.remove('scroll-locked'), 320);
+  }
 }
 
 function onSegmentedClick(e) {

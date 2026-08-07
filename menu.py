@@ -56,7 +56,11 @@ try:
                 v = m.get(nk, "")
                 if v and float(v) != 0:
                     unit = "g" if nl != "kcal" else ""
-                    nutr_parts.append(f"{nl}={v}{unit}")
+                    val = float(v)
+                    if nl == "kcal":
+                        # ETH API reports energy in kJ — convert to kcal
+                        val = round(val / 4.184, 1)
+                    nutr_parts.append(f"{nl}={val}{unit}")
             nutr_str = ", ".join(nutr_parts)
 
             if nutr_str:

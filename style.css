@@ -1,349 +1,455 @@
 /* ============================================================
-   ETH/UZH University Menus — Apple.com-style design
-   No cards, no dish separators, fixed 9-row nutrition tables
+   ETH/UZH University Menus — style.css
+   Apple.com / iOS design. Flat & minimal: NO cards, NO
+   box-shadows, NO container borders/background blocks.
+   White light / true-black dark via prefers-color-scheme.
+   DOM per CONTRACT.md.
    ============================================================ */
 
+/* 1. Design tokens */
 :root {
-  --bg: #ffffff;
-  --text: #1d1d1f;
-  --sub: #86868b;
-  --body: #515154;
-  --border: #d2d2d7;
-  --raw-bg: #f5f5f7;
+  --bg: #ffffff; --text: #1d1d1f; --sub: #86868b; --body: #515154;
+  --border: #d2d2d7; --raw-bg: #f5f5f7;
+  --thumb-bg: #1d1d1f; --thumb-text: #ffffff;  /* segmented pill + check dot */
+  --accent: #0071e3;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+          "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --content-w: 980px;
+  --ease: cubic-bezier(.4, 0, .2, 1);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #000000;
-    --text: #f5f5f7;
-    --sub: #98989d;
-    --body: #d2d2d7;
-    --border: #424245;
-    --raw-bg: #1d1d1f;
+    --bg: #000000; --text: #f5f5f7; --sub: #98989d; --body: #a1a1a6;
+    --border: #424245; --raw-bg: #1d1d1f;
+    --thumb-bg: #f5f5f7; --thumb-text: #1d1d1f;
+    --accent: #2997ff;
   }
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* 2. Reset & base */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   background-color: var(--bg);
   color: var(--text);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons",
-    "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font);
+  font-size: 16px;
   line-height: 1.5;
   min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
 }
 
-::selection {
-  background: rgba(0, 0, 0, 0.1);
-}
-@media (prefers-color-scheme: dark) {
-  ::selection {
-    background: rgba(255, 255, 255, 0.15);
-  }
-}
-
-.app {
-  min-height: 100vh;
-  padding-bottom: 64px;
+/* smooth cross-fade on dark-mode switch */
+body, .header, #selector, .segmented, .seg-option, .mensa-title,
+#raw-toggle, #raw-panel, .footer, .menu-btn, .menu-btn::before,
+.menu-btn::after, .mensa-check, .group-add input,
+.nutrition-table td, .nutrition-table th {
+  transition: background-color .3s ease, color .3s ease, border-color .3s ease;
 }
 
-/* ---------- Header ---------- */
+button { font-family: inherit; -webkit-tap-highlight-color: transparent; }
 
-.header {
-  padding: 96px 24px 64px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+input:focus-visible { outline: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
 }
 
-.header h1 {
-  font-size: 40px;
+/* 3. Header */
+.header { position: relative; padding: 56px 24px 40px; text-align: center; }
+
+#date-heading {
+  font-size: clamp(32px, 6vw, 56px);
   font-weight: 600;
   letter-spacing: -0.02em;
-  line-height: 1.1;
+  line-height: 1.05;
 }
 
-.header p {
-  margin-top: 12px;
-  font-size: 21px;
-  color: var(--sub);
+/* 3a. Hamburger: three 1px bars, 18px tall, ~40px tap target.
+   Pseudo-elements + gradient middle bar; no bg/border. */
+.menu-btn {
+  position: absolute;
+  top: 16px; left: 16px;
+  width: 40px; height: 40px;
+  padding: 0;
+  background: linear-gradient(var(--text), var(--text)) center / 18px 1px no-repeat;
+  border: none;
+  cursor: pointer;
+}
+.menu-btn::before,
+.menu-btn::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px; height: 1px;
+  background: var(--text);
+}
+.menu-btn::before { top: 11.5px; }
+.menu-btn::after  { bottom: 11.5px; }
+
+/* 3b. Segmented Lunch/Dinner switch (iOS style) */
+.segmented {
+  position: relative;
+  display: inline-flex;
+  margin-top: 24px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+.seg-thumb {
+  position: absolute;
+  top: 2px; bottom: 2px; left: 2px;
+  z-index: 1;
+  width: calc(50% - 2px);          /* half the track minus padding */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--thumb-bg);
+  color: var(--thumb-text);        /* active label lives on the thumb */
+  border-radius: 999px;
+  font-size: 13px;
   font-weight: 500;
+  transform: translateX(0%);       /* Lunch */
+  pointer-events: none;
+  transition: transform .3s var(--ease),
+              background-color .3s ease, color .3s ease;
+}
+.seg-option {
+  position: relative;
+  z-index: 0;
+  flex: 1 1 0;
+  min-width: 92px;
+  padding: 7px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--sub);               /* inactive */
+  background: none;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.seg-option:hover { color: var(--text); }
+
+/* Dinner: thumb slides right — covers common JS conventions */
+.segmented[data-meal="Dinner"] .seg-thumb,
+.segmented.dinner .seg-thumb,
+.segmented:has(.seg-option[data-meal="Dinner"].active) .seg-thumb {
+  transform: translateX(100%);
 }
 
-@media (min-width: 768px) {
-  .header h1 { font-size: 56px; }
+/* 4. Selector panel (#selector) */
+#selector {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height .45s var(--ease);
 }
-@media (max-width: 600px) {
-  .header { padding: 64px 20px 40px; }
-  .header h1 { font-size: 32px; }
-  .header p { font-size: 17px; }
-}
+#selector.open { max-height: 88vh; }
 
-/* ---------- Main ---------- */
-
-.main {
-  max-width: 980px;
+.selector-columns {
+  display: grid;
+  grid-template-columns: 1fr;      /* stacks on mobile */
+  gap: 28px;
+  max-width: var(--content-w);
   margin: 0 auto;
-  padding: 0 24px;
-}
-@media (min-width: 768px) {
-  .main { padding: 0 32px; }
+  padding: 20px 24px 32px;
 }
 
-.mensa-section {
-  margin-bottom: 80px;
+/* 4a. Mensa list (scrollable) */
+.selector-mensas {
+  max-height: 50vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 6px;
 }
+.mensa-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 4px;
+  border-radius: 8px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color .15s ease;
+}
+.mensa-row:hover { background: var(--raw-bg); }
+
+.mensa-check {
+  position: relative;
+  flex-shrink: 0;
+  width: 18px; height: 18px;
+  border: 1.5px solid #86868b;
+  border-radius: 50%;
+}
+.mensa-row.selected .mensa-check::after {  /* filled dot when selected */
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--thumb-bg);
+}
+
+.mensa-label { font-size: 14px; color: var(--text); }
+.mensa-group { margin-left: auto; font-size: 11px; color: var(--sub); }
+
+/* 4b. Groups */
+.group-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 7px 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+.group-select-all {
+  margin-left: auto;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--sub);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.group-select-all:hover { color: var(--text); text-decoration: underline; }
+.group-count { font-size: 11px; font-weight: 400; color: var(--sub); }
+.group-delete {                      /* (x) for custom groups */
+  padding: 0 2px;
+  font-size: 12px;
+  color: var(--sub);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.group-delete:hover { color: var(--text); }
+
+.group-add {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  padding-top: 6px;
+}
+.group-add input {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 0;
+  font-size: 12px;
+  color: var(--text);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);  /* hairline only — no box */
+}
+.group-add input::placeholder { color: var(--sub); }
+.group-add input:focus { border-bottom-color: var(--accent); }
+.group-add button {
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent);
+  background: none;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.group-add button:hover { background: var(--raw-bg); }
+
+/* 5. Content: sections & dishes */
+#content { max-width: var(--content-w); margin: 0 auto; padding: 8px 24px 80px; }
+.mensa-section { padding: 40px 0 8px; }
 
 .mensa-title {
-  font-size: 32px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: clamp(26px, 4vw, 40px);
   font-weight: 600;
   letter-spacing: -0.02em;
-  margin-bottom: 24px;
+  line-height: 1.15;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
-
-@media (min-width: 768px) {
-  .mensa-title { font-size: 40px; }
+.mensa-caret {
+  flex-shrink: 0;
+  width: 8px; height: 8px;
+  border-right: 1.5px solid var(--sub);
+  border-bottom: 1.5px solid var(--sub);
+  transform: rotate(45deg);         /* chevron down */
+  transition: transform .3s var(--ease);
 }
-@media (max-width: 600px) {
-  .mensa-section { margin-bottom: 48px; }
-  .mensa-title { font-size: 26px; margin-bottom: 16px; }
-}
+.mensa-section.collapsed .mensa-caret { transform: rotate(135deg); } /* +90° → right */
+.mensa-section.collapsed .dish,
+.mensa-section.collapsed .no-meals { display: none; }
+.no-meals { padding: 12px 0; font-size: 15px; color: var(--sub); }
 
-.no-meals {
-  padding: 32px 0;
-  color: var(--sub);
-  font-size: 17px;
-}
-
-/* ---------- Dish (no card, no separator) ---------- */
-
+/* Dishes: column mobile / text + nutrition desktop. NO borders between dishes. */
 .dish {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 40px 0;
+  padding: 32px 0;
 }
-@media (min-width: 768px) {
-  .dish {
-    flex-direction: row;
-    gap: 48px;
-    padding: 48px 0;
-  }
-}
-@media (max-width: 600px) {
-  .dish { padding: 32px 0; }
-}
-
-.dish-main {
-  flex: 1;
-}
-
+.dish-main { flex: 1; min-width: 0; }
 .dish-label {
+  margin-bottom: 8px;
   font-size: 12px;
   font-weight: 600;
-  color: var(--sub);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  margin-bottom: 8px;
+  color: var(--sub);
 }
-
 .dish-name {
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 1.2;
   margin-bottom: 8px;
+  font-size: clamp(24px, 3vw, 28px);
+  font-weight: 600;
   letter-spacing: -0.01em;
+  line-height: 1.2;
 }
-@media (min-width: 768px) {
-  .dish-name { font-size: 28px; }
-}
-
 .dish-desc {
+  max-width: 46rem;
   font-size: 15px;
-  color: var(--body);
   line-height: 1.55;
-  max-width: 44rem;
+  color: var(--body);
 }
-@media (min-width: 768px) {
-  .dish-desc { font-size: 16px; }
-}
+.nutrition-col { width: 100%; flex-shrink: 0; }
 
-/* ---------- Nutrition table (fixed 9 rows, 2 value columns) ---------- */
-
-.nutrition-col {
-  width: 100%;
-  flex-shrink: 0;
-}
-@media (min-width: 768px) {
-  .nutrition-col { width: 320px; }
-}
-
+/* Nutrition table: fixed layout, 9 rows, 34% / 33% / 33% */
 .nutrition-table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
 }
-
 .nutrition-table thead th {
+  padding: 0 0 8px;
   font-size: 11px;
   font-weight: 600;
-  color: var(--sub);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  text-align: right;
-  padding: 0 0 8px;
+  color: var(--sub);
+  text-align: right;                /* per 100g + Total */
 }
-.nutrition-table thead th:first-child {
-  text-align: left;
-}
-
+.nutrition-table thead th:first-child { text-align: left; }
+.nutrition-table th:first-child,
+.nutrition-table .n-label { width: 34%; }
+.nutrition-table th:not(:first-child),
+.nutrition-table .n-val { width: 33%; }
 .nutrition-table tbody td {
-  font-size: 13px;
   padding: 7px 0;
+  font-size: 13px;
   border-bottom: 1px solid var(--border);
 }
-.nutrition-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.nutrition-table .n-label {
-  color: var(--sub);
-  text-align: left;
-  width: 34%;
-}
+.nutrition-table tbody tr:last-child td { border-bottom: none; }
+.nutrition-table .n-label { color: var(--sub); text-align: left; }
 .nutrition-table .n-val {
   text-align: right;
-  color: var(--text);
   font-weight: 500;
-  width: 33%;
   font-variant-numeric: tabular-nums;
 }
 
-/* ---------- Raw data toggle ---------- */
+/* 6. Raw data section */
+.raw-section { max-width: var(--content-w); margin: 0 auto; padding: 0 24px 48px; }
 
-.raw-section {
-  max-width: 980px;
+#raw-toggle {
+  display: block;
   margin: 0 auto;
-  padding: 0 24px 40px;
-}
-@media (min-width: 768px) {
-  .raw-section { padding: 0 32px 48px; }
-}
-
-.raw-toggle-row {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.raw-btn {
-  padding: 12px 28px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 24px;
+  padding: 10px 26px;
   font-size: 14px;
   font-weight: 500;
   color: var(--text);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 24px;
   cursor: pointer;
-  transition: all 0.2s;
-  font-family: inherit;
-  -webkit-tap-highlight-color: transparent;
 }
-.raw-btn:hover { background: var(--raw-bg); }
-.raw-btn:active { transform: scale(0.97); }
+#raw-toggle:hover { border-color: var(--text); }
 
-.raw-panel {
+#raw-panel {                         /* flat disclosure panel (tinted bg intentional) */
+  display: none;
   margin-top: 20px;
+  padding: 20px;
   background: var(--raw-bg);
   border-radius: 16px;
-  padding: 20px;
-  display: none;
 }
-.raw-panel.open { display: block; }
+#raw-panel.open { display: block; }
 
 .raw-head {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 12px;
 }
-
 .raw-title {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-  color: var(--sub);
-  letter-spacing: 0.05em;
   text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--sub);
 }
 
-.copy-btn {
-  padding: 6px 16px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 16px;
+#copy-btn {
+  padding: 5px 14px;
   font-size: 12px;
   font-weight: 500;
   color: var(--text);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 14px;
   cursor: pointer;
-  transition: all 0.2s;
-  font-family: inherit;
+  transition: border-color .15s ease, color .15s ease;
 }
-.copy-btn:hover { border-color: var(--text); }
-.copy-btn:active { transform: scale(0.96); }
-.copy-btn.copied { color: #34c759; border-color: #34c759; }
+#copy-btn:hover { border-color: var(--text); }
+#copy-btn.copied { color: #34c759; border-color: #34c759; }
 
-.raw-text {
-  font-family: "SF Mono", SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
-  font-size: 12px;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  word-break: break-word;
-  color: var(--body);
+#raw-text {
   max-height: 400px;
   overflow-y: auto;
-}
-@media (max-width: 600px) {
-  .raw-text { font-size: 11px; max-height: 300px; }
-  .raw-btn { width: 100%; padding: 14px; }
-}
-
-/* ---------- Footer ---------- */
-
-.footer {
-  text-align: center;
-  padding: 48px 0 32px;
-  color: var(--sub);
+  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 12px;
-  max-width: 980px;
-  margin: 0 auto;
-  border-top: 1px solid var(--border);
-}
-@media (max-width: 600px) {
-  .footer { font-size: 11px; }
+  line-height: 1.6;
+  color: var(--body);
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
-/* ---------- Loading / error ---------- */
+/* 7. Footer */
+.footer { padding: 48px 24px 40px; text-align: center; font-size: 12px; color: var(--sub); }
 
-.loading {
-  padding: 80px 20px;
-  text-align: center;
-  color: var(--sub);
+/* 8. Loading / error states */
+.loading { padding: 96px 20px; text-align: center; font-size: 17px; color: var(--sub); }
+.error   { padding: 64px 20px; text-align: center; font-size: 15px; font-weight: 500; color: #d70015; }
+
+/* 9. Responsive */
+@media (min-width: 768px) {          /* desktop layout */
+  .header { padding: 72px 32px 48px; }
+  .selector-columns { grid-template-columns: 1fr 1fr; gap: 48px; padding: 24px 32px 36px; }
+  #content { padding: 16px 32px 96px; }
+  .mensa-section { padding: 48px 0 12px; }
+  .dish { flex-direction: row; gap: 48px; padding: 44px 0; }
+  .dish-desc { font-size: 16px; }
+  .nutrition-col { width: 320px; }
+  .raw-section { padding: 0 32px 56px; }
 }
-.error {
-  padding: 48px 20px;
-  text-align: center;
-  color: #d70015;
-  font-weight: 500;
+
+@media (max-width: 600px) {          /* mobile tweaks */
+  .header { padding: 48px 56px 32px; }  /* side padding clears the hamburger */
+  .menu-btn {                          /* 36px target, 16px bars */
+    top: 12px; left: 12px;
+    width: 36px; height: 36px;
+    background: linear-gradient(var(--text), var(--text)) center / 16px 1px no-repeat;
+  }
+  .menu-btn::before,
+  .menu-btn::after { width: 16px; }
+  .menu-btn::before { top: 9.5px; }
+  .menu-btn::after  { bottom: 9.5px; }
+  .segmented { margin-top: 18px; }
+  .seg-option { min-width: 82px; padding: 6px 14px; }
+  .selector-columns { padding: 16px 20px 28px; }
+  #content { padding: 0 20px 64px; }
+  .mensa-section { padding: 28px 0 4px; }
+  .dish { padding: 26px 0; }
+  .raw-section { padding: 0 20px 40px; }
 }

@@ -623,18 +623,15 @@ function toggleSection(section) {
   const collapsed = prefs.collapsedMensas.has(id);
   const body = section.querySelector('.mensa-dishes');
   const title = section.querySelector('.mensa-title');
-  const caret = section.querySelector('.mensa-caret');
 
   if (collapsed) {
     prefs.collapsedMensas.delete(id);
     section.classList.remove('collapsed');
     if (body) expandBody(body);
-    if (caret) caret.innerHTML = '&#9662;';
   } else {
     prefs.collapsedMensas.add(id);
     section.classList.add('collapsed');
     if (body) collapseBody(body);
-    if (caret) caret.innerHTML = '&#9656;';
   }
   if (title) title.setAttribute('aria-expanded', String(!collapsed));
   savePrefs();

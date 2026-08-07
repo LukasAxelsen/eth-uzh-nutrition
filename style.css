@@ -158,9 +158,15 @@ input:focus-visible { outline: none; }
   transition: transform .35s var(--ease);
 }
 
-/* Mobile: pushing the app aside reveals the drawer. */
-.app { transition: transform .35s var(--ease), margin-left .35s var(--ease), width .35s var(--ease); }
-body.menu-open .app { transform: translateX(min(340px, 85vw)); }
+/* Mobile: the drawer becomes a FULL-SCREEN picker — the app content
+   slides completely off-screen (translateX 100%), leaving only the
+   mensa/group selection visible. Picking a mensa or group closes it
+   and the content slides back. GPU-friendly: transform only, no reflow. */
+.app { transition: transform .35s var(--ease); }
+@media (max-width: 767px) {
+  #selector { width: 100%; }
+  body.menu-open .app { transform: translateX(100%); }
+}
 
 /* Scroll lock while the drawer is open (Bootstrap-offcanvas pattern).
    Mobile only — keeps position:fixed reliable on iOS; without it a
@@ -173,11 +179,27 @@ body.menu-open .app { transform: translateX(min(340px, 85vw)); }
   }
 }
 
+/* Drawer content: single column, top-to-bottom (mensas then groups).
+   Panes are separated by a hairline + section label so the list never
+   reads as one dense block. */
 .selector-columns {
-  display: grid;
-  grid-template-columns: 1fr;      /* stacks on mobile */
-  gap: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   padding: 20px 22px 32px;
+}
+.selector-pane + .selector-pane {
+  border-top: 1px solid var(--border);
+  margin-top: 14px;
+  padding-top: 14px;
+}
+.selector-pane-title {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--sub);
 }
 
 /* 4a. Mensa list (scrollable) */
@@ -218,47 +240,44 @@ body.menu-open .app { transform: translateX(min(340px, 85vw)); }
 
 .mensa-label { font-size: 14px; color: var(--text); }
 
-/* 4b. Groups */
-.group-row {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  padding: 7px 0;
+/* 4b. Groups — horizontal filter chips (Material-style).
+   Chips wrap onto multiple lines; click applies the group. */
+.group-rows { display: flex; flex-wrap: wrap; gap: 8px; }
+.group-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 13px;
   font-size: 13px;
-  font-weight: 600;
-}
-.group-name {                    /* looks like plain text, acts as apply button */
-  padding: 0;
-  font: inherit;
-  font-weight: inherit;
+  font-weight: 500;
   color: var(--text);
   background: none;
-  border: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
   cursor: pointer;
-  text-align: left;
+  transition: border-color .15s ease, background-color .15s ease;
 }
-.group-name:hover { text-decoration: underline; }
-.group-select-all {
-  margin-left: auto;
-  padding: 0;
-  font-size: 12px;
+.group-chip:hover { border-color: var(--text); background: var(--raw-bg); }
+.group-chip:disabled { opacity: .4; cursor: default; }
+.group-chip .chip-count {
+  font-size: 11px;
   font-weight: 400;
   color: var(--sub);
-  background: none;
-  border: none;
-  cursor: pointer;
+  font-variant-numeric: tabular-nums;
 }
-.group-select-all:hover { color: var(--text); text-decoration: underline; }
-.group-count { font-size: 11px; font-weight: 400; color: var(--sub); }
-.group-delete {                      /* (x) for custom groups */
-  padding: 0 2px;
-  font-size: 12px;
+.group-chip.custom .chip-x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px; height: 16px;
+  margin-left: 2px;
+  font-size: 13px;
+  line-height: 1;
   color: var(--sub);
-  background: none;
-  border: none;
+  border-radius: 50%;
   cursor: pointer;
 }
-.group-delete:hover { color: var(--text); }
+.group-chip.custom .chip-x:hover { color: var(--text); background: var(--border); }
 
 .group-add {
   display: flex;
@@ -460,7 +479,8 @@ body.menu-open .app { transform: translateX(min(340px, 85vw)); }
   .header { padding: 72px 32px 48px; }
   /* Sidebar pattern (GitHub/Linear-style): the drawer is a fixed 380px
      column; the whole app (header + content) gives way via margin-left
-     and takes the remaining width — nothing gets covered or squeezed. */
+     and takes the remaining width — nothing gets covered or squeezed.
+     Drawer content stays single-column (mensas on top, groups below). */
   body.menu-open .app { transform: none; }
   #selector { width: 380px; }
   body.menu-open .app {
@@ -469,8 +489,7 @@ body.menu-open .app { transform: translateX(min(340px, 85vw)); }
   }
   body.menu-open #content,
   body.menu-open .raw-section { max-width: none; }
-  .selector-columns { grid-template-columns: 1fr; gap: 24px; padding: 20px 22px 32px; }
-  .selector-mensas { max-height: 62vh; }
+  .selector-mensas { max-height: 55vh; }
   #content { padding: 16px 32px 96px; }
   .mensa-section { padding: 48px 0 12px; }
   .dish { flex-direction: row; gap: 48px; padding: 44px 0; }

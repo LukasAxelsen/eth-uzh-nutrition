@@ -299,20 +299,21 @@ function refreshMensaRows() {
   });
 }
 
-/* ---------- selector: group rows (right column) ---------- */
+/* ---------- selector: group chips (horizontal filter chips) ---------- */
 
 function groupRowHTML(g) {
-  // Every group name is a button; clicking it (or "Select all")
-  // APPLIES the group — the current selection is replaced by its members.
-  const nameHTML = '<button class="group-name" type="button" aria-label="Apply group ' + esc(g.name) + '">' + esc(g.name) + '</button>';
-
-  return '<div class="group-row' + (g.custom ? ' custom' : '') + '" data-group="' + esc(g.name) + '">' +
-    nameHTML +
-    '<button class="group-select-all" type="button"' +
-    (g.members.length ? '' : ' disabled') + '>Select all</button>' +
-    '<span class="group-count">' + g.members.length + '</span>' +
-    (g.custom ? '<button class="group-delete" type="button" aria-label="Delete group ' + esc(g.name) + '">&times;</button>' : '') +
-    '</div>';
+  // Material-style filter chip: click applies the group (replaces the
+  // current selection with its members); custom chips carry a delete (x).
+  const count = g.members.length;
+  return '<button class="group-chip' + (g.custom ? ' custom' : '') + '" type="button"' +
+    (count ? '' : ' disabled') +
+    ' data-group="' + esc(g.name) + '" aria-label="Apply group ' + esc(g.name) + '">' +
+    '<span class="chip-name">' + esc(g.name) + '</span>' +
+    '<span class="chip-count">' + count + '</span>' +
+    (g.custom
+      ? '<span class="chip-x" role="button" tabindex="-1" aria-label="Delete group ' + esc(g.name) + '">&times;</span>'
+      : '') +
+    '</button>';
 }
 
 function renderGroupList() {
@@ -550,18 +551,17 @@ function toggleMensa(id) {
 }
 
 function onGroupsClick(e) {
-  const row = e.target.closest('.group-row');
-  if (!row) return;
-
-  if (e.target.closest('.group-delete')) {
-    deleteCustomGroup(row.dataset.group);
+  // The chip's (x) deletes a custom group without applying it.
+  const x = e.target.closest('.chip-x');
+  if (x) {
+    const chip = x.closest('.group-chip');
+    if (chip) deleteCustomGroup(chip.dataset.group);
     return;
   }
-  // Clicking the group name OR "Select all" applies the group:
-  // the selection is replaced by that group's members.
-  if (e.target.closest('.group-name') || e.target.closest('.group-select-all')) {
-    applyGroup(row.dataset.group);
-  }
+  // Clicking a chip applies the group: the selection is replaced by
+  // that group's members.
+  const chip = e.target.closest('.group-chip');
+  if (chip) applyGroup(chip.dataset.group);
 }
 
 /** Apply a group (default or custom): REPLACE the current selection

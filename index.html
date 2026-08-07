@@ -57,19 +57,25 @@
   <!-- ============ Mensa selector (drawer, sibling of .app) ============ -->
   <div id="selector" class="selector" aria-label="Mensa selector" aria-hidden="true">
     <div class="selector-columns">
-      <!-- Left column: scrollable list of all mensas -->
-      <div class="selector-mensas"></div>
+      <!-- Top pane: scrollable list of all mensas -->
+      <section class="selector-pane">
+        <h3 class="selector-pane-title">Mensas</h3>
+        <div class="selector-mensas"></div>
+      </section>
 
-      <!-- Right column: group rows + custom group creation -->
-      <div class="selector-groups">
-        <div class="group-rows"></div>
-        <div class="group-add">
-          <input id="group-input" type="text" placeholder="New group name"
-                 aria-label="New group name" autocomplete="off">
-          <button id="group-add-btn" type="button">Add</button>
-          <span class="group-add-msg" id="group-add-msg" role="status" aria-live="polite"></span>
+      <!-- Bottom pane: group rows + custom group creation -->
+      <section class="selector-pane">
+        <h3 class="selector-pane-title">Groups</h3>
+        <div class="selector-groups">
+          <div class="group-rows"></div>
+          <div class="group-add">
+            <input id="group-input" type="text" placeholder="New group name"
+                   aria-label="New group name" autocomplete="off">
+            <button id="group-add-btn" type="button">Add</button>
+            <span class="group-add-msg" id="group-add-msg" role="status" aria-live="polite"></span>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   </div>
 

@@ -60,7 +60,7 @@ try:
             nutr_str = ", ".join(nutr_parts)
 
             if nutr_str:
-                lines.append(f"{FACILITY_NAMES[fid]}/{mt_name}: {line_name} — {dish}: {desc} | {nutr_str}")
+                lines.append(f"{FACILITY_NAMES[fid]}/{mt_name}: {line_name} — {dish}: {desc} | per100g: {nutr_str}")
                 found = True
         if not found:
             lines.append(f"{FACILITY_NAMES[fid]}: no meals today (closed or on break)")
@@ -116,19 +116,31 @@ try:
                 nutr_map = {
                     "energy": ("kcal", ""), "protein": ("protein", "g"), "fat": ("fat", "g"),
                     "carbohydrates": ("carbs", "g"), "sugar": ("sugar", "g"),
-                    "salt": ("salt", "g"), "fibers": ("fibers", "g"),
+                    "salt": ("salt", "g"), "fibers": ("fiber", "g"),
                 }
-                parts = []
+                p100_parts = []
+                tot_parts = []
                 for key, (label, unit) in nutr_map.items():
                     v = stats.get(key, {})
-                    if isinstance(v, dict) and v.get("amount") is not None and float(v["amount"]) != 0:
-                        parts.append(f"{label}={v['amount']}{unit}")
+                    if not isinstance(v, dict):
+                        continue
+                    p100 = v.get("amountPer100g")
+                    amt = v.get("amount")
+                    if p100 is not None and float(p100) != 0:
+                        p100_parts.append(f"{label}={round(float(p100), 1)}{unit}")
+                    if amt is not None and float(amt) != 0:
+                        tot_parts.append(f"{label}={amt}{unit}")
 
                 tw = stats.get("servingWeight", {})
                 if isinstance(tw, dict) and tw.get("amount"):
-                    parts.append(f"weight={tw['amount']}{tw.get('unit', 'g')}")
+                    tot_parts.append(f"weight={tw['amount']}{tw.get('unit', 'g')}")
 
-                nutr_str = ", ".join(parts) if parts else "nutrition=N/A"
+                sections = []
+                if p100_parts:
+                    sections.append("per100g: " + ", ".join(p100_parts))
+                if tot_parts:
+                    sections.append("total: " + ", ".join(tot_parts))
+                nutr_str = " | ".join(sections) if sections else "nutrition=N/A"
                 lines.append(f"UZH Obere Mensa/Mittag: {cat} — {dish_name} | {nutr_str}")
 except Exception as e:
     lines.append(f"UZH Obere Mensa: fetch error — {e}")
@@ -142,14 +154,22 @@ text = "\n".join(lines) + "\n"
 with open(os.path.join(OUTPUT_DIR, "index.txt"), "w") as f:
     f.write(text)
 
-# Beautiful Apple iOS 26 + 二次元 style HTML
-# The page fetches index.txt at runtime and renders it as beautiful cards
-# Read HTML template and insert date
-template_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "template.html")
-with open(template_path) as f:
-    html_content = f.read().replace("DATE_PLACEHOLDER", today)
+# Assemble static site: copy template files, inject date into index.html
+BASE = os.path.dirname(os.path.abspath(__file__))
+TEMPLATE_DIR = os.path.join(BASE, "template")
 
+with open(os.path.join(TEMPLATE_DIR, "index.html")) as f:
+    html_content = f.read().replace("DATE_PLACEHOLDER", today)
 with open(os.path.join(OUTPUT_DIR, "index.html"), "w") as f:
     f.write(html_content)
 
-print(f"Done — {sum(1 for l in lines if '| kcal=' in l)} dishes written")
+with open(os.path.join(TEMPLATE_DIR, "style.css")) as f:
+    with open(os.path.join(OUTPUT_DIR, "style.css"), "w") as out:
+        out.write(f.read())
+
+with open(os.path.join(TEMPLATE_DIR, "app.js")) as f:
+    js_content = f.read().replace("DATE_PLACEHOLDER", today)
+with open(os.path.join(OUTPUT_DIR, "app.js"), "w") as f:
+    f.write(js_content)
+
+print(f"Done — {sum(1 for l in lines if 'kcal=' in l)} dishes written")

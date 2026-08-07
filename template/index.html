@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>University Menus — DATE_PLACEHOLDER</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <h1 id="date-heading">Loading…</h1>
+      <p>University Menus</p>
+    </header>
+
+    <main class="main" id="content">
+      <div class="loading">Loading menu data…</div>
+    </main>
+
+    <div class="raw-section">
+      <div class="raw-toggle-row">
+        <button class="raw-btn" id="raw-toggle" onclick="toggleRaw()">Show Raw Data</button>
+      </div>
+      <div class="raw-panel" id="raw-panel">
+        <div class="raw-head">
+          <span class="raw-title">Raw Data</span>
+          <button class="copy-btn" id="copy-btn" onclick="copyRaw()">Copy</button>
+        </div>
+        <div class="raw-text" id="raw-text"></div>
+      </div>
+    </div>
+
+    <footer class="footer">Updated daily at 06:00 Zurich time</footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

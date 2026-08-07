@@ -2,31 +2,74 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
   <title>University Menus — DATE_PLACEHOLDER</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="app">
+
+    <!-- ======================= Header ======================= -->
     <header class="header">
-      <h1 id="date-heading">Loading…</h1>
-      <p>University Menus</p>
+      <div class="header-top">
+        <!-- Hamburger: toggles the #selector panel (bars are styled by CSS) -->
+        <button class="menu-btn" id="menu-btn" type="button"
+                aria-label="Toggle mensa selector"
+                aria-controls="selector" aria-expanded="false">
+          <span class="menu-bar"></span>
+          <span class="menu-bar"></span>
+          <span class="menu-bar"></span>
+        </button>
+        <h1 id="date-heading">Loading…</h1>
+      </div>
+
+      <!-- Lunch/Dinner segmented switch (iOS style).
+           .seg-thumb is the sliding indicator; JS positions it over the
+           active .seg-option (inline geometry = functional fallback). -->
+      <div class="segmented" style="position:relative" aria-label="Meal time">
+        <span class="seg-thumb" aria-hidden="true"
+              style="position:absolute;top:0;bottom:0;left:0;width:0;
+                     transition:left .3s ease,width .3s ease"></span>
+        <button class="seg-option active" type="button" data-meal="Lunch" aria-pressed="true">Lunch</button>
+        <button class="seg-option" type="button" data-meal="Dinner" aria-pressed="false">Dinner</button>
+      </div>
     </header>
 
-    <main class="main" id="content">
+    <!-- ==================== Mensa selector ==================== -->
+    <div id="selector" class="selector" aria-label="Mensa selector">
+      <div class="selector-columns">
+        <!-- Left column: scrollable list of all mensas -->
+        <div class="selector-mensas"></div>
+
+        <!-- Right column: group rows + custom group creation -->
+        <div class="selector-groups">
+          <div class="group-rows"></div>
+          <div class="group-add">
+            <input id="group-input" type="text" placeholder="New group name"
+                   aria-label="New group name" autocomplete="off">
+            <button id="group-add-btn" type="button">Add</button>
+            <span class="group-add-msg" id="group-add-msg" role="status" aria-live="polite"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================= Content ======================= -->
+    <main class="main" id="content" aria-live="polite">
       <div class="loading">Loading menu data…</div>
     </main>
 
+    <!-- ====================== Raw data ======================= -->
     <div class="raw-section">
-      <div class="raw-toggle-row">
-        <button class="raw-btn" id="raw-toggle" onclick="toggleRaw()">Show Raw Data</button>
-      </div>
+      <button class="raw-btn" id="raw-toggle" type="button"
+              aria-expanded="false" aria-controls="raw-panel">Show Raw Data</button>
       <div class="raw-panel" id="raw-panel">
         <div class="raw-head">
           <span class="raw-title">Raw Data</span>
-          <button class="copy-btn" id="copy-btn" onclick="copyRaw()">Copy</button>
+          <button class="copy-btn" id="copy-btn" type="button">Copy</button>
         </div>
-        <div class="raw-text" id="raw-text"></div>
+        <pre class="raw-text" id="raw-text"></pre>
       </div>
     </div>
 

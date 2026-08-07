@@ -2,13 +2,13 @@ ETH/UZH Mensa Menus — 2026-08-07
 ============================================================
 
 ETH Mensa Clausiusbar: no meals today (closed or on break)
-ETH Mensa Archimedes/Mittag: The Gardener — Gelbes Thai Curry: Currysauce | Broccoli | Zucchetti | Blumenkohl | Peperoni | Kokosreis | Sojasrossen | Minze | Frucht | kcal=426, protein=1.8g, fat=3.5g, saturated=2.6g, carbs=15g, sugar=1.4g, salt=0.72g
-ETH Mensa Archimedes/Mittag: The Chef — Frikadelle: Rosmarinjus | Bratkartoffeln Lyoner Art | glasierte Bohnen | kcal=489, protein=5.0g, fat=6.8g, saturated=1.9g, carbs=8.4g, sugar=1.6g, salt=1.00g
-ETH Mensa Archimedes/Mittag: The Expert — Luzerner Pastetli: Kalbsbrätchügeli | Champignons | Erbsen | Karotten | Gemüsereis | kcal=638, protein=4.8g, fat=7.1g, saturated=3.0g, carbs=17g, sugar=1.5g, salt=0.85g
-ETH Mensa Polyterrasse/Mittag: STREET — Fish`n`Chips: Tartarsauce | Country cuts | Limette | Cole slaw | kcal=685, protein=5.3g, fat=9.9g, saturated=1.1g, carbs=12g, sugar=1.3g, salt=0.53g
-ETH Mensa Polyterrasse/Mittag: GARDEN — Orient Chickpea: Kichererbsen | Zucchetti | Blumenkohl | Paprika | Ras el Hanout | Couscous  | Marokkanischer Minzjoghurt | kcal=544, protein=4.1g, fat=2.9g, saturated=0.4g, carbs=20g, sugar=1.7g, salt=0.96g
-ETH Mensa Polyterrasse/Mittag: HOME — Spaghetti & Spicy Meatballs: Rindshackbällchen | Scharfe Tomatensauce | Spaghetti | Reibkäse | Mischsalat | kcal=515, protein=5.9g, fat=3.9g, saturated=1.3g, carbs=15g, sugar=1.5g, salt=0.64g
+ETH Mensa Archimedes/Mittag: The Gardener — Gelbes Thai Curry: Currysauce | Broccoli | Zucchetti | Blumenkohl | Peperoni | Kokosreis | Sojasrossen | Minze | Frucht | per100g: kcal=426, protein=1.8g, fat=3.5g, saturated=2.6g, carbs=15g, sugar=1.4g, salt=0.72g
+ETH Mensa Archimedes/Mittag: The Chef — Frikadelle: Rosmarinjus | Bratkartoffeln Lyoner Art | glasierte Bohnen | per100g: kcal=489, protein=5.0g, fat=6.8g, saturated=1.9g, carbs=8.4g, sugar=1.6g, salt=1.00g
+ETH Mensa Archimedes/Mittag: The Expert — Luzerner Pastetli: Kalbsbrätchügeli | Champignons | Erbsen | Karotten | Gemüsereis | per100g: kcal=638, protein=4.8g, fat=7.1g, saturated=3.0g, carbs=17g, sugar=1.5g, salt=0.85g
+ETH Mensa Polyterrasse/Mittag: STREET — Fish`n`Chips: Tartarsauce | Country cuts | Limette | Erbsen | per100g: kcal=685, protein=5.3g, fat=9.9g, saturated=1.1g, carbs=12g, sugar=1.3g, salt=0.53g
+ETH Mensa Polyterrasse/Mittag: GARDEN — Orient Chickpea: Kichererbsen | Zucchetti | Blumenkohl | Paprika | Ras el Hanout | Couscous  | Marokkanischer Minzjoghurt | per100g: kcal=544, protein=4.1g, fat=2.9g, saturated=0.4g, carbs=20g, sugar=1.7g, salt=0.96g
+ETH Mensa Polyterrasse/Mittag: HOME — Spaghetti & Spicy Meatballs: Rindshackbällchen | Scharfe Tomatensauce | Spaghetti | Reibkäse | Mischsalat | per100g: kcal=515, protein=5.9g, fat=3.9g, saturated=1.3g, carbs=15g, sugar=1.5g, salt=0.64g
 
-UZH Obere Mensa/Mittag: farm — HUMMUS BOWL, Ofengemüse, Süsskartoffeln, Spinat Sprossen Rüebli, Kerne | kcal=612, protein=17g, fat=28g, carbs=66g, sugar=17g, salt=4g, fibers=16g, weight=551g
-UZH Obere Mensa/Mittag: butcher — FARM SHAKSHUKA, Spiegelei, Kichererbsen, Couscous, Blumenkohl | kcal=826, protein=32g, fat=36g, carbs=96g, sugar=16g, salt=8g, fibers=14g, weight=600g
-UZH Obere Mensa/Mittag: voll anders — PANIERTES SCHNITZEL, Ketchup Mayo Zitrone, Pommes frites, Menüsalat / Apfelmus | kcal=929, protein=27g, fat=52g, carbs=82g, sugar=20g, salt=4g, fibers=5g, weight=420g
+UZH Obere Mensa/Mittag: farm — HUMMUS BOWL, Ofengemüse, Süsskartoffeln, Spinat Sprossen Rüebli, Kerne | per100g: kcal=111.1, protein=3.1g, fat=5.1g, carbs=12.0g, sugar=3.1g, salt=0.7g, fiber=2.9g | total: kcal=612, protein=17g, fat=28g, carbs=66g, sugar=17g, salt=4g, fiber=16g, weight=551g
+UZH Obere Mensa/Mittag: butcher — FARM SHAKSHUKA, Spiegelei, Kichererbsen, Couscous, Blumenkohl | per100g: kcal=137.7, protein=5.3g, fat=6.0g, carbs=16.0g, sugar=2.7g, salt=1.3g, fiber=2.3g | total: kcal=826, protein=32g, fat=36g, carbs=96g, sugar=16g, salt=8g, fiber=14g, weight=600g
+UZH Obere Mensa/Mittag: voll anders — PANIERTES SCHNITZEL, Ketchup Mayo Zitrone, Pommes frites, Menüsalat / Apfelmus | per100g: kcal=221.2, protein=6.4g, fat=12.4g, carbs=19.5g, sugar=4.8g, salt=1.0g, fiber=1.2g | total: kcal=929, protein=27g, fat=52g, carbs=82g, sugar=20g, salt=4g, fiber=5g, weight=420g

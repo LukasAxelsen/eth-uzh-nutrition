@@ -1,0 +1,349 @@
+/* ============================================================
+   ETH/UZH University Menus — Apple.com-style design
+   No cards, no dish separators, fixed 9-row nutrition tables
+   ============================================================ */
+
+:root {
+  --bg: #ffffff;
+  --text: #1d1d1f;
+  --sub: #86868b;
+  --body: #515154;
+  --border: #d2d2d7;
+  --raw-bg: #f5f5f7;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000000;
+    --text: #f5f5f7;
+    --sub: #98989d;
+    --body: #d2d2d7;
+    --border: #424245;
+    --raw-bg: #1d1d1f;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons",
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+::selection {
+  background: rgba(0, 0, 0, 0.1);
+}
+@media (prefers-color-scheme: dark) {
+  ::selection {
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+
+.app {
+  min-height: 100vh;
+  padding-bottom: 64px;
+}
+
+/* ---------- Header ---------- */
+
+.header {
+  padding: 96px 24px 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.header p {
+  margin-top: 12px;
+  font-size: 21px;
+  color: var(--sub);
+  font-weight: 500;
+}
+
+@media (min-width: 768px) {
+  .header h1 { font-size: 56px; }
+}
+@media (max-width: 600px) {
+  .header { padding: 64px 20px 40px; }
+  .header h1 { font-size: 32px; }
+  .header p { font-size: 17px; }
+}
+
+/* ---------- Main ---------- */
+
+.main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+@media (min-width: 768px) {
+  .main { padding: 0 32px; }
+}
+
+.mensa-section {
+  margin-bottom: 80px;
+}
+
+.mensa-title {
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 768px) {
+  .mensa-title { font-size: 40px; }
+}
+@media (max-width: 600px) {
+  .mensa-section { margin-bottom: 48px; }
+  .mensa-title { font-size: 26px; margin-bottom: 16px; }
+}
+
+.no-meals {
+  padding: 32px 0;
+  color: var(--sub);
+  font-size: 17px;
+}
+
+/* ---------- Dish (no card, no separator) ---------- */
+
+.dish {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 40px 0;
+}
+@media (min-width: 768px) {
+  .dish {
+    flex-direction: row;
+    gap: 48px;
+    padding: 48px 0;
+  }
+}
+@media (max-width: 600px) {
+  .dish { padding: 32px 0; }
+}
+
+.dish-main {
+  flex: 1;
+}
+
+.dish-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sub);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+
+.dish-name {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+@media (min-width: 768px) {
+  .dish-name { font-size: 28px; }
+}
+
+.dish-desc {
+  font-size: 15px;
+  color: var(--body);
+  line-height: 1.55;
+  max-width: 44rem;
+}
+@media (min-width: 768px) {
+  .dish-desc { font-size: 16px; }
+}
+
+/* ---------- Nutrition table (fixed 9 rows, 2 value columns) ---------- */
+
+.nutrition-col {
+  width: 100%;
+  flex-shrink: 0;
+}
+@media (min-width: 768px) {
+  .nutrition-col { width: 320px; }
+}
+
+.nutrition-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.nutrition-table thead th {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--sub);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: right;
+  padding: 0 0 8px;
+}
+.nutrition-table thead th:first-child {
+  text-align: left;
+}
+
+.nutrition-table tbody td {
+  font-size: 13px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+}
+.nutrition-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.nutrition-table .n-label {
+  color: var(--sub);
+  text-align: left;
+  width: 34%;
+}
+.nutrition-table .n-val {
+  text-align: right;
+  color: var(--text);
+  font-weight: 500;
+  width: 33%;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Raw data toggle ---------- */
+
+.raw-section {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+}
+@media (min-width: 768px) {
+  .raw-section { padding: 0 32px 48px; }
+}
+
+.raw-toggle-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.raw-btn {
+  padding: 12px 28px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+.raw-btn:hover { background: var(--raw-bg); }
+.raw-btn:active { transform: scale(0.97); }
+
+.raw-panel {
+  margin-top: 20px;
+  background: var(--raw-bg);
+  border-radius: 16px;
+  padding: 20px;
+  display: none;
+}
+.raw-panel.open { display: block; }
+
+.raw-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.raw-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sub);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.copy-btn {
+  padding: 6px 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.copy-btn:hover { border-color: var(--text); }
+.copy-btn:active { transform: scale(0.96); }
+.copy-btn.copied { color: #34c759; border-color: #34c759; }
+
+.raw-text {
+  font-family: "SF Mono", SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--body);
+  max-height: 400px;
+  overflow-y: auto;
+}
+@media (max-width: 600px) {
+  .raw-text { font-size: 11px; max-height: 300px; }
+  .raw-btn { width: 100%; padding: 14px; }
+}
+
+/* ---------- Footer ---------- */
+
+.footer {
+  text-align: center;
+  padding: 48px 0 32px;
+  color: var(--sub);
+  font-size: 12px;
+  max-width: 980px;
+  margin: 0 auto;
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 600px) {
+  .footer { font-size: 11px; }
+}
+
+/* ---------- Loading / error ---------- */
+
+.loading {
+  padding: 80px 20px;
+  text-align: center;
+  color: var(--sub);
+}
+.error {
+  padding: 48px 20px;
+  text-align: center;
+  color: #d70015;
+  font-weight: 500;
+}

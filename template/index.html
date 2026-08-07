@@ -25,12 +25,10 @@
       </div>
 
       <!-- Lunch/Dinner segmented switch (iOS style).
-           .seg-thumb is the sliding indicator; JS positions it over the
-           active .seg-option (inline geometry = functional fallback). -->
-      <div class="segmented" style="position:relative" aria-label="Meal time">
-        <span class="seg-thumb" aria-hidden="true"
-              style="position:absolute;top:0;bottom:0;left:0;width:0;
-                     transition:left .3s ease,width .3s ease"></span>
+           .seg-thumb is a CSS-driven sliding pill: fixed size at the
+           track origin, moved purely by transform (see style.css). -->
+      <div class="segmented" aria-label="Meal time">
+        <span class="seg-thumb" aria-hidden="true"></span>
         <button class="seg-option active" type="button" data-meal="Lunch" aria-pressed="true">Lunch</button>
         <button class="seg-option" type="button" data-meal="Dinner" aria-pressed="false">Dinner</button>
       </div>

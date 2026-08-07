@@ -383,7 +383,7 @@ function mensaSectionHTML(m) {
 
   return '<section class="mensa-section' + (collapsed ? ' collapsed' : '') + '" data-mensa="' + esc(m.id) + '">' +
     '<h2 class="mensa-title" role="button" tabindex="0" aria-expanded="' + !collapsed + '">' +
-    '<span class="mensa-caret" aria-hidden="true">' + (collapsed ? '&#9656;' : '&#9662;') + '</span>' +
+    '<span class="mensa-caret" aria-hidden="true"></span>' +
     esc(m.name) +
     '</h2>' + body +
     '</section>';
@@ -403,23 +403,26 @@ function renderContent() {
 /* ---------- segmented switch + sliding thumb ---------- */
 
 function updateSegmented() {
+  const seg = document.querySelector('.segmented');
+  if (seg) seg.dataset.meal = prefs.meal;   // CSS [data-meal=...] drives the thumb
   document.querySelectorAll('.seg-option').forEach((btn) => {
     const active = btn.dataset.meal === prefs.meal;
     btn.classList.toggle('active', active);
     btn.setAttribute('aria-pressed', String(active));
   });
-  positionThumb();
 }
 
-/** Slide .seg-thumb over the active button (inline geometry). */
+/**
+ * Keep the CSS-driven thumb in sync. Best practice for a segmented
+ * control: the thumb is a fixed-width pill at the track origin and the
+ * active state is expressed purely via CSS transform (translateX 0%→100%)
+ * keyed off the container's data-meal attribute. No inline geometry —
+ * measuring offsets here would fight the CSS transition and cause
+ * double-shift (the bug this replaces).
+ */
 function positionThumb() {
   const seg = document.querySelector('.segmented');
-  if (!seg) return;
-  const thumb = seg.querySelector('.seg-thumb');
-  const active = seg.querySelector('.seg-option.active');
-  if (!thumb || !active) return;
-  thumb.style.left = active.offsetLeft + 'px';
-  thumb.style.width = active.offsetWidth + 'px';
+  if (seg) seg.dataset.meal = prefs.meal;
 }
 
 /* ---------- raw panel ---------- */

@@ -159,8 +159,19 @@ input:focus-visible { outline: none; }
 }
 
 /* Mobile: pushing the app aside reveals the drawer. */
-.app { transition: transform .35s var(--ease); }
+.app { transition: transform .35s var(--ease), margin-left .35s var(--ease), width .35s var(--ease); }
 body.menu-open .app { transform: translateX(min(340px, 85vw)); }
+
+/* Scroll lock while the drawer is open (Bootstrap-offcanvas pattern).
+   Mobile only — keeps position:fixed reliable on iOS; without it a
+   scrolled page can detach the drawer from the viewport
+   ("drawer appears below content"). */
+@media (max-width: 767px) {
+  html.scroll-locked, html.scroll-locked body {
+    overflow: hidden;
+    height: 100%;
+  }
+}
 
 .selector-columns {
   display: grid;
@@ -447,10 +458,18 @@ body.menu-open .app { transform: translateX(min(340px, 85vw)); }
 /* 9. Responsive */
 @media (min-width: 768px) {          /* desktop layout */
   .header { padding: 72px 32px 48px; }
-  /* Wide screens: the drawer overlays the left margin; content stays put. */
+  /* Sidebar pattern (GitHub/Linear-style): the drawer is a fixed 380px
+     column; the whole app (header + content) gives way via margin-left
+     and takes the remaining width — nothing gets covered or squeezed. */
   body.menu-open .app { transform: none; }
   #selector { width: 380px; }
-  .selector-columns { grid-template-columns: 1fr 1fr; gap: 32px; padding: 24px 28px 36px; }
+  body.menu-open .app {
+    margin-left: 380px;
+    width: calc(100% - 380px);
+  }
+  body.menu-open #content,
+  body.menu-open .raw-section { max-width: none; }
+  .selector-columns { grid-template-columns: 1fr; gap: 24px; padding: 20px 22px 32px; }
   .selector-mensas { max-height: 62vh; }
   #content { padding: 16px 32px 96px; }
   .mensa-section { padding: 48px 0 12px; }

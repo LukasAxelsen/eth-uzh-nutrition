@@ -508,6 +508,10 @@ function setSelectorOpen(open) {
   panel.classList.toggle('open', open);
   panel.setAttribute('aria-hidden', String(!open));
   document.getElementById('menu-btn').setAttribute('aria-expanded', String(open));
+  // Scroll lock while the drawer is open (Bootstrap-offcanvas pattern).
+  // Prevents background scrolling that breaks position:fixed on iOS
+  // (drawer would "jump" to the scroll position instead of the left edge).
+  document.documentElement.classList.toggle('scroll-locked', open);
 }
 
 function onSegmentedClick(e) {

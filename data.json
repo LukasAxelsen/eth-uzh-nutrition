@@ -8,7 +8,7 @@
    "meals": {
     "Lunch": [
      {
-      "line": "chefs world",
+      "line": "Chefs World",
       "dish": "Rinds Flanksteak",
       "desc": "Mais Couscous | Tomaten Salsa | Maiskolben | Black Bean Velvet",
       "nutrition": {
@@ -42,7 +42,7 @@
       }
      },
      {
-      "line": "vitality",
+      "line": "Vitality",
       "dish": "Egg Naan",
       "desc": "Hummus | Avocado | Spiegelei | Zwiebeln | Koriander | Chaat Salat",
       "nutrition": {
@@ -149,7 +149,7 @@
      {
       "line": "GARDEN",
       "dish": "Orient Chickpea",
-      "desc": "Kichererbsen | Zucchetti | Blumenkohl | Paprika | Ras el Hanout | Couscous  | Marokkanischer Minzjoghurt",
+      "desc": "Kichererbsen | Zucchetti | Blumenkohl | Paprika | Ras el Hanout | Couscous | Marokkanischer Minzjoghurt",
       "nutrition": {
        "p100": {
         "kcal": 130.0,
@@ -202,7 +202,7 @@
     "Dinner": [
      {
       "line": "GARDEN ABEND",
-      "dish": "INDISCHES CURRY MIT PFLANZENGESCHNETZ..",
+      "dish": "Indisches Curry mit Pflanzengeschnetz..",
       "desc": "Gemüse | Basmatireis | Sojasprossen",
       "nutrition": {
        "p100": {},
@@ -211,7 +211,7 @@
      },
      {
       "line": "HOME ABEND",
-      "dish": "POULETGESCHNETZELTES MIT ZITRONENPFEF..",
+      "dish": "Pouletgeschnetzeltes mit Zitronenpfef..",
       "desc": "Spätzli | Karotten & Erbsen",
       "nutrition": {
        "p100": {},
@@ -229,8 +229,8 @@
     "Lunch": [
      {
       "line": "World",
-      "dish": "Köfte Bowl ",
-      "desc": "IP-Suisse Rindsköfte/Tzatziki/Fladenbrot/Eisberg/Kabis/Karotten/Gurken/Tomaten/Dill Peterli",
+      "dish": "Köfte Bowl",
+      "desc": "IP-Suisse Rindsköfte | Tzatziki | Fladenbrot | Eisberg | Kabis | Karotten | Gurken | Tomaten | Dill Peterli",
       "nutrition": {
        "p100": {
         "kcal": 132.9,
@@ -246,8 +246,8 @@
      },
      {
       "line": "Green",
-      "dish": "Falafel Bowl ",
-      "desc": "Mini Curry Falafel/Tzatziki/Fladenbrot/Eisberg/Kabis/Karotten/Gurken/Tomaten/Dill Peterli",
+      "dish": "Falafel Bowl",
+      "desc": "Mini Curry Falafel | Tzatziki | Fladenbrot | Eisberg | Kabis | Karotten | Gurken | Tomaten | Dill Peterli",
       "nutrition": {
        "p100": {
         "kcal": 108.0,
@@ -412,7 +412,7 @@
    "meals": {
     "Lunch": [
      {
-      "line": "fire",
+      "line": "Fire",
       "dish": "Delikatess Fleischkäse",
       "desc": "Rosmarinsauce | Spätzli | Glasierten Bohnen",
       "nutrition": {
@@ -429,7 +429,7 @@
       }
      },
      {
-      "line": "grill",
+      "line": "Grill",
       "dish": "Pouletschnitzel",
       "desc": "Aiolisauce | Pommes frites | Zweierlei Karotten | Zitronenschnitz",
       "nutrition": {
@@ -446,7 +446,7 @@
       }
      },
      {
-      "line": "green daily",
+      "line": "Green Daily",
       "dish": "Tandoori Chickpeas & Sweet Potatoes",
       "desc": "Chinakohl | Thai Nudeln | Kefen | Ingwer",
       "nutrition": {
@@ -463,7 +463,7 @@
       }
      },
      {
-      "line": "green delight",
+      "line": "Green Delight",
       "dish": "Choose 5",
       "desc": "Wähle 5 Komponenten heiss oder kalt",
       "nutrition": {
@@ -472,7 +472,7 @@
       }
      },
      {
-      "line": "pizza classica",
+      "line": "Pizza Classica",
       "dish": "Pizza Margherita",
       "desc": "Salat oder Lemonade",
       "nutrition": {
@@ -489,7 +489,7 @@
       }
      },
      {
-      "line": "pasta classica",
+      "line": "Pasta Classica",
       "dish": "Pasta al forno",
       "desc": "Nudelauflauf | verschiedenen Fleischsorten | Reibkäse | Salat oder Lemonade",
       "nutrition": {
@@ -506,7 +506,7 @@
       }
      },
      {
-      "line": "pasta della nonna",
+      "line": "Pasta della Nonna",
       "dish": "Gnocchi al Giardinera",
       "desc": "Tomatensauce | Liscio | Mascarpone | Grillgemüse | Reibkäse | Salat oder Lemonade",
       "nutrition": {
@@ -542,8 +542,8 @@
       }
      },
      {
-      "line": " Tofu Cashew Bowl",
-      "dish": " Tofu Cashew Bowl",
+      "line": "Tofu Cashew Bowl",
+      "dish": "Tofu Cashew Bowl",
       "desc": "Roter Reis | Marinierter Tofu | Saison Gemüse | Satay Sauce | Asia Krautsalat | Kräutersalat | Saison Topping",
       "nutrition": {
        "p100": {},
@@ -553,7 +553,7 @@
      {
       "line": "Chicken Satay Bowl",
       "dish": "Chicken Satay Bowl",
-      "desc": "Reisnudeln |Gegrilltes Poulet Satay |Grüne Bohnen |Rotes Curry |Asia Krautsalat |Kräutersalat |Thai Chilli",
+      "desc": "Reisnudeln | Gegrilltes Poulet Satay | Grüne Bohnen | Rotes Curry | Asia Krautsalat | Kräutersalat | Thai Chilli",
       "nutrition": {
        "p100": {},
        "total": {}
@@ -562,7 +562,7 @@
      {
       "line": "Planted Bowl",
       "dish": "Planted Bowl",
-      "desc": "Salatmischung | Planted Chicken Teriyaki | Sweet Corn | Tamarinden Sauce| Asia Kräutersalat | Erdnüsse",
+      "desc": "Salatmischung | Planted Chicken Teriyaki | Sweet Corn | Tamarinden Sauce | Asia Kräutersalat | Erdnüsse",
       "nutrition": {
        "p100": {},
        "total": {}
@@ -589,8 +589,8 @@
     "Lunch": [
      {
       "line": "Eins",
-      "dish": "Rinds Entrecôte Steak | Kräuterbutter",
-      "desc": "Pommes Frites | Beilagensalat",
+      "dish": "Rinds Entrecôte Steak",
+      "desc": "Kräuterbutter | Pommes Frites | Beilagensalat",
       "nutrition": {
        "p100": {
         "kcal": 150.1,
@@ -606,8 +606,8 @@
      },
      {
       "line": "Zwei",
-      "dish": "Fischknusperli | Kartoffelecken",
-      "desc": "Tartarsauce | Limette | Cole slaw | Beilagensalat",
+      "dish": "Fischknusperli",
+      "desc": "Kartoffelecken | Tartarsauce | Limette | Cole slaw | Beilagensalat",
       "nutrition": {
        "p100": {
         "kcal": 141.5,
@@ -623,8 +623,8 @@
      },
      {
       "line": "Drei",
-      "dish": "2erlei Wähe | Broccoli & Gemüse",
-      "desc": "Kräuter Quark | Beilagen von Bowl Buffet",
+      "dish": "2erlei Wähe",
+      "desc": "Broccoli & Gemüse | Kräuter Quark | Beilagen von Bowl Buffet",
       "nutrition": {
        "p100": {
         "kcal": 130.0,
@@ -683,8 +683,8 @@
     "Lunch": [
      {
       "line": "PASTA OF THE DAY",
-      "dish": "HUMMUS PASTA",
-      "desc": "Kichererbsensauce / Dörrtomaten / Kichererbsen / Spinat",
+      "dish": "Hummus Pasta",
+      "desc": "Kichererbsensauce | Dörrtomaten | Kichererbsen | Spinat",
       "nutrition": {
        "p100": {},
        "total": {}
@@ -692,8 +692,8 @@
      },
      {
       "line": "PLANTS & MORE",
-      "dish": "MOUSSAKA",
-      "desc": "Pilz Bolognese / Auberginen / Kartoffeln / Nüssen /\nLinsen / Dill",
+      "dish": "Moussaka",
+      "desc": "Pilz Bolognese | Auberginen | Kartoffeln | Nüssen | Linsen | Dill",
       "nutrition": {
        "p100": {},
        "total": {}
@@ -701,8 +701,8 @@
      },
      {
       "line": "CLASSIC FLAVOUR",
-      "dish": "GYROS TELLER",
-      "desc": "Schweins Gyros / Tzatziki / Tomaten / Gurken / Lattich /\nPommes / Zwiebel",
+      "dish": "Gyros Teller",
+      "desc": "Schweins Gyros | Tzatziki | Tomaten | Gurken | Lattich | Pommes | Zwiebel",
       "nutrition": {
        "p100": {},
        "total": {}
@@ -710,8 +710,8 @@
      },
      {
       "line": "WEEKLY BOWL",
-      "dish": "POKE BOWL",
-      "desc": "Sushi Reis / gebratene Pilze / Karotten / pikanter Broccoli / Wasabi",
+      "dish": "Poke Bowl",
+      "desc": "Sushi Reis | gebratene Pilze | Karotten | pikanter Broccoli | Wasabi",
       "nutrition": {
        "p100": {},
        "total": {}
@@ -728,7 +728,7 @@
    "meals": {
     "Lunch": [
      {
-      "line": "garden",
+      "line": "Garden",
       "dish": "Wir bedienen dich gerne in der Oberen Mensa.",
       "desc": "",
       "nutrition": {
@@ -737,7 +737,7 @@
       }
      },
      {
-      "line": "pure asia",
+      "line": "Pure Asia",
       "dish": "Wir bedienen dich gerne in der Oberen Mensa.",
       "desc": "",
       "nutrition": {
@@ -746,7 +746,7 @@
       }
      },
      {
-      "line": "butcher",
+      "line": "Butcher",
       "dish": "Wir bedienen dich gerne in der Oberen Mensa.",
       "desc": "",
       "nutrition": {
@@ -765,9 +765,9 @@
    "meals": {
     "Lunch": [
      {
-      "line": "farm",
-      "dish": "HUMMUS BOWL, Ofengemüse, Süsskartoffeln, Spinat Sprossen Rüebli, Kerne",
-      "desc": "",
+      "line": "Farm",
+      "dish": "Hummus Bowl",
+      "desc": "Ofengemüse | Süsskartoffeln | Spinat Sprossen Rüebli | Kerne",
       "nutrition": {
        "p100": {
         "kcal": 111.1,
@@ -791,9 +791,9 @@
       }
      },
      {
-      "line": "butcher",
-      "dish": "FARM SHAKSHUKA, Spiegelei, Kichererbsen, Couscous, Blumenkohl",
-      "desc": "",
+      "line": "Butcher",
+      "dish": "Shakshuka",
+      "desc": "Spiegelei | Kichererbsen | Couscous | Blumenkohl",
       "nutrition": {
        "p100": {
         "kcal": 137.7,
@@ -817,9 +817,9 @@
       }
      },
      {
-      "line": "voll anders",
-      "dish": "PANIERTES SCHNITZEL, Ketchup Mayo Zitrone, Pommes frites, Menüsalat / Apfelmus",
-      "desc": "",
+      "line": "Voll Anders",
+      "dish": "Paniertes Schnitzel",
+      "desc": "Ketchup Mayo Zitrone | Pommes frites | Menüsalat | Apfelmus",
       "nutrition": {
        "p100": {
         "kcal": 221.2,
@@ -854,8 +854,8 @@
     "Lunch": [
      {
       "line": "",
-      "dish": "Belugalinsen Salat mit geräuchertem Tofu, Fenchel und Apfel",
-      "desc": "",
+      "dish": "Belugalinsen Salat mit geräuchertem Tofu",
+      "desc": "Fenchel und Apfel",
       "nutrition": {
        "p100": {},
        "total": {}
@@ -881,9 +881,9 @@
    "meals": {
     "Lunch": [
      {
-      "line": "garden",
-      "dish": "HUMMUS BOWL, Ofengemüse, Süsskartoffeln, Spinat, Sprossen, Rüebli, Kerne",
-      "desc": "",
+      "line": "Garden",
+      "dish": "Hummus Bowl",
+      "desc": "Ofengemüse | Süsskartoffeln | Spinat | Sprossen | Rüebli | Kerne",
       "nutrition": {
        "p100": {
         "kcal": 116.7,
@@ -907,9 +907,9 @@
       }
      },
      {
-      "line": "farm",
-      "dish": "SHAKSHUKA, Spiegelei, Kichererbsen, Couscous Pfanne, Blumenkohl",
-      "desc": "",
+      "line": "Farm",
+      "dish": "Shakshuka",
+      "desc": "Spiegelei | Kichererbsen | Couscous Pfanne | Blumenkohl",
       "nutrition": {
        "p100": {
         "kcal": 106.0,
@@ -933,9 +933,9 @@
       }
      },
      {
-      "line": "voll anders",
-      "dish": "BRATWURST, Senf Dip, Kartoffelsalat, Antipasti Gemüse, Pilze",
-      "desc": "",
+      "line": "Voll Anders",
+      "dish": "Bratwurst",
+      "desc": "Senf Dip | Kartoffelsalat | Antipasti Gemüse | Pilze",
       "nutrition": {
        "p100": {
         "kcal": 153.5,
@@ -960,8 +960,8 @@
      },
      {
       "line": "Hit",
-      "dish": "PANIERTES SCHNITZEL, Pommes Frites",
-      "desc": "",
+      "dish": "Paniertes Schnitzel",
+      "desc": "Pommes Frites",
       "nutrition": {
        "p100": {
         "kcal": 166.1,
@@ -1036,8 +1036,8 @@
     "Lunch": [
      {
       "line": "",
-      "dish": "POLPETTE, Penne, Tomatensauce, Wurzelgemüse, Rucola & Reibkäse, Menüsalat",
-      "desc": "",
+      "dish": "Polpette",
+      "desc": "Penne | Tomatensauce | Wurzelgemüse | Rucola & Reibkäse | Menüsalat",
       "nutrition": {
        "p100": {},
        "total": {}

@@ -186,10 +186,9 @@ function esc(s) {
 
 /**
  * Number formatting matching the backend dump: Number.toString() is
- * the JS equivalent of Python's str(float) for JSON numbers — it keeps
- * every stored decimal (0.58 -> "0.58", 143.6 -> "143.6"). Whole
- * values that were floats in JSON (e.g. 18.0) arrive as integers and
- * render without a trailing ".0" — indistinguishable client-side.
+ * the JS equivalent of Python's str(float) for JSON numbers. The
+ * backend strips trailing ".0" (18.0 -> "18") so the raw text from
+ * the copy button is byte-identical with index.txt.
  */
 function fmtNum(v) {
   const n = Number(v);
@@ -222,13 +221,21 @@ function nutriSegment(nutr, includeWeight) {
 
 /**
  * One raw-text line, index.txt format:
- *   NAME/SLOT: line — dish: desc | per100g: kcal=… | total: …
- * Emits "nutrition=N/A" when the dish carries no nutrition at all.
+ *   NAME/SLOT: line — dish | desc | per100g: … | total: …
+ * Empty segments and line==dish duplicates are dropped (mirrors the
+ * backend dish_body()). Emits "nutrition=N/A" when the dish carries
+ * no nutrition at all.
  */
 function dishRawLine(m, d) {
   const nutrition = d.nutrition || { p100: {}, total: {} };
-  let line = m.name + '/' + prefs.meal + ': ' + (d.line || '') + ' — ' +
-    (d.dish || '') + ': ' + (d.desc || '');
+  const line = String(d.line || '').trim();
+  const dish = String(d.dish || '').trim();
+  const desc = String(d.desc || '').trim();
+
+  let head;
+  if (line && line.toLowerCase() !== dish.toLowerCase()) head = line + ' — ' + dish;
+  else head = dish;
+  if (desc) head += ' | ' + desc;
 
   const segs = [];
   const p100 = nutriSegment(nutrition.p100 || {}, false);
@@ -236,7 +243,8 @@ function dishRawLine(m, d) {
   if (p100) segs.push('per100g: ' + p100);
   if (total) segs.push('total: ' + total);
 
-  return line + (segs.length ? ' | ' + segs.join(' | ') : ' | nutrition=N/A');
+  return m.name + '/' + prefs.meal + ': ' + head +
+    (segs.length ? ' | ' + segs.join(' | ') : ' | nutrition=N/A');
 }
 
 /** Filtered raw text: selected mensas, current meal slot only. */
@@ -339,10 +347,15 @@ function renderGroupList() {
 
 function dishHTML(d) {
   const nutrition = d.nutrition || { p100: {}, total: {} };
+  // The label is dropped when it duplicates the dish name (Rice Up!
+  // publishes "Rice Up! Bowl" as both line and dish).
+  const line = String(d.line || '').trim();
+  const dish = String(d.dish || '').trim();
+  const label = line && line.toLowerCase() !== dish.toLowerCase() ? line : '';
   return '<div class="dish">' +
     '<div class="dish-main">' +
-    '<div class="dish-label">' + esc(d.line || '') + '</div>' +
-    '<h3 class="dish-name">' + esc(d.dish || '') + '</h3>' +
+    (label ? '<div class="dish-label">' + esc(label) + '</div>' : '') +
+    '<h3 class="dish-name">' + esc(dish) + '</h3>' +
     (d.desc ? '<p class="dish-desc">' + esc(d.desc) + '</p>' : '') +
     '</div>' +
     '<div class="nutrition-col">' + nutritionTableHTML(nutrition) + '</div>' +

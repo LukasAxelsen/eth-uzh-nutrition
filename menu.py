@@ -405,9 +405,21 @@ def main():
     with open(os.path.join(OUTPUT_DIR, "index.txt"), "w") as f:
         f.write(txt)
 
-    # Assemble static site from template/
+    # Assemble static site from template/. Cache-busting version: git short
+    # hash (falls back to a timestamp) — forces browsers to fetch fresh
+    # style.css/app.js on every deploy instead of serving stale caches.
+    try:
+        rev = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            capture_output=True, text=True, timeout=5,
+        ).stdout.strip() or datetime.now().strftime("%Y%m%d%H%M")
+    except Exception:
+        rev = datetime.now().strftime("%Y%m%d%H%M")
+
     with open(os.path.join(TEMPLATE_DIR, "index.html")) as f:
-        html = f.read().replace("DATE_PLACEHOLDER", TODAY)
+        html = (f.read()
+                .replace("DATE_PLACEHOLDER", TODAY)
+                .replace("VER_PLACEHOLDER", rev))
     with open(os.path.join(OUTPUT_DIR, "index.html"), "w") as f:
         f.write(html)
 

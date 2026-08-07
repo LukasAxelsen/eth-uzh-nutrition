@@ -2,18 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light dark">
   <title>University Menus — 2026-08-07</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="app">
+  <div class="app" id="app">
 
     <!-- ======================= Header ======================= -->
     <header class="header">
       <div class="header-top">
-        <!-- Hamburger: toggles the #selector panel (bars are styled by CSS) -->
+        <!-- Hamburger: toggles the #selector drawer (bars styled by CSS) -->
         <button class="menu-btn" id="menu-btn" type="button"
                 aria-label="Toggle mensa selector"
                 aria-controls="selector" aria-expanded="false">
@@ -34,25 +33,6 @@
       </div>
     </header>
 
-    <!-- ==================== Mensa selector ==================== -->
-    <div id="selector" class="selector" aria-label="Mensa selector">
-      <div class="selector-columns">
-        <!-- Left column: scrollable list of all mensas -->
-        <div class="selector-mensas"></div>
-
-        <!-- Right column: group rows + custom group creation -->
-        <div class="selector-groups">
-          <div class="group-rows"></div>
-          <div class="group-add">
-            <input id="group-input" type="text" placeholder="New group name"
-                   aria-label="New group name" autocomplete="off">
-            <button id="group-add-btn" type="button">Add</button>
-            <span class="group-add-msg" id="group-add-msg" role="status" aria-live="polite"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- ======================= Content ======================= -->
     <main class="main" id="content" aria-live="polite">
       <div class="loading">Loading menu data…</div>
@@ -72,6 +52,25 @@
     </div>
 
     <footer class="footer">Updated daily at 06:00 Zurich time</footer>
+  </div>
+
+  <!-- ============ Mensa selector (drawer, sibling of .app) ============ -->
+  <div id="selector" class="selector" aria-label="Mensa selector" aria-hidden="true">
+    <div class="selector-columns">
+      <!-- Left column: scrollable list of all mensas -->
+      <div class="selector-mensas"></div>
+
+      <!-- Right column: group rows + custom group creation -->
+      <div class="selector-groups">
+        <div class="group-rows"></div>
+        <div class="group-add">
+          <input id="group-input" type="text" placeholder="New group name"
+                 aria-label="New group name" autocomplete="off">
+          <button id="group-add-btn" type="button">Add</button>
+          <span class="group-add-msg" id="group-add-msg" role="status" aria-live="polite"></span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="app.js"></script>

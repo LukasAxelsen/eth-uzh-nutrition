@@ -161,10 +161,11 @@ input:focus-visible { outline: none; }
 /* Mobile: the drawer becomes a FULL-SCREEN picker — the app content
    slides completely off-screen (translateX 100%), leaving only the
    mensa/group selection visible. Picking a mensa or group closes it
-   and the content slides back. GPU-friendly: transform only, no reflow. */
-.app { transition: transform .35s var(--ease); }
+   and the content slides back. GPU-friendly: transform only, no reflow;
+   will-change promotes the layers so the slide doesn't jank. */
+.app { transition: transform .3s var(--ease); will-change: transform; }
 @media (max-width: 767px) {
-  #selector { width: 100%; }
+  #selector { width: 100%; will-change: transform; }
   body.menu-open .app { transform: translateX(100%); }
 }
 

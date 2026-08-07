@@ -10,7 +10,7 @@
      {
       "line": "chefs world",
       "dish": "Rinds Flanksteak",
-      "desc": "Mais Couscous | Tomaten Salsa | Maiskolben | Black Bean Velvet ",
+      "desc": "Mais Couscous | Tomaten Salsa | Maiskolben | Black Bean Velvet",
       "nutrition": {
        "p100": {
         "kcal": 143.6,
@@ -192,7 +192,7 @@
      {
       "line": "Tagesdessert",
       "dish": "Tagesdessert",
-      "desc": "Täglich süsse Köstlichkeiten\n",
+      "desc": "Täglich süsse Köstlichkeiten",
       "nutrition": {
        "p100": {},
        "total": {}
@@ -230,7 +230,7 @@
      {
       "line": "World",
       "dish": "Köfte Bowl ",
-      "desc": "IP-Suisse Rindsköfte/Tzatziki/Fladenbrot/Eisberg/Kabis/Karotten/Gurken/Tomaten/Dill Peterli ",
+      "desc": "IP-Suisse Rindsköfte/Tzatziki/Fladenbrot/Eisberg/Kabis/Karotten/Gurken/Tomaten/Dill Peterli",
       "nutrition": {
        "p100": {
         "kcal": 132.9,
@@ -247,7 +247,7 @@
      {
       "line": "Green",
       "dish": "Falafel Bowl ",
-      "desc": "Mini Curry Falafel/Tzatziki/Fladenbrot/Eisberg/Kabis/Karotten/Gurken/Tomaten/Dill Peterli ",
+      "desc": "Mini Curry Falafel/Tzatziki/Fladenbrot/Eisberg/Kabis/Karotten/Gurken/Tomaten/Dill Peterli",
       "nutrition": {
        "p100": {
         "kcal": 108.0,
@@ -544,7 +544,7 @@
      {
       "line": " Tofu Cashew Bowl",
       "dish": " Tofu Cashew Bowl",
-      "desc": "Roter Reis | Marinierter Tofu | Saison Gemüse | Satay Sauce | Asia Krautsalat | Kräutersalat | Saison Topping\n",
+      "desc": "Roter Reis | Marinierter Tofu | Saison Gemüse | Satay Sauce | Asia Krautsalat | Kräutersalat | Saison Topping",
       "nutrition": {
        "p100": {},
        "total": {}
@@ -607,7 +607,7 @@
      {
       "line": "Zwei",
       "dish": "Fischknusperli | Kartoffelecken",
-      "desc": "Tartarsauce | Limette | Cole slaw | Beilagensalat\n\n",
+      "desc": "Tartarsauce | Limette | Cole slaw | Beilagensalat",
       "nutrition": {
        "p100": {
         "kcal": 141.5,
@@ -1037,6 +1037,34 @@
      {
       "line": "",
       "dish": "POLPETTE, Penne, Tomatensauce, Wurzelgemüse, Rucola & Reibkäse, Menüsalat",
+      "desc": "",
+      "nutrition": {
+       "p100": {},
+       "total": {}
+      }
+     }
+    ],
+    "Dinner": []
+   }
+  },
+  {
+   "id": "uzh-botanischergarten",
+   "name": "Botanischer Garten",
+   "group": "Other",
+   "meals": {
+    "Lunch": [
+     {
+      "line": "",
+      "dish": "Farm",
+      "desc": "",
+      "nutrition": {
+       "p100": {},
+       "total": {}
+      }
+     },
+     {
+      "line": "",
+      "dish": "Butcher",
       "desc": "",
       "nutrition": {
        "p100": {},

@@ -59,3 +59,5 @@ Mensa Irchel/Lunch: Hit — PANIERTES SCHNITZEL, Pommes Frites: | per100g: kcal=
 Mensa Irchel/Lunch: Tagessuppe — Selleriecremesuppe: | per100g: kcal=38.0, fat=2.0g, carbs=2.0g | total: kcal=38, fat=2g, carbs=2g, weight=100g
 Mensa Irchel/Lunch: Tagesdessert — Zitronen-Quarkcreme mit Mandeln: | per100g: kcal=229.6, protein=7.0g, fat=7.0g, carbs=30.4g, sugar=21.7g | total: kcal=264, protein=8g, fat=8g, carbs=35g, sugar=25g, weight=115g
 Tierspital Mensa/Lunch: — POLPETTE, Penne, Tomatensauce, Wurzelgemüse, Rucola & Reibkäse, Menüsalat: | nutrition=N/A
+Botanischer Garten/Lunch: — Farm: | nutrition=N/A
+Botanischer Garten/Lunch: — Butcher: | nutrition=N/A

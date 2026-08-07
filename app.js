@@ -460,8 +460,9 @@ function collapseBody(body) {
    ------------------------------------------------------------ */
 
 function bindEvents() {
+  // The single hamburger both opens AND closes the drawer (it slides to
+  // the top-right corner while open, so it stays visible/tappable).
   document.getElementById('menu-btn').addEventListener('click', toggleSelector);
-  document.getElementById('drawer-close').addEventListener('click', closeSelector);
   document.querySelector('.segmented').addEventListener('click', onSegmentedClick);
 
   const mensaList = document.querySelector('.selector-mensas');
@@ -548,7 +549,7 @@ function toggleMensa(id) {
   renderContent();
   updateRawText();
   // NOTE: no auto-close — the drawer stays usable for multi-select;
-  // the user closes it via the hamburger in the drawer header.
+  // the user closes it via the hamburger (slides back to the top-left).
 }
 
 function onGroupsClick(e) {
@@ -577,7 +578,7 @@ function applyGroup(name) {
   renderContent();
   updateRawText();
   // NOTE: no auto-close (same as toggleMensa) — drawer stays usable
-  // until the user closes it via the drawer-header hamburger.
+  // until the user closes it via the hamburger.
 }
 
 function deleteCustomGroup(name) {

@@ -190,15 +190,15 @@ body.menu-open #menu-btn {
               visibility 0s linear;
 }
 
-/* Mobile: the drawer becomes a FULL-SCREEN picker — the app content
-   slides completely off-screen (translateX 100%), leaving only the
-   mensa/group selection visible. GPU-friendly: transform only, no
-   reflow. No will-change here: one-off transitions promote a layer on
-   demand, while a permanently pinned layer on a full-viewport element
-   costs memory and can jank the first paint. */
+/* The app content moves with the drawer. Mobile: GPU transform slide —
+   will-change keeps the big DOM on a permanent compositor layer so the
+   first frame of the slide doesn't stall while the layer is promoted
+   (this is what made the return "stick" before). Desktop: the content
+   glides aside too (margin-left/width transition in the desktop query). */
 .app { transition: transform .3s cubic-bezier(.4, 0, .2, 1); }
 @media (max-width: 767px) {
   #selector { width: 100%; }
+  .app { will-change: transform; }
   body.menu-open .app { transform: translateX(100%); }
 }
 
@@ -511,11 +511,20 @@ body.menu-open #menu-btn {
 /* 9. Responsive */
 @media (min-width: 768px) {          /* desktop layout */
   .header { padding: 72px 32px 48px; }
-  /* Sidebar pattern (GitHub/Linear-style): the drawer is a fixed 380px
-     column; the whole app (header + content) gives way via margin-left
-     and takes the remaining width — nothing gets covered or squeezed.
-     Drawer content stays single-column (mensas on top, groups below). */
+  /* Sidebar pattern (GitHub/Linear/shadcn-style): the drawer is a fixed
+     380px column; the whole app (header + content) gives way via
+     margin-left and takes the remaining width — animated with the same
+     Material easing so the content GLIDES aside instead of snapping
+     (this was the "flash" bug). */
   body.menu-open .app { transform: none; margin-left: 380px; width: calc(100% - 380px); }
+  .app {
+    /* margin-left/width animate alongside transform (shadcn sidebar
+       practice: layout-property animation is fine for a one-off 0.3s
+       give-way on desktop hardware). */
+    transition: transform .3s cubic-bezier(.4, 0, .2, 1),
+                margin-left .3s cubic-bezier(.4, 0, .2, 1),
+                width .3s cubic-bezier(.4, 0, .2, 1);
+  }
   #selector { width: 380px; }
   /* Drawer open on desktop: the hamburger slides just right of the
      380px sidebar (12px + 380px) and stays visible/tappable. */

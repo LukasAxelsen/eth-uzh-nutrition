@@ -58,7 +58,7 @@ input:focus-visible { outline: none; }
 }
 
 /* 3. Header */
-.header { position: relative; padding: 56px 24px 40px; text-align: center; }
+.header { padding: 56px 24px 40px; text-align: center; }
 
 #date-heading {
   font-size: clamp(32px, 6vw, 56px);
@@ -67,16 +67,26 @@ input:focus-visible { outline: none; }
   line-height: 1.05;
 }
 
-/* 3a. Hamburger: three 1px bars, 18px tall, ~40px tap target.
-   Pseudo-elements + gradient middle bar; no bg/border. */
+/* 3a. Hamburger: three 1px bars, ~40px tap target (36px on small
+   phones). Lives at BODY level as a sibling of .app and #selector,
+   position:fixed — deliberately OUTSIDE .app: a fixed element inside a
+   transformed ancestor is positioned relative to that ancestor
+   (containing-block trap), which would break the top-right slide while
+   .app is translated off-screen. z-index 300 keeps it above the drawer
+   (#selector z-index 200) on both mobile (over the full-screen drawer)
+   and desktop (right of the 380px sidebar), so it stays tappable. */
 .menu-btn {
-  position: absolute;
-  top: 16px; left: 16px;
+  position: fixed;
+  top: 12px; left: 12px;
+  z-index: 300;
   width: 40px; height: 40px;
   padding: 0;
   background: linear-gradient(var(--text), var(--text)) center / 18px 1px no-repeat;
   border: none;
   cursor: pointer;
+  /* Same duration + easing as #selector/.app: the hamburger and the
+     drawer move in lockstep (one shared choreography). */
+  transition: transform .3s cubic-bezier(.4, 0, .2, 1);
 }
 .menu-btn::before,
 .menu-btn::after {
@@ -89,6 +99,17 @@ input:focus-visible { outline: none; }
 }
 .menu-btn::before { top: 11.5px; }
 .menu-btn::after  { bottom: 11.5px; }
+
+/* Drawer open: the hamburger slides to the TOP-RIGHT corner of the
+   viewport (mobile full-screen drawer) / just right of the 380px
+   sidebar (desktop) — same duration + easing as the drawer for a
+   coordinated feel. Closing slides it back to the top-left.
+   Math (40px button at left:12px): translateX(100vw - 64px) →
+   left edge 52px from the right viewport edge, right edge 12px —
+   symmetric margins, clear of notches/scrollbars. */
+body.menu-open #menu-btn {
+  transform: translateX(calc(100vw - 64px));
+}
 
 /* 3b. Segmented Lunch/Dinner switch (iOS style) */
 .segmented {
@@ -150,60 +171,35 @@ input:focus-visible { outline: none; }
   overscroll-behavior: contain;
   transform: translateX(-100%);
   visibility: hidden;                    /* no tab focus while closed */
-  transition: transform .35s var(--ease), visibility 0s linear .35s;
+  /* Shared drawer spec — identical to .app and #menu-btn: 0.3s +
+     Material standard cubic-bezier(0.4, 0, 0.2, 1) so the drawer,
+     content and hamburger move in lockstep (the old .35s here caused
+     a 0.05s stall at the end of the close). visibility: 0s duration
+     with a .3s delay on close keeps the drawer painted while it slides
+     out, then makes it inert — exactly one transform duration, no
+     extra stall. */
+  transition: transform .3s cubic-bezier(.4, 0, .2, 1),
+              visibility 0s linear .3s;
 }
 #selector.open {
   transform: translateX(0);
   visibility: visible;
-  transition: transform .35s var(--ease);
+  /* Both transitions declared on both states: on open, visibility
+     flips instantly (0 delay) while the transform animates. */
+  transition: transform .3s cubic-bezier(.4, 0, .2, 1),
+              visibility 0s linear;
 }
-
-/* Drawer header: hamburger to close the drawer. Hidden on desktop where
-   the main hamburger stays visible (the app content is not moved away). */
-.drawer-head { display: none; }
-.drawer-close {
-  position: relative;
-  width: 40px; height: 40px;
-  padding: 0;
-  background: linear-gradient(var(--text), var(--text)) center / 18px 1px no-repeat;
-  border: none;
-  cursor: pointer;
-}
-.drawer-close::before,
-.drawer-close::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 18px; height: 1px;
-  background: var(--text);
-}
-.drawer-close::before { top: 11.5px; }
-.drawer-close::after  { bottom: 11.5px; }
 
 /* Mobile: the drawer becomes a FULL-SCREEN picker — the app content
    slides completely off-screen (translateX 100%), leaving only the
-   mensa/group selection visible. Picking a mensa or group closes it
-   and the content slides back. GPU-friendly: transform only, no reflow;
-   will-change promotes the layers so the slide doesn't jank. */
-.app { transition: transform .3s var(--ease); will-change: transform; }
+   mensa/group selection visible. GPU-friendly: transform only, no
+   reflow. No will-change here: one-off transitions promote a layer on
+   demand, while a permanently pinned layer on a full-viewport element
+   costs memory and can jank the first paint. */
+.app { transition: transform .3s cubic-bezier(.4, 0, .2, 1); }
 @media (max-width: 767px) {
-  #selector { width: 100%; will-change: transform; }
+  #selector { width: 100%; }
   body.menu-open .app { transform: translateX(100%); }
-  /* Drawer header visible on mobile: sticky hamburger to close. */
-  .drawer-head {
-    display: flex;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    padding: 10px 14px;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-  }
-  .drawer-close { width: 36px; height: 36px; }
-  .drawer-close::before { top: 9.5px; }
-  .drawer-close::after  { bottom: 9.5px; }
 }
 
 /* Scroll lock while the drawer is open (Bootstrap-offcanvas pattern).
@@ -519,12 +515,11 @@ input:focus-visible { outline: none; }
      column; the whole app (header + content) gives way via margin-left
      and takes the remaining width — nothing gets covered or squeezed.
      Drawer content stays single-column (mensas on top, groups below). */
-  body.menu-open .app { transform: none; }
+  body.menu-open .app { transform: none; margin-left: 380px; width: calc(100% - 380px); }
   #selector { width: 380px; }
-  body.menu-open .app {
-    margin-left: 380px;
-    width: calc(100% - 380px);
-  }
+  /* Drawer open on desktop: the hamburger slides just right of the
+     380px sidebar (12px + 380px) and stays visible/tappable. */
+  body.menu-open #menu-btn { transform: translateX(392px); }
   body.menu-open #content,
   body.menu-open .raw-section { max-width: none; }
   .selector-mensas { max-height: 55vh; }
@@ -539,7 +534,6 @@ input:focus-visible { outline: none; }
 @media (max-width: 600px) {          /* mobile tweaks */
   .header { padding: 48px 56px 32px; }  /* side padding clears the hamburger */
   .menu-btn {                          /* 36px target, 16px bars */
-    top: 12px; left: 12px;
     width: 36px; height: 36px;
     background: linear-gradient(var(--text), var(--text)) center / 16px 1px no-repeat;
   }
@@ -547,6 +541,9 @@ input:focus-visible { outline: none; }
   .menu-btn::after { width: 16px; }
   .menu-btn::before { top: 9.5px; }
   .menu-btn::after  { bottom: 9.5px; }
+  /* 36px button at left:12px → translateX(100vw - 60px): right edge
+     lands 12px from the right viewport edge (symmetric with left). */
+  body.menu-open #menu-btn { transform: translateX(calc(100vw - 60px)); }
   .segmented { margin-top: 18px; }
   .seg-option { min-width: 82px; padding: 6px 14px; }
   .selector-columns { padding: 16px 20px 28px; }

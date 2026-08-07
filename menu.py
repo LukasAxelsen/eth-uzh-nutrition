@@ -13,14 +13,15 @@ import json
 import os
 import re
 import subprocess
-import sys
 import time
 from datetime import timezone, timedelta, datetime
 
-# Pause between rapid sequential requests to Food2050 (app.food2050.ch).
-# Without it, the batch scraper trips rate limiting and weekly/detail pages
-# come back empty, leaving outlets with list-API fallback dishes (no nutrition).
+# Pause before every HTTP request. Food2050 (app.food2050.ch) rate-limits
+# rapid bursts, so the pacing lives inside http_get/http_post and covers the
+# whole UZH scrape: list-API POSTs, weekly pages and per-dish detail pages.
 SCRAPE_DELAY = 0.4  # seconds
+
+USER_AGENT = "Mozilla/5.0 (compatible; eth-uzh-nutrition/1.0)"
 
 # --------------------------------------------------------------------------
 # Config
@@ -28,8 +29,8 @@ SCRAPE_DELAY = 0.4  # seconds
 
 TODAY = datetime.now(timezone(timedelta(hours=2))).date().isoformat()
 
-OUTPUT_DIR = "output"
 BASE = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_DIR = os.path.join(BASE, "output")
 TEMPLATE_DIR = os.path.join(BASE, "template")
 
 # ETH facility-id -> (display name, default group)
@@ -58,7 +59,7 @@ ETH_FACILITIES = {
     28: ("Flavour Kitchen", "Irchel"),
 }
 
-# ETH meal-time names -> Lunch/Dinner
+# ETH meal-time names -> Lunch/Dinner (anything else is dropped)
 ETH_LUNCH_NAMES = ("Mittag", "Mittagessen", "Lunch")
 ETH_DINNER_NAMES = ("Abend", "Abendessen", "Dinner")
 
@@ -103,16 +104,39 @@ NUTRITION_KEYS = ["kcal", "protein", "fat", "saturated", "carbs", "sugar", "salt
 ETH_NUTRIENT_KEYS = ["energy", "protein", "fat", "saturated-fatty-acids", "carbohydrates", "sugar", "salt"]
 ETH_NUTRIENT_LABELS = ["kcal", "protein", "fat", "saturated", "carbs", "sugar", "salt"]
 
+# Food2050 stats key -> data.json label. The source emits "fibers"
+# (plural) and "energy" already in kcal — no conversion needed.
 UZH_NUTRIENT_MAP = {
-    "energy": ("kcal", ""), "protein": ("protein", "g"), "fat": ("fat", "g"),
-    "carbohydrates": ("carbs", "g"), "sugar": ("sugar", "g"),
-    "salt": ("salt", "g"), "fibers": ("fiber", "g"),
+    "energy": "kcal", "protein": "protein", "fat": "fat",
+    "carbohydrates": "carbs", "sugar": "sugar",
+    "salt": "salt", "fibers": "fiber",
 }
 
 
-def http_get(url, timeout=30):
-    """GET a URL and return body text (with UA header + one retry)."""
-    cmd = ["curl", "-s", "-A", "Mozilla/5.0 (compatible; eth-uzh-nutrition/1.0)", url]
+# --------------------------------------------------------------------------
+# HTTP + numeric helpers
+# --------------------------------------------------------------------------
+
+def _num(value):
+    """Return value as a float, or None when missing / zero / non-numeric."""
+    try:
+        f = float(value)
+    except (TypeError, ValueError):
+        return None
+    return f if f != 0 else None
+
+
+def _keep_number(value):
+    """Like _num, but keeps integers as ints (UZH per-serving amounts)."""
+    f = _num(value)
+    if f is None:
+        return None
+    return int(f) if f.is_integer() else f
+
+
+def _curl(args, timeout=30):
+    """Run curl and return stdout text, or '' after attempts with backoff."""
+    cmd = ["curl", "-s", "-A", USER_AGENT] + args
     for attempt in range(2):
         try:
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
@@ -125,27 +149,38 @@ def http_get(url, timeout=30):
     return ""
 
 
+def http_get(url, timeout=30):
+    """GET a URL and return the body text (or '' on failure)."""
+    time.sleep(SCRAPE_DELAY)  # pace every request (Food2050 rate limits)
+    return _curl([url], timeout=timeout)
+
+
 def http_post(url, body, headers=None, timeout=30):
-    """POST a JSON body and return parsed JSON."""
-    cmd = ["curl", "-s", "-X", "POST", url,
-           "-A", "Mozilla/5.0 (compatible; eth-uzh-nutrition/1.0)",
-           "-H", "Content-Type: application/json"]
+    """POST a JSON body and return the parsed dict (or {} on failure)."""
+    time.sleep(SCRAPE_DELAY)  # pace every request (Food2050 rate limits)
+    args = ["-X", "POST", url, "-H", "Content-Type: application/json"]
     for k, v in (headers or {}).items():
-        cmd += ["-H", f"{k}: {v}"]
-    cmd += ["-d", body]
-    for attempt in range(2):
-        try:
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
-            if result.stdout:
-                return json.loads(result.stdout)
-        except Exception:
-            pass
-    return {}
+        args += ["-H", f"{k}: {v}"]
+    args += ["-d", body]
+    text = _curl(args, timeout=timeout)
+    try:
+        return json.loads(text) if text else {}
+    except ValueError:
+        return {}
 
 
 # --------------------------------------------------------------------------
 # ETH
 # --------------------------------------------------------------------------
+
+def eth_meal_slot(meal_time_name):
+    """Map an ETH meal-time name to a slot ('Lunch'|'Dinner') or None."""
+    if any(t in meal_time_name for t in ETH_DINNER_NAMES):
+        return "Dinner"
+    if any(t in meal_time_name for t in ETH_LUNCH_NAMES):
+        return "Lunch"
+    return None
+
 
 def fetch_eth():
     """Return list of {id, name, group, meals: {Lunch: [...], Dinner: [...]}}."""
@@ -159,44 +194,52 @@ def fetch_eth():
     meal_times = data.get("meal-times", [])
 
     # meal-time-id -> (facility-id, meal-time-name)
-    mt_map = {mt["meal-time-id"]: (mt["facility-id"], mt["meal-time-name"]) for mt in meal_times}
+    mt_map = {
+        mt.get("meal-time-id"): (mt.get("facility-id"), mt.get("meal-time-name", ""))
+        for mt in meal_times if mt.get("meal-time-id")
+    }
 
     # facility-id -> {Lunch: [dishes], Dinner: [dishes]}
     per_facility = {}
     for m in meals:
+        if not m.get("meal-name"):
+            continue
         mt_id = m.get("meal-time-id")
         if mt_id not in mt_map:
             continue
         fid, mt_name = mt_map[mt_id]
         if fid not in ETH_FACILITIES:
             continue
+        slot = eth_meal_slot(mt_name)
+        if slot is None:
+            continue
 
         dish = {
-            "line": m["line-name"],
+            "line": m.get("line-name", ""),
             "dish": m["meal-name"],
-            "desc": m.get("description", ""),
+            "desc": m.get("description", "").strip(),
             "nutrition": {},
         }
+        # ETH reports energy in kJ — convert to kcal. Missing/zero values
+        # are skipped so dishes never carry fabricated 0s.
         nutr = {}
         for nk, nl in zip(ETH_NUTRIENT_KEYS, ETH_NUTRIENT_LABELS):
-            v = m.get(nk, "")
-            if v and float(v) != 0:
-                val = float(v)
-                if nl == "kcal":
-                    # ETH API reports energy in kJ — convert to kcal
-                    val = round(val / 4.184, 1)
-                nutr[nl] = val
+            val = _num(m.get(nk))
+            if val is None:
+                continue
+            if nl == "kcal":
+                val = round(val / 4.184, 1)
+            nutr[nl] = val
         dish["nutrition"]["p100"] = nutr
         dish["nutrition"]["total"] = {}
 
-        meal_slot = "Dinner" if any(t in mt_name for t in ETH_DINNER_NAMES) else "Lunch"
-        per_facility.setdefault(fid, {"Lunch": [], "Dinner": []})[meal_slot].append(dish)
+        per_facility.setdefault(fid, {"Lunch": [], "Dinner": []})[slot].append(dish)
 
     result = []
     for fid, (name, group) in ETH_FACILITIES.items():
         meals_by_slot = per_facility.get(fid)
         if not meals_by_slot:
-            continue
+            continue  # facility has no dishes today — drop it entirely
         result.append({
             "id": f"eth-{fid}",
             "name": f"ETH {name}",
@@ -244,9 +287,11 @@ def fetch_uzh():
                 dishes = uzh_dishes_from_list(k.get("todayOffer") or [])
 
             if not dishes:
-                continue
+                continue  # outlet has no dishes today — drop it entirely
             result.append({
-                "id": f"uzh-{slug}",
+                # Some kitchen slugs already carry a "uzh-" prefix
+                # (uzh-binzmuehle, uzh-cityport, uzh-botanischergarten).
+                "id": "uzh-" + slug.removeprefix("uzh-"),
                 "name": name,
                 "group": group,
                 "meals": {"Lunch": dishes, "Dinner": []},
@@ -255,17 +300,22 @@ def fetch_uzh():
 
 
 def uzh_dishes_from_list(today_offer):
-    """Build dishes from the list API (no nutrition available)."""
+    """Build dishes from the list API (no nutrition available).
+
+    Recipe titles can be empty (Botanischer Garten publishes only display
+    names) — fall back to the displayName so the outlet is not dropped.
+    """
     dishes = []
     for offer in today_offer:
         for item in offer.get("digitalMenuItems") or []:
             recipe = item.get("recipe") or {}
             title = (recipe.get("title") or {}).get("de") or ""
-            if not title:
+            name = (title or item.get("displayName") or "").strip()
+            if not name:
                 continue
             dishes.append({
                 "line": "",
-                "dish": title,
+                "dish": name,
                 "desc": "",
                 "nutrition": {"p100": {}, "total": {}},
             })
@@ -274,12 +324,14 @@ def uzh_dishes_from_list(today_offer):
 
 def scrape_uzh_weekly(slug):
     """Scrape today's dishes + nutrition from the Food2050 weekly page.
-    Returns a list of dishes, or None if the weekly page is unavailable."""
+
+    Returns a list of dishes, or None if the weekly page is unavailable
+    (caller then falls back to the list API).
+    """
     url = UZH_WEEKLY_URLS.get(slug)
     if not url:
         return None
 
-    time.sleep(SCRAPE_DELAY)  # pace consecutive weekly-page scrapes (rate limiting)
     html = http_get(url)
     m = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', html)
     if not m:
@@ -300,28 +352,24 @@ def scrape_uzh_weekly(slug):
             if item.get("detailUrl", "").endswith(TODAY):
                 items.append(item)
     if not items:
-        return []
+        return []  # page loaded, but nothing is served today
 
     dishes = []
     for item in items:
-        detail_url = item.get("detailUrl")
-        cat = item.get("category", {}).get("name", "")
-        dish_name = item.get("dish", {}).get("name", "")
+        dish_name = (item.get("dish") or {}).get("name", "")
         if not dish_name:
             continue
-        time.sleep(SCRAPE_DELAY)  # pace per-dish detail-page scrapes (rate limiting)
-        stats = scrape_uzh_stats(detail_url)
         dishes.append({
-            "line": cat,
+            "line": (item.get("category") or {}).get("name", ""),
             "dish": dish_name,
             "desc": "",
-            "nutrition": stats,
+            "nutrition": scrape_uzh_stats(item.get("detailUrl")),
         })
     return dishes
 
 
 def scrape_uzh_stats(detail_url):
-    """Fetch one Food2050 dish page and extract nutrition stats."""
+    """Fetch one Food2050 dish page and extract per-100g + per-serving stats."""
     html = http_get(detail_url)
     m = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', html)
     if not m:
@@ -333,18 +381,23 @@ def scrape_uzh_stats(detail_url):
         return {"p100": {}, "total": {}}
 
     p100, total = {}, {}
-    for key, (label, unit) in UZH_NUTRIENT_MAP.items():
+    for key, label in UZH_NUTRIENT_MAP.items():
         v = stats.get(key)
         if not isinstance(v, dict):
             continue
-        if v.get("amountPer100g") is not None and float(v["amountPer100g"]) != 0:
-            p100[label] = round(float(v["amountPer100g"]), 1)
-        if v.get("amount") is not None and float(v["amount"]) != 0:
-            total[label] = v["amount"]
+        per100 = _num(v.get("amountPer100g"))
+        if per100 is not None:
+            p100[label] = round(per100, 1)
+        amount = _keep_number(v.get("amount"))
+        if amount is not None:
+            total[label] = amount
 
-    tw = stats.get("servingWeight")
-    if isinstance(tw, dict) and tw.get("amount"):
-        total["weight"] = tw["amount"]
+    # servingWeight belongs to total only (contract: weight never in p100)
+    sw = stats.get("servingWeight")
+    if isinstance(sw, dict):
+        weight = _keep_number(sw.get("amount"))
+        if weight is not None:
+            total["weight"] = weight
 
     return {"p100": p100, "total": total}
 
@@ -354,6 +407,7 @@ def scrape_uzh_stats(detail_url):
 # --------------------------------------------------------------------------
 
 def format_nutrition(nutr):
+    """One nutrition segment, e.g. 'kcal=152.0, protein=5.3g' ('' when empty)."""
     parts = []
     for key in NUTRITION_KEYS:
         v = nutr.get(key)
@@ -364,25 +418,23 @@ def format_nutrition(nutr):
 
 
 def render_txt(mensas):
+    """One physical line per dish: NAME/SLOT: line — dish: desc | per100g: … | total: …"""
     lines = [f"ETH/UZH Mensa Menus — {TODAY}", "=" * 60, ""]
     for m in mensas:
         for slot in ("Lunch", "Dinner"):
-            if not m["meals"][slot]:
-                continue
             for d in m["meals"][slot]:
-                nutr = format_nutrition(d["nutrition"].get("p100", {}))
-                segs = [f"per100g: {nutr}"] if nutr else []
-                tot = format_nutrition(d["nutrition"].get("total", {}))
-                if tot:
-                    segs.append(f"total: {tot}")
+                segs = []
+                p100 = format_nutrition(d["nutrition"].get("p100", {}))
+                if p100:
+                    segs.append(f"per100g: {p100}")
+                total = format_nutrition(d["nutrition"].get("total", {}))
+                if total:
+                    segs.append(f"total: {total}")
                 nutr_str = " | ".join(segs) if segs else "nutrition=N/A"
-                # Collapse embedded newlines (ETH descriptions contain them)
-                # so index.txt stays one physical line per dish.
+                # Collapse embedded whitespace/newlines (ETH descriptions
+                # contain them) so index.txt stays one physical line per dish.
                 body = " ".join(f'{d["line"]} — {d["dish"]}: {d["desc"]}'.split())
                 lines.append(f'{m["name"]}/{slot}: {body} | {nutr_str}')
-        # closed mensa with no meals at all
-        if not m["meals"]["Lunch"] and not m["meals"]["Dinner"]:
-            lines.append(f'{m["name"]}: no meals today (closed or on break)')
     return "\n".join(lines) + "\n"
 
 

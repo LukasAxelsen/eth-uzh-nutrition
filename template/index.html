@@ -7,21 +7,25 @@
   <link rel="stylesheet" href="style.css?v=VER_PLACEHOLDER">
 </head>
 <body>
+  <!-- Hamburger: lives at BODY level (sibling of .app and #selector),
+       position:fixed, so it can slide to the top-right corner while the
+       drawer opens. It must NOT live inside .app: a fixed element inside
+       a transformed ancestor is positioned relative to that ancestor
+       (containing-block trap), which would break the slide while .app
+       is translated off-screen. -->
+  <button class="menu-btn" id="menu-btn" type="button"
+          aria-label="Toggle mensa selector"
+          aria-controls="selector" aria-expanded="false">
+    <span class="menu-bar"></span>
+    <span class="menu-bar"></span>
+    <span class="menu-bar"></span>
+  </button>
+
   <div class="app" id="app">
 
     <!-- ======================= Header ======================= -->
     <header class="header">
-      <div class="header-top">
-        <!-- Hamburger: toggles the #selector drawer (bars styled by CSS) -->
-        <button class="menu-btn" id="menu-btn" type="button"
-                aria-label="Toggle mensa selector"
-                aria-controls="selector" aria-expanded="false">
-          <span class="menu-bar"></span>
-          <span class="menu-bar"></span>
-          <span class="menu-bar"></span>
-        </button>
-        <h1 id="date-heading">Loading…</h1>
-      </div>
+      <h1 id="date-heading">Loading…</h1>
 
       <!-- Lunch/Dinner segmented switch (iOS style).
            .seg-thumb is a CSS-driven sliding pill: fixed size at the
@@ -56,16 +60,6 @@
 
   <!-- ============ Mensa selector (drawer, sibling of .app) ============ -->
   <div id="selector" class="selector" aria-label="Mensa selector" aria-hidden="true">
-    <!-- Drawer header (mobile only): hamburger that closes the drawer.
-         On desktop the main hamburger stays visible, so this is hidden. -->
-    <div class="drawer-head">
-      <button class="drawer-close" id="drawer-close" type="button"
-              aria-label="Close mensa selector" aria-controls="selector">
-        <span class="menu-bar"></span>
-        <span class="menu-bar"></span>
-        <span class="menu-bar"></span>
-      </button>
-    </div>
     <div class="selector-columns">
       <!-- Top pane: scrollable list of all mensas -->
       <section class="selector-pane">

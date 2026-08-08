@@ -25,7 +25,7 @@
    ------------------------------------------------------------ */
 
 // Replaced at deploy time (e.g. "2026-08-07"). Keep the token verbatim.
-const DATE_STR = '2026-08-08';
+const DATE_STR = '2026-08-09';
 const STORAGE_KEY = 'eth-uzh-nutrition-prefs';
 
 // Default groups, in display order (custom groups are appended after).
@@ -40,7 +40,7 @@ const NUTRITION_ROWS = [
   { label: 'Energy', key: 'kcal' },
   { label: 'Protein', key: 'protein' },
   { label: 'Fat', key: 'fat' },
-  { label: 'Saturated', key: 'saturated' },
+  { label: 'Saturated fat', key: 'saturated' },
   { label: 'Carbs', key: 'carbs' },
   { label: 'Sugar', key: 'sugar' },
   { label: 'Salt', key: 'salt' },
@@ -54,8 +54,15 @@ const EMPTY_MEALS_TEXT = 'No meals available today.';
    2. App state
    ------------------------------------------------------------ */
 
-// Normalized data.json contents.
+// Normalized data.json contents: { date, days: {ISO: {mensas}},
+// availableDates: [ISO...] }. `data.days[state.date].mensas` is the
+// ACTIVE dataset — every render reads from it.
 let data = null;
+
+// Selected calendar date (ISO). Starts at the served date, changes via
+// the calendar popover. NOT persisted: the menu site is a "today"
+// product; a remembered past date would confuse the next visit.
+let selectedDate = '';
 
 // User preferences. Sets for membership (fast lookup), plain object
 // for custom groups. Mirrors the localStorage schema exactly:
@@ -65,7 +72,7 @@ let prefs = {
   meal: 'Lunch',
   selected: new Set(),
   photos: false,
-  theme: 'auto',
+  theme: 'light',
   customGroups: {},
   collapsedMensas: new Set(),
 };
@@ -79,7 +86,7 @@ let rawFiltered = '';
 
 /** Read + sanitize stored prefs; fall back to defaults on any error. */
 function loadPrefs() {
-  const p = { meal: 'Lunch', selected: new Set(), photos: false, theme: 'auto', customGroups: {}, collapsedMensas: new Set() };
+  const p = { meal: 'Lunch', selected: new Set(), photos: false, theme: 'light', customGroups: {}, collapsedMensas: new Set() };
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return p;
@@ -125,8 +132,15 @@ async function fetchData() {
   const resp = await fetch('data.json', { cache: 'no-cache' });
   if (!resp.ok) throw new Error('HTTP ' + resp.status);
   const json = await resp.json();
-  if (!json || !Array.isArray(json.mensas)) throw new Error('Unexpected data.json shape');
-  return json;
+  if (!json || !json.days || typeof json.days !== 'object') {
+    throw new Error('Unexpected data.json shape');
+  }
+  // Normalize every day's mensas up front (one pass, cached per day).
+  const days = {};
+  for (const [iso, day] of Object.entries(json.days)) {
+    days[iso] = normalizeMensas(day.mensas || []);
+  }
+  return { date: json.date, days, availableDates: json.availableDates || [] };
 }
 
 /** Guarantee every mensa has id/name/group and Lunch/Dinner arrays. */
@@ -144,7 +158,7 @@ function normalizeMensas(raw) {
 
 /** Drop stale ids (closed mensas etc.), default selection to Central. */
 function validatePrefsAgainstData() {
-  const ids = new Set(data.mensas.map((m) => m.id));
+  const ids = new Set(activeMensas().map((m) => m.id));
 
   prefs.selected = new Set(Array.from(prefs.selected).filter((id) => ids.has(id)));
 
@@ -165,13 +179,20 @@ function validatePrefsAgainstData() {
 
 /* ---------- mensa/group lookup helpers ---------- */
 
+/** The ACTIVE dataset: the selected day's mensas. Every render reads
+    through this so switching the calendar date automatically feeds the
+    whole pipeline (content, selector, raw text) — no per-feature wiring. */
+function activeMensas() {
+  return (data && data.days[selectedDate]) || [];
+}
+
 function mensaById(id) {
-  return data.mensas.find((m) => m.id === id) || null;
+  return activeMensas().find((m) => m.id === id) || null;
 }
 
 /** All mensas belonging to a default group (data order). */
 function mensasInGroup(group) {
-  return data.mensas.filter((m) => m.group === group);
+  return activeMensas().filter((m) => m.group === group);
 }
 
 /** Member ids of a group row — default group or custom group. */
@@ -257,7 +278,7 @@ function dishRawLine(m, d) {
 /** Filtered raw text: selected mensas, current meal slot only. */
 function buildRawText() {
   const lines = [];
-  for (const m of data.mensas) {
+  for (const m of activeMensas()) {
     if (!prefs.selected.has(m.id)) continue;
     for (const d of m.meals[prefs.meal]) lines.push(dishRawLine(m, d));
   }
@@ -317,7 +338,11 @@ function renderAll() {
    snapshot approach that caused jank on height changes. */
 
 const ANIM_MS = 350;
-const ANIM_EASE = 'cubic-bezier(.4, 0, .2, 1)';
+// Apple's standard easing (HIG "ease"): strong ease-out — instant
+// response, long graceful settle. This is the single curve for ALL
+// content animation (FLIP, disclosures); keep in sync with --ease in
+// style.css.
+const ANIM_EASE = 'cubic-bezier(.32, .72, 0, 1)';
 
 // Animations are enabled ONLY after the initial render completes — the
 // first paint must be silent (content just appears), per FLIP practice
@@ -369,20 +394,65 @@ function flipPlay(container, first) {
   }
 }
 
+/** Enter animation for a freshly reconciled node: it grows from 0 height
+    to its natural height (same choreography as the photo open — the
+    layout-animation primitive of this site). The node is inserted at
+    0 height so it does NOT shove its siblings down; on the next frame
+    the natural height is measured and a height transition grows it,
+    which smoothly pushes everything below it. No fades, no FLIP needed
+    for the enter itself (the sibling FLIP pass measures ~0 delta and
+    stays out of the way). Also the site-wide default for ADDED content:
+    every new section/dish/chip enters this way — no per-feature wiring.
+    Call right after the node is inserted and populated. */
+function animateEnter(node) {
+  if (!animationsAllowed() || !node.isConnected) return;
+  node.dataset.entering = '1';
+  // Inline the height transition for the grow (the node's own CSS may
+  // not transition height — e.g. .mensa-section doesn't), APPENDED to
+  // any existing transition so state feedback (hover etc.) keeps
+  // working during the grow. Cleaned up with the height afterwards.
+  const cur = getComputedStyle(node).transition;
+  node.style.transition = (cur && cur !== 'all 0s ease 0s' ? cur + ', ' : '') +
+                          'height .35s ' + ANIM_EASE;
+  node.style.height = '0';
+  node.style.overflow = 'hidden';
+  requestAnimationFrame(() => {
+    if (!node.isConnected) return;
+    node.style.height = 'auto';
+    const h = node.offsetHeight; // natural height
+    node.style.height = '0px';
+    void node.offsetHeight; // reflow: transition starts from 0
+    node.style.height = h + 'px';
+    node.style.overflow = '';
+    // Drop the inline height once grown so layout stays responsive.
+    const onEnd = (e) => {
+      if (e.propertyName === 'height') {
+        node.style.height = '';
+        node.style.transition = '';
+        delete node.dataset.entering;
+        node.removeEventListener('transitionend', onEnd);
+      }
+    };
+    node.addEventListener('transitionend', onEnd);
+  });
+}
+
 /** Keyed reconciliation: keep existing nodes in order, create missing ones
     via makeEl(key), drop stale ones. No enter/leave fades — newly added
-    nodes just appear, and every surviving node whose position changed
-    slides smoothly via FLIP (the Vue TransitionGroup move choreography:
-    the list "makes room" for additions/removals instead of popping).
+    nodes grow in from 0 height (animateEnter), and every surviving node
+    whose position changed slides smoothly via FLIP (the Vue
+    TransitionGroup move choreography: the list "makes room" for
+    additions/removals instead of popping).
     The FLIP pass itself is orchestrated by renderAll() (doFlip stays
     false there); standalone callers may pass doFlip=true. */
-function reconcileChildren(container, keys, makeEl, doFlip) {
+function reconcileChildren(container, keys, makeEl, doFlip, enter = true) {
   const first = flipFirst(container);
   const existing = new Map();
   for (const child of container.children) {
     if (child.dataset.key) existing.set(child.dataset.key, child);
   }
   const seen = new Set();
+  const added = [];
 
   // Walk the desired order with an index into the live children: a node
   // that is ALREADY at its target position is left untouched — calling
@@ -396,6 +466,7 @@ function reconcileChildren(container, keys, makeEl, doFlip) {
       node = makeEl(key);
       node.dataset.key = key;
       container.insertBefore(node, container.children[targetIdx] || null);
+      added.push(node);
     } else if (container.children[targetIdx] !== node) {
       container.insertBefore(node, container.children[targetIdx] || null);
     }
@@ -408,6 +479,21 @@ function reconcileChildren(container, keys, makeEl, doFlip) {
   // keyed and present in the new list.
   for (const child of Array.from(container.children)) {
     if (!child.dataset.key || !seen.has(child.dataset.key)) child.remove();
+  }
+
+  // Enter choreography for freshly added nodes: grow from 0 height.
+  // Deferred to the end so all siblings are in their final positions
+  // before the measurement frame runs. A node whose ANCESTOR is already
+  // entering (e.g. a dish inside a freshly added section) is skipped —
+  // the outer grow carries it, and a nested grow would corrupt the outer
+  // measurement (the section would measure the dishes at 0 height and
+  // clip their growth). Standalone adds (new section, new chip, dishes
+  // swapped by a meal switch inside a SURVIVING section) animate.
+  if (enter) {
+    for (const node of added) {
+      if (node.closest('[data-entering]')) continue;
+      animateEnter(node);
+    }
   }
 
   if (doFlip === true) flipPlay(container, first);
@@ -477,7 +563,7 @@ function renderMensaList() {
   // Keyed reconcile: rows are keyed by mensa id, so toggling a selection
   // reuses the DOM node (only the .selected class flips via CSS) and the
   // list never re-renders wholesale. Same pipeline as #content.
-  reconcileChildren(container, data.mensas.map((m) => m.id), (key) => {
+  reconcileChildren(container, activeMensas().map((m) => m.id), (key) => {
     const row = document.createElement('div');
     row.innerHTML = mensaRowHTML(mensaById(key));
     return row.firstChild;
@@ -533,7 +619,7 @@ function renderGroupList() {
     groups.push({ name, members: groupMembers(name), custom });
   };
   DEFAULT_GROUPS.forEach((name) => pushGroup(name, false));
-  data.mensas.forEach((m) => pushGroup(m.group, false));
+  activeMensas().forEach((m) => pushGroup(m.group, false));
   Object.keys(prefs.customGroups).forEach((name) => pushGroup(name, true));
 
   // Keyed reconcile: chips are keyed by group name, so adding/removing a
@@ -637,7 +723,7 @@ function dishKey(m, d, i) {
  */
 function renderContent() {
   const content = document.getElementById('content');
-  const selected = data.mensas.filter((m) => prefs.selected.has(m.id));
+  const selected = activeMensas().filter((m) => prefs.selected.has(m.id));
 
   if (!selected.length) {
     reconcileChildren(content, ['__empty__'], () => {
@@ -645,7 +731,7 @@ function renderContent() {
       div.className = 'no-meals';
       div.textContent = EMPTY_MEALS_TEXT;
       return div;
-    });
+    }, false, false);
     return;
   }
 
@@ -669,14 +755,14 @@ function renderContent() {
         div.className = 'no-meals';
         div.textContent = EMPTY_MEALS_TEXT;
         return div;
-      });
+      }, false, false);
       continue;
     }
     reconcileChildren(body, dishes.map((d, i) => dishKey(m, d, i)), (key) => {
       const dish = document.createElement('div');
       dish.innerHTML = dishHTML(dishes[Number(key.split('|').pop())]);
       return dish.firstChild;
-    });
+    }, false);
   }
 }
 
@@ -684,7 +770,13 @@ function renderContent() {
  * Idempotent photo sync: makes the DOM match prefs.photos by inserting or
  * removing <img class="dish-photo"> inside REUSED dish nodes — dish text/
  * nutrition never rebuilds (no flash). Runs inside renderAll()'s diff
- * pass, so the resulting height changes are covered by the same FLIP.
+ * pass.
+ * Choreography (no fades — layout animation only): photos OPEN by
+ * growing from 0 height (content slides down naturally), CLOSE by
+ * shrinking back to 0 height (content slides up), then the node is
+ * removed. Height transitions are layout animations, so they are
+ * self-contained: the FLIP pass measures a ~0 delta and stays out of
+ * the way — no double animation, works in every browser.
  */
 function applyPhotos() {
   const show = prefs.photos;
@@ -700,17 +792,49 @@ function applyPhotos() {
       el.src = url;
       el.alt = (dishEl.querySelector('.dish-name') || {}).textContent || '';
       el.loading = 'lazy';
+      // Insert at 0 height (no layout shift), then grow on the next
+      // frame so the height transition actually animates. height:auto
+      // can't transition (0px -> auto doesn't interpolate), so measure
+      // the natural height first, reset to 0, then animate to the
+      // pixel value.
+      el.style.height = '0';
+      el.style.marginTop = '0';
       main.appendChild(el);
-      // Photo itself: scale+rise in (its own space is reserved by the
-      // aspect-ratio, so this is a pure compositor animation).
       if (animationsAllowed()) {
-        el.animate(
-          [{ opacity: 0, transform: 'scale(.96) translateY(6px)' }, { opacity: 1, transform: 'scale(1) translateY(0)' }],
-          { duration: ANIM_MS, easing: ANIM_EASE }
-        );
+        requestAnimationFrame(() => {
+          el.style.height = 'auto';
+          const h = el.offsetHeight; // natural height (aspect-ratio)
+          el.style.height = '0px';
+          void el.offsetHeight; // reflow: transition starts from 0
+          el.style.height = h + 'px';
+          el.style.marginTop = '16px';
+          // After the grow finishes, drop the inline height so the
+          // layout returns to the natural aspect-ratio height (keeps
+          // it responsive on resize).
+          const onEnd = (e) => {
+            if (e.propertyName === 'height') {
+              el.style.height = '';
+              el.removeEventListener('transitionend', onEnd);
+            }
+          };
+          el.addEventListener('transitionend', onEnd);
+        });
+      } else {
+        el.style.height = '';
+        el.style.marginTop = '';
       }
     } else if (!show && img) {
-      img.remove();
+      if (animationsAllowed()) {
+        // Pin current height, force reflow, then shrink to 0; the
+        // transitionend removes the node once the collapse finished.
+        img.style.height = img.clientHeight + 'px';
+        void img.offsetHeight; // reflow so the transition starts from the pinned height
+        img.style.height = '0';
+        img.style.marginTop = '0';
+        img.addEventListener('transitionend', () => img.remove(), { once: true });
+      } else {
+        img.remove();
+      }
     }
   }
 }
@@ -720,24 +844,15 @@ function applyPhotos() {
 function updateSegmented() {
   const seg = document.querySelector('.segmented');
   if (seg) seg.dataset.meal = prefs.meal;   // CSS [data-meal=...] drives the thumb
-  document.querySelectorAll('.seg-option').forEach((btn) => {
+  // [data-meal] ONLY: the appearance switch (.segmented.appearance) has
+  // its own options (data-theme) and its own sync (updateAppearance).
+  // A blanket .seg-option query here would wipe the appearance switch's
+  // active class on every load/resize — the "Light starts grey" bug.
+  document.querySelectorAll('.seg-option[data-meal]').forEach((btn) => {
     const active = btn.dataset.meal === prefs.meal;
     btn.classList.toggle('active', active);
     btn.setAttribute('aria-pressed', String(active));
   });
-}
-
-/**
- * Keep the CSS-driven thumb in sync. Best practice for a segmented
- * control: the thumb is a fixed-width pill at the track origin and the
- * active state is expressed purely via CSS transform (translateX 0%→100%)
- * keyed off the container's data-meal attribute. No inline geometry —
- * measuring offsets here would fight the CSS transition and cause
- * double-shift (the bug this replaces).
- */
-function positionThumb() {
-  const seg = document.querySelector('.segmented');
-  if (seg) seg.dataset.meal = prefs.meal;
 }
 
 /* ---------- raw panel ---------- */
@@ -782,6 +897,12 @@ function bindEvents() {
   document.getElementById('menu-btn').addEventListener('click', toggleSelector);
   document.querySelector('.segmented').addEventListener('click', onSegmentedClick);
 
+  // Calendar popover: trigger toggle + month nav + grid selection.
+  document.getElementById('date-trigger').addEventListener('click', () => toggleCalendar());
+  document.getElementById('cal-prev').addEventListener('click', () => onCalendarNav(-1));
+  document.getElementById('cal-next').addEventListener('click', () => onCalendarNav(1));
+  document.getElementById('cal-grid').addEventListener('click', onCalendarGridClick);
+
   const appearanceSeg = document.getElementById('appearance-seg');
   appearanceSeg.addEventListener('click', onAppearanceClick);
   appearanceSeg.addEventListener('keydown', (e) => {
@@ -817,8 +938,8 @@ function bindEvents() {
   document.getElementById('raw-toggle').addEventListener('click', toggleRaw);
   document.getElementById('copy-btn').addEventListener('click', copyRaw);
 
-  window.addEventListener('resize', positionThumb);
-  window.addEventListener('load', positionThumb); // fonts/layout settle
+  window.addEventListener('resize', updateSegmented);
+  window.addEventListener('load', updateSegmented); // fonts/layout settle
 
   // Esc closes the drawer (accessibility best practice).
   document.addEventListener('keydown', (e) => {
@@ -871,6 +992,126 @@ function onSegmentedClick(e) {
   prefs.meal = btn.dataset.meal;
   savePrefs();
   renderAll();
+}
+
+/* ---------- calendar (date picker popover) ---------- */
+
+// Month currently displayed in the calendar grid (first day of month).
+let calMonth = '';
+
+/** All dates that carry ANY data, keyed by ISO date. */
+function availableDates() {
+  return (data && data.availableDates) || [];
+}
+
+/** True when the date carries any dish (calendar cell enabled).
+    days[iso] always has the full mensa list (empty meals included), so
+    we must count DISHES, not mensas. */
+function hasData(iso) {
+  const mensas = data && data.days && data.days[iso];
+  if (!mensas || !mensas.length) return false;
+  return mensas.some((m) => m.meals.Lunch.length || m.meals.Dinner.length);
+}
+
+/** Toggle the calendar disclosure (WAI-ARIA date-picker dialog pattern).
+    The calendar is IN THE DOCUMENT FLOW between the date heading and
+    the meal switch: expanding pushes Lunch/Dinner (and everything
+    below) smoothly down; collapsing lets it back up. The animation is
+    max-height driven by expandBody/collapseBody (scrollHeight
+    measurement + transition — the same disclosure machinery as the
+    raw panel and mensa collapse, works in every browser).
+    Trigger click toggles; choosing a date does NOT close (users can
+    compare several days in a row); Escape closes (keyboard access). */
+function toggleCalendar() {
+  const cal = document.getElementById('calendar');
+  const header = document.querySelector('.header');
+  const trigger = document.getElementById('date-trigger');
+  const open = !header.classList.contains('calendar-open');
+
+  if (open) {
+    if (!calMonth) {
+      calMonth = selectedDate.slice(0, 7) + '-01'; // first of selected month
+    }
+    renderCalendar();
+    header.classList.add('calendar-open');
+    expandBody(cal); // max-height: scrollHeight -> none (smooth push-down)
+    trigger.setAttribute('aria-expanded', 'true');
+    document.addEventListener('keydown', onCalendarKeydown);
+  } else {
+    header.classList.remove('calendar-open');
+    collapseBody(cal); // max-height: scrollHeight -> 0 (smooth pull-up)
+    trigger.setAttribute('aria-expanded', 'false');
+    document.removeEventListener('keydown', onCalendarKeydown);
+  }
+}
+
+function onCalendarKeydown(e) {
+  if (e.key === 'Escape') toggleCalendar();
+}
+
+/** Render the calendar grid for calMonth: weekday-aligned cells with
+    enabled/disabled states; today, selected and data-bearing markers. */
+function renderCalendar() {
+  const [y, m] = calMonth.split('-').map(Number);
+  const grid = document.getElementById('cal-grid');
+  const title = document.getElementById('cal-title');
+  const note = document.getElementById('cal-note');
+
+  const months = ['January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'];
+  title.textContent = months[m - 1] + ' ' + y;
+
+  // Monday-first grid: 0 = Monday. JS getDay(): 0=Sun..6=Sat.
+  const first = new Date(y, m - 1, 1);
+  const lead = (first.getDay() + 6) % 7;
+  const daysInMonth = new Date(y, m, 0).getDate();
+  const todayIso = data ? data.date : '';
+
+  const cells = [];
+  for (let i = 0; i < lead; i++) cells.push('<span class="cal-cell cal-empty"></span>');
+  for (let d = 1; d <= daysInMonth; d++) {
+    const iso = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    const enabled = hasData(iso);
+    const classes = ['cal-cell'];
+    if (iso === selectedDate) classes.push('selected');
+    if (iso === todayIso) classes.push('today');
+    if (!enabled) classes.push('disabled');
+    cells.push(
+      `<button class="${classes.join(' ')}" type="button" data-date="${iso}"` +
+      (enabled ? '' : ' disabled') +
+      ` aria-label="${formatDate(iso)}${enabled ? '' : ' (no data)'}">${d}</button>`
+    );
+  }
+  grid.innerHTML = cells.join('');
+
+  // Footer note: how many days carry data in this month.
+  const monthPrefix = calMonth.slice(0, 7);
+  const n = availableDates().filter((iso) => iso.startsWith(monthPrefix)).length;
+  note.textContent = n ? `${n} day${n === 1 ? '' : 's'} with menus in this month` : 'No menus in this month';
+}
+
+/** Switch the active date: swap dataset + re-render through the unified
+    pipeline (content FLIPs, selector/raw refresh). The calendar stays
+    OPEN so several days can be compared in a row — the trigger or
+    Escape closes it. */
+function selectDate(iso) {
+  if (!hasData(iso) || iso === selectedDate) return;
+  selectedDate = iso;
+  document.getElementById('date-heading').textContent = formatDate(iso);
+  renderAll(); // everything reads activeMensas() — one pipeline
+  renderCalendar(); // move the selected-cell highlight
+}
+
+function onCalendarNav(dir) {
+  const [y, m] = calMonth.split('-').map(Number);
+  const dt = new Date(y, m - 1 + dir, 1);
+  calMonth = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-01`;
+  renderCalendar();
+}
+
+function onCalendarGridClick(e) {
+  const cell = e.target.closest('.cal-cell[data-date]');
+  if (cell && !cell.disabled) selectDate(cell.dataset.date);
 }
 
 function onMensaListClick(e) {
@@ -936,7 +1177,7 @@ function addCustomGroup() {
     showGroupMsg('Enter a group name');
     return;
   }
-  if (DEFAULT_GROUPS.includes(name) || data.mensas.some((m) => m.group === name)) {
+  if (DEFAULT_GROUPS.includes(name) || activeMensas().some((m) => m.group === name)) {
     showGroupMsg('That name is reserved');
     return;
   }
@@ -1049,20 +1290,22 @@ async function init() {
 
   try {
     const json = await fetchData();
-    data = { date: json.date, mensas: normalizeMensas(json.mensas) };
+    data = json;
+    selectedDate = json.date;
+    document.getElementById('date-heading').textContent = formatDate(selectedDate);
     validatePrefsAgainstData();
     renderAll(); // silent first paint — animations stay disabled
     animEnabled = true; // from here on, user interactions animate
-    positionThumb();
+    updateSegmented();
   } catch (err) {
     console.error(err);
     document.getElementById('content').innerHTML =
       '<div class="error">Failed to load menu data. Please try again later.</div>';
   }
 
-  // Re-position the thumb once webfonts settle (widths may shift).
+  // Re-sync the segmented control once webfonts settle (widths may shift).
   if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(() => positionThumb()).catch(() => {});
+    document.fonts.ready.then(() => updateSegmented()).catch(() => {});
   }
 }
 

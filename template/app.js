@@ -448,9 +448,12 @@ function renderMensaList() {
 }
 
 /** In-place update of every mensa row (preserves scroll position).
-    The filled dot is drawn by CSS (.mensa-check::after) — no text. */
+    The filled dot is drawn by CSS (.mensa-check::after) — no text.
+    NOTE: skip rows without data-mensa (e.g. the photo-row in Setting,
+    which is a .mensa-row for styling but is NOT a selectable mensa). */
 function refreshMensaRows() {
   document.querySelectorAll('.mensa-row').forEach((row) => {
+    if (!row.dataset.mensa) return;
     const sel = prefs.selected.has(row.dataset.mensa);
     row.classList.toggle('selected', sel);
     row.setAttribute('aria-pressed', String(sel));

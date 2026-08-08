@@ -71,7 +71,7 @@ let selectedDate = '';
 let prefs = {
   meal: 'Lunch',
   selected: new Set(),
-  photos: false,
+  photos: true,   // photos ON by default (product owner)
   theme: 'light',
   customGroups: {},
   collapsedMensas: new Set(),
@@ -86,7 +86,7 @@ let rawFiltered = '';
 
 /** Read + sanitize stored prefs; fall back to defaults on any error. */
 function loadPrefs() {
-  const p = { meal: 'Lunch', selected: new Set(), photos: false, theme: 'light', customGroups: {}, collapsedMensas: new Set() };
+  const p = { meal: 'Lunch', selected: new Set(), photos: true, theme: 'light', customGroups: {}, collapsedMensas: new Set() };
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return p;
@@ -322,7 +322,22 @@ function renderAll() {
   updatePhotoToggle();
   updateAppearance();
   renderSelector();
+  const content = document.getElementById('content');
+  const oldH = content.getBoundingClientRect().height;
   renderContent();
+  const newH = content.getBoundingClientRect().height;
+  // Content-height glide: when the day/meal swap dishes wholesale (no
+  // section entering), lock the OLD height and glide to the new one —
+  // the dish swap itself is instant, but the layout glides smoothly
+  // instead of jumping (the date/meal-switch "flash" regression). Fresh
+  // sections (checkbox adds) are exempt: their own grow animation
+  // drives the height continuously.
+  if (!content.querySelector('[data-entering]') &&
+      Math.abs(newH - oldH) > 2 && animationsAllowed()) {
+    animateContentHeight(content, oldH, newH);
+  } else {
+    content.style.height = '';
+  }
   applyPhotos(); // idempotent <img> sync — part of the same diff pass
   updateRawText();
   for (const [c, first] of snapshots) flipPlay(c, first);
@@ -382,6 +397,11 @@ function flipFirst(container) {
     `first`) are skipped — they run their own enter animation. */
 function flipPlay(container, first) {
   if (!animationsAllowed()) return;
+  // A container with entering nodes skips FLIP entirely: the enters
+  // grow via continuous height transitions which push siblings along
+  // smoothly. FLIP here would measure the mid-grow layout and fight
+  // the growth with a reverse displacement (the date-switch "flash").
+  if (container.querySelector('[data-entering]')) return;
   for (const child of container.children) {
     if (!first.has(child)) continue;
     const delta = first.get(child) - child.getBoundingClientRect().top;
@@ -762,7 +782,11 @@ function renderContent() {
       const dish = document.createElement('div');
       dish.innerHTML = dishHTML(dishes[Number(key.split('|').pop())]);
       return dish.firstChild;
-    }, false);
+    }, false, false);
+    // enter=false: wholesale swaps (date/meal) are animated by the
+    // #content height glide in renderAll — per-dish grows on top of it
+    // would double-animate. Fresh sections still grow as one unit (their
+    // own animateEnter carries the nested dishes via the enter guard).
   }
 }
 
@@ -864,6 +888,36 @@ function updateRawText() {
 }
 
 /* ---------- collapse animation (max-height) ---------- */
+
+/** Glide a container's height from oldH to newH (Apple ease). Used when
+    content swaps wholesale (date/meal switch): the DOM swap is instant,
+    but locking the old height and transitioning to the new one makes
+    the layout glide instead of jump. Interrupt-safe: a running glide
+    is cleaned up before a new one starts. */
+function animateContentHeight(node, oldH, newH) {
+  if (node._heightGlideEnd) {
+    node.removeEventListener('transitionend', node._heightGlideEnd);
+    node._heightGlideEnd = null;
+  }
+  const cur = getComputedStyle(node).transition;
+  node.style.transition = (cur && cur !== 'all 0s ease 0s' ? cur + ', ' : '') +
+                          'height .35s ' + ANIM_EASE;
+  node.style.height = oldH + 'px';
+  node.style.overflow = 'hidden';
+  void node.offsetHeight; // reflow: lock at oldH, then glide
+  node.style.height = newH + 'px';
+  const onEnd = (e) => {
+    if (e.propertyName === 'height') {
+      node.style.height = '';
+      node.style.overflow = '';
+      node.style.transition = '';
+      node.removeEventListener('transitionend', onEnd);
+      node._heightGlideEnd = null;
+    }
+  };
+  node._heightGlideEnd = onEnd;
+  node.addEventListener('transitionend', onEnd);
+}
 
 function expandBody(body) {
   body.style.maxHeight = body.scrollHeight + 'px';

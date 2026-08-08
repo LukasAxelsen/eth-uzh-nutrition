@@ -518,18 +518,23 @@ function groupRowHTML(g) {
 function renderGroupList() {
   const container = document.querySelector('.group-rows');
 
-  // Default groups in fixed order, then any data groups not listed, then custom.
-  const known = new Set(DEFAULT_GROUPS);
-  const groups = DEFAULT_GROUPS.map((name) => ({ name, members: mensasInGroup(name).map((m) => m.id), custom: false }));
-  for (const m of data.mensas) {
-    if (!known.has(m.group)) {
-      known.add(m.group);
-      groups.push({ name: m.group, members: [m.id], custom: false });
-    }
-  }
-  for (const name of Object.keys(prefs.customGroups)) {
-    groups.push({ name, members: prefs.customGroups[name], custom: true });
-  }
+  // Build the FULL group catalog: default groups (fixed order), then every
+  // data group not covered, then custom groups. members comes from
+  // groupMembers(name) — the SAME function applyGroup uses — so the badge
+  // count, the applied selection and the active highlight can never
+  // disagree (the old bug: data groups were built with only the first
+  // mensa, so after applying the group the members never matched the
+  // selection and the chip never turned black).
+  const groups = [];
+  const seen = new Set();
+  const pushGroup = (name, custom) => {
+    if (!name || seen.has(name)) return;   // dedupe (defensive)
+    seen.add(name);
+    groups.push({ name, members: groupMembers(name), custom });
+  };
+  DEFAULT_GROUPS.forEach((name) => pushGroup(name, false));
+  data.mensas.forEach((m) => pushGroup(m.group, false));
+  Object.keys(prefs.customGroups).forEach((name) => pushGroup(name, true));
 
   // Keyed reconcile: chips are keyed by group name, so adding/removing a
   // custom group slides the remaining chips into place (FLIP) instead of
@@ -919,7 +924,11 @@ function deleteCustomGroup(name) {
 }
 
 /** Create a custom group whose members = currently selected mensas.
-    Recreating with an existing name redefines its members (update). */
+    Recreating with an existing name redefines its members (update).
+    Reserved names (default groups AND data groups) are rejected so a
+    custom chip can never shadow a real group — the catalog in
+    renderGroupList dedupes by name, so a shadowing custom group would
+    silently replace the real one. */
 function addCustomGroup() {
   const input = document.getElementById('group-input');
   const name = input.value.trim();
@@ -927,7 +936,7 @@ function addCustomGroup() {
     showGroupMsg('Enter a group name');
     return;
   }
-  if (DEFAULT_GROUPS.includes(name)) {
+  if (DEFAULT_GROUPS.includes(name) || data.mensas.some((m) => m.group === name)) {
     showGroupMsg('That name is reserved');
     return;
   }

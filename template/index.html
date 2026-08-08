@@ -34,11 +34,12 @@
 
       <!-- Calendar: IN THE DOCUMENT FLOW between the date and the meal
            switch. Expanding pushes Lunch/Dinner (and everything below)
-           down smoothly; collapsing lets it back up. The frame is a
-           grid-track disclosure (grid-template-rows: 0fr -> 1fr, the
-           modern height-animation pattern): the track clips the frame
-           completely when collapsed — no max-height hack, no leftover
-           border, no JS height measurement. -->
+           down smoothly; collapsing lets it back up. It is a max-height
+           disclosure (the same expandBody/collapseBody scrollHeight
+           machinery as the mensa sections and raw panel): .calendar
+           clips (max-height:0 + overflow:hidden), and the frame's
+           padding/border lives on .calendar-inner — a CHILD of the
+           clipped box — so nothing lingers when collapsed. -->
       <div class="calendar" id="calendar" aria-label="Pick a date">
         <div class="calendar-inner">
           <div class="calendar-head">

@@ -27,7 +27,7 @@ USER_AGENT = "Mozilla/5.0 (compatible; eth-uzh-nutrition/1.0)"
 # Config
 # --------------------------------------------------------------------------
 
-TODAY = datetime.now(timezone(timedelta(hours=2))).date().isoformat()
+TODAY = "2026-08-10"  # PREVIEW: pinned to a weekday; revert to live before commit
 
 
 def _current_date():

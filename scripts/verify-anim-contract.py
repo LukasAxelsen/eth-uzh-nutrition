@@ -91,6 +91,11 @@ check("--ease token is Apple's curve",
 no_var = CSS.replace("var(--ease)", "")
 check("no bare `ease` keyword transitions",
       not re.search(r"transition:[^;]*\bease\b", no_var))
+# JS-generated inline transitions must honor the same rule — the mensa
+# collapse once shipped 'transition:max-height .35s ease' inline (a
+# second, invisible easing curve the CSS-only check missed).
+check("no bare `ease` in JS inline transition strings",
+      not re.search(r"transition:[^;]*\bease\b", JS))
 check("no hardcoded Material curve leftovers",
       "cubic-bezier(.4, 0, .2, 1)" not in CSS)
 check("JS ANIM_EASE matches --ease",
@@ -108,9 +113,29 @@ for tok in ("--r-sm", "--r-md", "--r-lg", "--r-pill", "--r-circle"):
 check("squircle progressive enhancement present",
       "@supports (corner-shape: squircle)" in CSS and
       "corner-shape: squircle" in CSS)
-check("squircle covers framed surfaces + iOS26 controls",
-      all(s in CSS[CSS.index("@supports (corner-shape: squircle)"):]
-          for s in (".calendar-inner", ".raw-inner", ".segmented", ".seg-thumb", ".group-chip")))
+def block_after(marker, text):
+    """Text inside the first balanced {…} after marker (for @supports)."""
+    i = text.index(marker) + len(marker)
+    j = text.index("{", i)
+    depth, k = 0, j
+    while k < len(text):
+        if text[k] == "{":
+            depth += 1
+        elif text[k] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[j + 1:k]
+        k += 1
+    return ""
+
+# Squircle is a progressive enhancement for the two LARGE FRAMED
+# surfaces ONLY (AGENTS.md #9) — controls stay pills. The old check
+# sliced to EOF, so it passed vacuously no matter what the @supports
+# block contained (and demanded the opposite of AGENTS.md).
+sq = block_after("@supports (corner-shape: squircle)", CSS)
+check("squircle covers ONLY framed surfaces (controls stay pills)",
+      ".calendar-inner" in sq and ".raw-inner" in sq and
+      not any(s in sq for s in (".segmented", ".seg-thumb", ".group-chip")))
 
 print("== B4. design decisions (product owner, hard-coded) ==")
 check("trigger outline is box-shadow inset (not border)",
@@ -152,6 +177,15 @@ check("rapid toggles coalesce (settle before measuring)",
       "if (content._heightGlideEnd) settleContentHeight(content)" in JS)
 check("glide has timeout fallback (transitionend may never fire)",
       "_glideTimer = setTimeout" in JS)
+# The 'none' poison: settleContentHeight must clear the inline
+# transition with '' — 'none' stays inline and the NEXT glide builds
+# the invalid "none, height ..." list, silently killing the animation
+# (the "content appears without animation" regression).
+check("settle clears transition with '' (not 'none')",
+      "node.style.transition = '';" in JS and
+      "node.style.transition = 'none';" not in JS)
+check("glide/enter never prepend 'none' to a transition list",
+      JS.count("cur !== 'none'") >= 2)
 check("glide target includes photos (applyPhotos before newH, fresh at natural height)",
       "applyPhotos(); // idempotent <img> sync — BEFORE the height measurement" in JS and
       "dishEl.dataset.fresh === '1'" in JS and

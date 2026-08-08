@@ -103,6 +103,10 @@ event handler -> mutate state only -> renderAll()
    <16 / Chrome <107 jump instead of animating. Use max-height +
    scrollHeight measurement (`expandBody`/`collapseBody`) — the same
    disclosure machinery as the raw panel and mensa collapse.
+   (2026 note: 0fr→1fr grid animation now works in every evergreen
+   browser; the max-height machinery stays because expandBody/collapseBody
+   need the measured scrollHeight for interrupt-safe choreography — one
+   disclosure mechanism for calendar, raw panel and mensa collapse.)
 3. NO negative margins as layout hacks. They offset the visible box from
    its flow position (the calendar once overlapped its trigger by 6px).
    Use honest padding, or state-class-driven margin.
@@ -122,8 +126,11 @@ event handler -> mutate state only -> renderAll()
    `cubic-bezier(.32, .72, 0, 1)` — the `--ease` token in style.css and
    `ANIM_EASE` in app.js are the only two definitions and MUST stay in
    sync. No bare `ease` keywords, no Material `cubic-bezier(.4, 0, .2, 1)`
-   (its fast tail reads as "abrupt stop" next to Apple's long settle —
-   this was a site-wide smoothness regression).
+ (its fast tail reads as "abrupt stop" next to Apple's long settle —
+ this was a site-wide smoothness regression). The verifier also flags
+ bare `ease` in JS-generated inline transitions — the mensa collapse
+ once shipped `transition:max-height .35s ease` inline, invisible to
+ the CSS-only check.
 9. NO new border-radius values. All radii come from the --r-* tokens
    (--r-sm 8 / --r-md 12 / --r-lg 16 / --r-pill 999 / --r-circle 50%).
    Squircle (`@supports (corner-shape: squircle)`, progressive

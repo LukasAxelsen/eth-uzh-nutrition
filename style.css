@@ -230,6 +230,13 @@ body.menu-open #menu-btn {
   margin-top: 14px;
   padding-top: 14px;
 }
+/* The Setting pane (bottom-most) reads as a footer of the drawer —
+   no hairline above it, just breathing room. */
+.selector-pane.settings-pane {
+  border-top: none;
+  margin-top: 10px;
+  padding-top: 10px;
+}
 .selector-pane-title {
   margin: 0 0 6px;
   font-size: 12px;

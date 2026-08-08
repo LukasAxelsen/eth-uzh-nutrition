@@ -6,7 +6,11 @@
    DOM per CONTRACT.md.
    ============================================================ */
 
-/* 1. Design tokens */
+/* 1. Design tokens.
+   Appearance is controlled by <html data-theme="light|dark|auto">:
+   - light / dark: forced palettes
+   - auto (or no attribute): follows the OS via prefers-color-scheme
+   The default (no attribute) keeps the original auto behaviour. */
 :root {
   --bg: #ffffff; --text: #1d1d1f; --sub: #86868b; --body: #515154;
   --border: #d2d2d7; --raw-bg: #f5f5f7;
@@ -18,8 +22,16 @@
   --ease: cubic-bezier(.4, 0, .2, 1);
 }
 
+/* Dark palette — two entry points, same values (keep in sync):
+   forced dark via data-theme, and auto following the OS. */
+:root[data-theme="dark"] {
+  --bg: #000000; --text: #f5f5f7; --sub: #98989d; --body: #a1a1a6;
+  --border: #424245; --raw-bg: #1d1d1f;
+  --thumb-bg: #f5f5f7; --thumb-text: #1d1d1f;
+  --accent: #2997ff;
+}
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root[data-theme="auto"], :root:not([data-theme]) {
     --bg: #000000; --text: #f5f5f7; --sub: #98989d; --body: #a1a1a6;
     --border: #424245; --raw-bg: #1d1d1f;
     --thumb-bg: #f5f5f7; --thumb-text: #1d1d1f;
@@ -111,7 +123,13 @@ body.menu-open #menu-btn {
   transform: translateX(calc(100vw - 64px));
 }
 
-/* 3b. Segmented Lunch/Dinner switch (iOS style) */
+/* 3b. Segmented switch (iOS style): Lunch/Dinner + Appearance.
+   The thumb is a fixed-size pill at the track origin, moved purely by
+   transform — CSS variables make it work for any segment count:
+     --seg-count: number of options (2 for meal, 3 for appearance)
+     --seg-index: 0-based index of the active option
+   This is the M3 "container transform" pattern: one persistent pill
+   glides to the active option. */
 .segmented {
   position: relative;
   display: inline-flex;
@@ -119,15 +137,16 @@ body.menu-open #menu-btn {
   padding: 2px;
   border: 1px solid var(--border);
   border-radius: 999px;
+  --seg-count: 2;
 }
 .seg-thumb {
   position: absolute;
   top: 2px; bottom: 2px; left: 2px;
   z-index: 0;
-  width: calc(50% - 2px);          /* half the track minus padding */
+  width: calc(100% / var(--seg-count) - 2px);
   background: var(--thumb-bg);
   border-radius: 999px;
-  transform: translateX(0%);       /* Lunch */
+  transform: translateX(calc(var(--seg-index, 0) * 100%));
   pointer-events: none;
   transition: transform .3s var(--ease),
               background-color .3s ease;
@@ -150,12 +169,17 @@ body.menu-open #menu-btn {
 .seg-option:hover { color: var(--text); }
 .seg-option.active { color: var(--thumb-text); }  /* on the thumb */
 
-/* Dinner: thumb slides right — covers common JS conventions */
-.segmented[data-meal="Dinner"] .seg-thumb,
-.segmented.dinner .seg-thumb,
-.segmented:has(.seg-option[data-meal="Dinner"].active) .seg-thumb {
-  transform: translateX(100%);
-}
+/* Meal switch: index 1 = Dinner. */
+.segmented[data-meal="Dinner"],
+.segmented.dinner { --seg-index: 1; }
+.segmented[data-meal="Lunch"],
+.segmented.lunch { --seg-index: 0; }
+
+/* Appearance switch: light/dark/auto (index 0/1/2). */
+.segmented.appearance { --seg-count: 3; }
+.segmented.appearance[data-theme="light"] { --seg-index: 0; }
+.segmented.appearance[data-theme="dark"]  { --seg-index: 1; }
+.segmented.appearance[data-theme="auto"]  { --seg-index: 2; }
 
 /* 4. Selector drawer (#selector) — fixed left drawer.
    Mobile: slides in and pushes .app aside (push pattern).
@@ -254,6 +278,7 @@ body.menu-open #menu-btn {
   padding-right: 6px;
 }
 .mensa-row {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -263,7 +288,21 @@ body.menu-open #menu-btn {
   -webkit-tap-highlight-color: transparent;
   transition: background-color .15s ease;
 }
+/* M3 state layer: hover/press feedback, same as the group chips. */
+.mensa-row::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--text);
+  opacity: 0;
+  transition: opacity .2s var(--ease);
+  pointer-events: none;
+}
+.mensa-row:hover::before { opacity: .05; }
+.mensa-row:active::before { opacity: .1; }
 .mensa-row:hover { background: var(--raw-bg); }
+.mensa-row .mensa-label { position: relative; }  /* above state layer */
 
 .mensa-check {
   position: relative;
@@ -297,10 +336,19 @@ body.menu-open #menu-btn {
    a mensa row (filled dot = photos on). */
 .photo-row { margin-top: 4px; }
 
+/* Appearance switch inside the drawer: compact, below the photo row. */
+#appearance-seg { margin-top: 14px; }
+
 /* 4b. Groups — horizontal filter chips (Material-style).
-   Chips wrap onto multiple lines; click applies the group. */
+   Chips wrap onto multiple lines; click applies the group.
+   Motion follows M3 chips: a state layer (::before) fades in on
+   hover/press, the container colour transitions on selection, and the
+   active chip gets a subtle scale pop — the M3 container-transform
+   feel, matched to the site's 350ms Material easing. */
 .group-rows { display: flex; flex-wrap: wrap; gap: 8px; }
 .group-chip {
+  position: relative;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -312,17 +360,38 @@ body.menu-open #menu-btn {
   border: 1px solid var(--border);
   border-radius: 999px;
   cursor: pointer;
-  transition: border-color .15s ease, background-color .15s ease;
+  transition: border-color .25s var(--ease),
+              background-color .25s var(--ease),
+              color .25s var(--ease),
+              transform .25s var(--ease);
 }
-.group-chip:hover { border-color: var(--text); background: var(--raw-bg); }
+/* M3 state layer: a translucent overlay that fades in on hover/press. */
+.group-chip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--text);
+  opacity: 0;
+  transition: opacity .2s var(--ease);
+  pointer-events: none;
+}
+.group-chip:hover::before { opacity: .06; }
+.group-chip:active::before { opacity: .12; }
+.group-chip:hover { border-color: var(--text); }
 .group-chip.active {
   border-color: var(--thumb-bg);
   background: var(--thumb-bg);
   color: var(--thumb-text, #fff);
+  /* M3 chips pop slightly when becoming selected. */
+  transform: scale(1.04);
 }
 .group-chip.active .chip-count { color: inherit; opacity: .85; }
 .group-chip:disabled { opacity: .4; cursor: default; }
+.group-chip .chip-name,
+.group-chip .chip-x { position: relative; }  /* above the state layer */
 .group-chip .chip-count {
+  position: relative;   /* above the state layer */
   font-size: 11px;
   font-weight: 400;
   color: var(--sub);

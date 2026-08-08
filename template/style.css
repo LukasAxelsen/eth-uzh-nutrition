@@ -264,8 +264,10 @@ body.menu-open #menu-btn {
   width: 18px; height: 18px;
   border: 1.5px solid #86868b;
   border-radius: 50%;
+  /* The filled dot is a real element (not display:none), scaled to zero —
+     so selecting/deselecting animates it in/out instead of popping. */
 }
-.mensa-row.selected .mensa-check::after {  /* filled dot when selected */
+.mensa-check::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -273,6 +275,13 @@ body.menu-open #menu-btn {
   width: 8px; height: 8px;
   border-radius: 50%;
   background: var(--thumb-bg);
+  transform: scale(0);
+  opacity: 0;
+  transition: transform .25s var(--ease), opacity .25s var(--ease);
+}
+.mensa-row.selected .mensa-check::after {  /* filled dot when selected */
+  transform: scale(1);
+  opacity: 1;
 }
 
 .mensa-label { font-size: 14px; color: var(--text); }
@@ -299,6 +308,12 @@ body.menu-open #menu-btn {
   transition: border-color .15s ease, background-color .15s ease;
 }
 .group-chip:hover { border-color: var(--text); background: var(--raw-bg); }
+.group-chip.active {
+  border-color: var(--thumb-bg);
+  background: var(--thumb-bg);
+  color: var(--thumb-text, #fff);
+}
+.group-chip.active .chip-count { color: inherit; opacity: .85; }
 .group-chip:disabled { opacity: .4; cursor: default; }
 .group-chip .chip-count {
   font-size: 11px;

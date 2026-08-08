@@ -271,13 +271,35 @@ function formatDate(iso) {
    6. Rendering
    ------------------------------------------------------------ */
 
-/** Full re-render of everything derived from state. */
+/**
+ * The unified animation pipeline (Vue TransitionGroup / react-flip-toolkit
+ * declarative model, vanilla): ALL dynamic containers register here; ANY
+ * state change funnels through renderAll() which measures every container,
+ * applies every diff, then FLIPs everything that moved in one pass.
+ *
+ * Extending the site: add a new dynamic element to this list and make its
+ * children keyed (data-key) — it inherits smooth move animations with no
+ * new code and no edge cases. Non-keyed or unchanged children never move
+ * and never re-render.
+ */
+const FLIP_CONTAINERS = () => [
+  document.getElementById('content'),
+  document.querySelector('.selector-mensas'),
+  document.querySelector('.group-rows'),
+];
+
+/** Full re-render of everything derived from state — the ONE render entry
+    point. Order: snapshot every container -> mutate all DOM (reconciles
+    use doFlip=false) -> FLIP all containers once. */
 function renderAll() {
+  const snapshots = FLIP_CONTAINERS().map((c) => [c, flipFirst(c)]);
   updateSegmented();
   updatePhotoToggle();
   renderSelector();
   renderContent();
+  applyPhotos(); // idempotent <img> sync — part of the same diff pass
   updateRawText();
+  for (const [c, first] of snapshots) flipPlay(c, first);
 }
 
 /* ---------- keyed reconciliation + FLIP (Vue TransitionGroup pattern) ----------
@@ -347,8 +369,8 @@ function flipPlay(container, first) {
     nodes just appear, and every surviving node whose position changed
     slides smoothly via FLIP (the Vue TransitionGroup move choreography:
     the list "makes room" for additions/removals instead of popping).
-    Pass doFlip=false when the caller wants to batch one FLIP pass across
-    several containers (see renderContent) to avoid double-measuring. */
+    The FLIP pass itself is orchestrated by renderAll() (doFlip stays
+    false there); standalone callers may pass doFlip=true. */
 function reconcileChildren(container, keys, makeEl, doFlip) {
   const first = flipFirst(container);
   const existing = new Map();
@@ -376,7 +398,7 @@ function reconcileChildren(container, keys, makeEl, doFlip) {
     if (!child.dataset.key || !seen.has(child.dataset.key)) child.remove();
   }
 
-  if (doFlip !== false) flipPlay(container, first);
+  if (doFlip === true) flipPlay(container, first);
 }
 
 /** Reflect prefs.photos on the drawer row (filled dot = on). */
@@ -390,8 +412,10 @@ function updatePhotoToggle() {
 function onPhotoToggleClick() {
   prefs.photos = !prefs.photos;
   savePrefs();
-  updatePhotoToggle();
-  applyPhotos(); // pure DOM insert/remove — no re-render
+  // Photo toggle is a plain state change — the unified renderAll()
+  // pipeline diffs everything (including the idempotent <img> sync in
+  // applyPhotos) and FLIPs all moved containers in one pass.
+  renderAll();
 }
 
 /* ---------- selector: mensa list (left column) ---------- */
@@ -412,7 +436,15 @@ function mensaRowHTML(m) {
 
 function renderMensaList() {
   const container = document.querySelector('.selector-mensas');
-  container.innerHTML = data.mensas.map(mensaRowHTML).join('');
+  // Keyed reconcile: rows are keyed by mensa id, so toggling a selection
+  // reuses the DOM node (only the .selected class flips via CSS) and the
+  // list never re-renders wholesale. Same pipeline as #content.
+  reconcileChildren(container, data.mensas.map((m) => m.id), (key) => {
+    const row = document.createElement('div');
+    row.innerHTML = mensaRowHTML(mensaById(key));
+    return row.firstChild;
+  });
+  refreshMensaRows(); // sync .selected class on (possibly reused) rows
 }
 
 /** In-place update of every mensa row (preserves scroll position).
@@ -458,7 +490,24 @@ function renderGroupList() {
     groups.push({ name, members: prefs.customGroups[name], custom: true });
   }
 
-  container.innerHTML = groups.map(groupRowHTML).join('');
+  // Keyed reconcile: chips are keyed by group name, so adding/removing a
+  // custom group slides the remaining chips into place (FLIP) instead of
+  // rebuilding the whole row with a flash.
+  reconcileChildren(container, groups.map((g) => g.name), (key) => {
+    const chip = document.createElement('div');
+    chip.innerHTML = groupRowHTML(groups.find((g) => g.name === key));
+    return chip.firstChild;
+  });
+
+  // Active state: the group whose members exactly match the current
+  // selection is highlighted (CSS transition, no rebuild).
+  const active = (g) => g.members.length > 0 &&
+    g.members.length === prefs.selected.size &&
+    g.members.every((id) => prefs.selected.has(id));
+  container.querySelectorAll('.group-chip').forEach((chip) => {
+    const g = groups.find((x) => x.name === chip.dataset.group);
+    chip.classList.toggle('active', !!(g && active(g)));
+  });
 }
 
 /* ---------- content: mensa sections ---------- */
@@ -471,6 +520,10 @@ function dishHTML(d, key) {
   const dish = String(d.dish || '').trim();
   const label = line && line.toLowerCase() !== dish.toLowerCase() ? line : '';
   const keyAttr = key ? ' data-key="' + esc(key) + '"' : '';
+  // The photo URL rides as data-photo: the <img> itself is inserted and
+  // removed by applyPhotos() WITHOUT rebuilding the dish node, so toggling
+  // photos never re-renders the dish text/nutrition (no flash). The dish
+  // key deliberately excludes the photo bit for the same reason.
   const photo = d.photo ? ' data-photo="' + esc(d.photo) + '"' : '';
   return '<div class="dish"' + keyAttr + photo + '>' +
     '<div class="dish-main">' +
@@ -521,21 +574,20 @@ function mensaSectionHTML(m) {
 }
 
 /** Stable key for one dish inside its mensa: meal slot + line + name.
-    Collision-safe enough in practice (same line+name twice in one slot
-    is rare; duplicates then share one key and reuse the first node). */
+    Deliberately EXCLUDES the photo state: photos are toggled by
+    applyPhotos() as a pure <img> insert/remove inside the (reused) dish
+    node, so the dish itself never rebuilds and never flashes. */
 function dishKey(m, d, i) {
+  // NOTE: index MUST be the last segment — reconcileChildren's makeEl
+  // recovers the dish via key.split('|').pop().
   return prefs.meal + '|' + (d.line || '') + '|' + (d.dish || '') + '|' + i;
 }
 
 /**
  * Keyed re-render of #content. Mensa sections are reconciled by mensa id;
  * dishes inside each section by dishKey. Nodes with unchanged keys are
- * REUSED (no re-render, no animation). One FLIP pass measures ALL old
- * positions up front, performs every DOM change (section add/remove AND
- * dish content swaps that change section heights), then slides every
- * surviving section from its old spot to the new one. This is the Vue
- * TransitionGroup move choreography: the list makes room dynamically —
- * nothing pops, nothing fades. First paint stays silent (animEnabled).
+ * REUSED (no re-render, no animation). FLIP is orchestrated by renderAll()
+ * — this function only performs the diffs. First paint stays silent.
  */
 function renderContent() {
   const content = document.getElementById('content');
@@ -551,15 +603,12 @@ function renderContent() {
     return;
   }
 
-  // ONE measurement of every current position, before ANY change.
-  const first = flipFirst(content);
-
   // Section level: key = mensa id. Reuse existing sections untouched.
   reconcileChildren(content, selected.map((m) => m.id), (key) => {
     const section = document.createElement('section');
     section.innerHTML = mensaSectionHTML(mensaById(key));
     return section.firstChild;
-  }, false); // defer flip — dish pass below also shifts heights
+  });
 
   // Dish level inside each surviving section.
   for (const section of content.querySelectorAll('.mensa-section')) {
@@ -574,73 +623,49 @@ function renderContent() {
         div.className = 'no-meals';
         div.textContent = EMPTY_MEALS_TEXT;
         return div;
-      }, false);
+      });
       continue;
     }
     reconcileChildren(body, dishes.map((d, i) => dishKey(m, d, i)), (key) => {
       const dish = document.createElement('div');
       dish.innerHTML = dishHTML(dishes[Number(key.split('|').pop())]);
       return dish.firstChild;
-    }, false);
+    });
   }
-
-  // ONE slide: every surviving section glides from its old top to the new.
-  flipPlay(content, first);
-
-  // Rebuilt dishes carry no <img> (dishHTML never renders it) — restore
-  // photos when the toggle is on so meal switches keep the photo state.
-  if (prefs.photos) applyPhotos();
 }
 
-/** Photo toggle: insert/remove <img class="dish-photo"> on existing
-    dishes with FULL FLIP participation — the height change slides every
-    section below (same choreography as mensa toggling). Photos are
-    preloaded via Image() + decode() so the browser cache makes repeated
-    on/off toggling instant (web.dev image decode practice). No re-render:
-    only the <img> nodes are touched. */
+/**
+ * Idempotent photo sync: makes the DOM match prefs.photos by inserting or
+ * removing <img class="dish-photo"> inside REUSED dish nodes — dish text/
+ * nutrition never rebuilds (no flash). Runs inside renderAll()'s diff
+ * pass, so the resulting height changes are covered by the same FLIP.
+ */
 function applyPhotos() {
   const show = prefs.photos;
-  const dishes = [...document.querySelectorAll('.dish')];
   const content = document.getElementById('content');
 
-  if (show) {
-    const pending = [];
-
-    for (const dishEl of dishes) {
-      const url = dishEl.dataset.photo;
-      if (!url || dishEl.querySelector('.dish-photo')) continue;
-      const img = document.createElement('img');
-      img.className = 'dish-photo';
-      img.alt = (dishEl.querySelector('.dish-name') || {}).textContent || '';
-      img.loading = 'lazy';
-      // Preload + decode BEFORE inserting: the layout shift (and its FLIP
-      // slide) then happens once, with the image already available — no
-      // pop-in after the slide, no second reflow when bytes arrive.
-      const pre = new Image();
-      pre.src = url;
-      pending.push({ dishEl, img, pre });
-    }
-
-    if (!pending.length) return;
-
-    // Wait for all decodes, then insert + FLIP once.
-    Promise.all(pending.map((p) => p.pre.decode().catch(() => {}))).then(() => {
-      if (!prefs.photos) return; // toggled off while loading
-      const first = flipFirst(content); // positions measured with photos absent
-      for (const p of pending) {
-        if (!p.dishEl.isConnected || p.dishEl.querySelector('.dish-photo')) continue;
-        p.dishEl.querySelector('.dish-main').appendChild(p.img); // appears; neighbors slide via flipPlay
+  for (const dishEl of content.querySelectorAll('.dish')) {
+    const url = dishEl.dataset.photo;
+    const main = dishEl.querySelector('.dish-main');
+    const img = dishEl.querySelector('.dish-photo');
+    if (show && url && !img) {
+      const el = document.createElement('img');
+      el.className = 'dish-photo';
+      el.src = url;
+      el.alt = (dishEl.querySelector('.dish-name') || {}).textContent || '';
+      el.loading = 'lazy';
+      main.appendChild(el);
+      // Photo itself: scale+rise in (its own space is reserved by the
+      // aspect-ratio, so this is a pure compositor animation).
+      if (animationsAllowed()) {
+        el.animate(
+          [{ opacity: 0, transform: 'scale(.96) translateY(6px)' }, { opacity: 1, transform: 'scale(1) translateY(0)' }],
+          { duration: ANIM_MS, easing: ANIM_EASE }
+        );
       }
-      flipPlay(content, first);
-    });
-  } else {
-    // Off: remove photos. Record positions first so the collapse slides.
-    const first = flipFirst(content);
-    for (const dishEl of dishes) {
-      const img = dishEl.querySelector('.dish-photo');
-      if (img) img.remove();
+    } else if (!show && img) {
+      img.remove();
     }
-    flipPlay(content, first);
   }
 }
 
@@ -790,9 +815,7 @@ function onSegmentedClick(e) {
   if (!btn || btn.dataset.meal === prefs.meal) return;
   prefs.meal = btn.dataset.meal;
   savePrefs();
-  updateSegmented(); // animates the thumb
-  renderContent();   // keyed reconcile: only changed dishes animate
-  updateRawText();
+  renderAll();
 }
 
 function onMensaListClick(e) {
@@ -812,12 +835,7 @@ function toggleMensa(id) {
   if (prefs.selected.has(id)) prefs.selected.delete(id);
   else prefs.selected.add(id);
   savePrefs();
-  refreshMensaRows();
-  renderGroupList();
-  renderContent();
-  updateRawText();
-  // NOTE: no auto-close — the drawer stays usable for multi-select;
-  // the user closes it via the hamburger (slides back to the top-left).
+  renderAll();
 }
 
 function onGroupsClick(e) {
@@ -841,18 +859,13 @@ function applyGroup(name) {
   if (!members.length) return;
   prefs.selected = new Set(members);
   savePrefs();
-  refreshMensaRows();
-  renderGroupList();
-  renderContent();
-  updateRawText();
-  // NOTE: no auto-close (same as toggleMensa) — drawer stays usable
-  // until the user closes it via the hamburger.
+  renderAll();
 }
 
 function deleteCustomGroup(name) {
   delete prefs.customGroups[name];
   savePrefs();
-  renderGroupList();
+  renderAll(); // chips reconcile + FLIP; selected rows already updated
 }
 
 /** Create a custom group whose members = currently selected mensas.
@@ -870,7 +883,7 @@ function addCustomGroup() {
   }
   prefs.customGroups[name] = Array.from(prefs.selected);
   savePrefs();
-  renderGroupList();
+  renderAll();
   input.value = '';
   showGroupMsg('');
 }

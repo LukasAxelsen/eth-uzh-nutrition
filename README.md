@@ -18,7 +18,9 @@ Static site: no accounts, no tracking.
 
 - `index.txt` — one line per dish, for scripts and LLMs
 - A "raw data" panel on the site with a copy button
-- [CONTRACT.md](CONTRACT.md) — exact `data.json` schema and DOM class contract
+- [CONTRACT.md](CONTRACT.md) — exact `data.json` schema, DOM class contract, and the animation contract
+- [AGENTS.md](AGENTS.md) — mandatory rules for any agent/human editing this repo (animation architecture, prohibitions, workflow)
+- `scripts/verify-anim-contract.py` — machine-checkable animation contract; run after any frontend change
 
 ## Data sources
 

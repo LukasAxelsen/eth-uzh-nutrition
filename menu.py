@@ -29,6 +29,11 @@ USER_AGENT = "Mozilla/5.0 (compatible; eth-uzh-nutrition/1.0)"
 
 TODAY = datetime.now(timezone(timedelta(hours=2))).date().isoformat()
 
+
+def _current_date():
+    """Zurich-local today (used to decide whether todayOffer fallback applies)."""
+    return datetime.now(timezone(timedelta(hours=2))).date().isoformat()
+
 BASE = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_DIR = os.path.join(BASE, "output")
 TEMPLATE_DIR = os.path.join(BASE, "template")
@@ -388,28 +393,34 @@ def fetch_uzh():
     (weekends, holidays, API hiccups) so the frontend renders it with
     its "no meals" notice instead of dropping it silently.
     """
+    is_today = TODAY == _current_date()
     result = []
     for loc_id, (group, slug_names) in UZH_LOCATIONS.items():
-        body = json.dumps({
-            "query": FOOD2050_QUERY,
-            "variables": {"locationId": loc_id},
-            "operationName": "ExampleQuery",
-        })
-        data = http_post("https://api.app.food2050.ch/", body)
-        kitchens = (data.get("data") or {}).get("location") or {}
-        kitchens = kitchens.get("kitchens") or []
-        by_slug = {k.get("slug"): k for k in kitchens}
+        # The GraphQL list API is only needed for the current day's
+        # todayOffer fallback; future dates are served purely via the
+        # weekly-page category templates, so skip the POST entirely.
+        by_slug = {}
+        if is_today:
+            body = json.dumps({
+                "query": FOOD2050_QUERY,
+                "variables": {"locationId": loc_id},
+                "operationName": "ExampleQuery",
+            })
+            data = http_post("https://api.app.food2050.ch/", body)
+            kitchens = (data.get("data") or {}).get("location") or {}
+            by_slug = {k.get("slug"): k for k in kitchens.get("kitchens") or []}
 
         for slug, name in slug_names.items():
             dishes = []
-            kitchen = by_slug.get(slug)
-            if kitchen is not None:
-                dishes = scrape_uzh_weekly(slug)
-                # Fall back to the list API whenever the weekly page
-                # yields nothing — parse failure (None) or empty list
-                # (outlet publishes names only via displayName, e.g.
-                # Botanischer Garten).
-                if not dishes:
+            # Weekly page for the current week; future dates via
+            # category templates (see scrape_uzh_date).
+            dishes = scrape_uzh_date(slug, TODAY)
+            # Fall back to the list API ONLY for the current day —
+            # for other dates the todayOffer is that day's data and
+            # would be wrong (it never applies to future dates).
+            if not dishes and is_today:
+                kitchen = by_slug.get(slug)
+                if kitchen is not None:
                     dishes = uzh_dishes_from_list(kitchen.get("todayOffer") or [])
 
             result.append({
@@ -450,29 +461,10 @@ def scrape_uzh_weekly(slug):
     Returns a list of dishes, or None if the weekly page is unavailable
     (caller then falls back to the list API).
     """
-    url = UZH_WEEKLY_URLS.get(slug)
-    if not url:
+    wk = _load_uzh_weekly(slug)
+    if wk is None:
         return None
-
-    html = http_get(url)
-    m = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', html)
-    if not m:
-        return None
-    try:
-        data = json.loads(m.group(1))
-        outlet = data["props"]["pageProps"]["organisation"]["outlet"]
-        calendar = (outlet.get("menuCategory") or {}).get("calendar")
-        if calendar is None:
-            calendar = outlet.get("calendar")  # some outlets render it at outlet level
-        daily = calendar["week"]["daily"]
-    except (KeyError, ValueError, TypeError):
-        return None
-
-    items = []
-    for day in daily:
-        for item in day.get("menuItems", []):
-            if item.get("detailUrl", "").endswith(TODAY):
-                items.append(item)
+    items = wk.get(TODAY) or []
     if not items:
         return []  # page loaded, but nothing is served today
 
@@ -487,6 +479,165 @@ def scrape_uzh_weekly(slug):
         d["nutrition"] = detail["nutrition"]
         dishes.append(d)
     return dishes
+
+
+# Weekly page parsed once per slug: {date: [menuItems]} plus the
+# category path segments found in the week's detailUrls (used to build
+# detail URLs for future dates). Cached across the multi-day loop.
+_weekly_cache = {}
+
+
+def _load_uzh_weekly(slug):
+    """Parse the weekly page once per slug.
+
+    Returns {date: [menuItems]} (date = YYYY-MM-DD) plus a parallel
+    structure of detailUrl templates, or None on failure.
+    """
+    if slug in _weekly_cache:
+        return _weekly_cache[slug]
+    url = UZH_WEEKLY_URLS.get(slug)
+    if not url:
+        _weekly_cache[slug] = None
+        return None
+
+    html = http_get(url)
+    m = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', html)
+    if not m:
+        _weekly_cache[slug] = None
+        return None
+    try:
+        data = json.loads(m.group(1))
+        outlet = data["props"]["pageProps"]["organisation"]["outlet"]
+        calendar = (outlet.get("menuCategory") or {}).get("calendar")
+        if calendar is None:
+            calendar = outlet.get("calendar")  # some outlets render it at outlet level
+        daily = calendar["week"]["daily"]
+    except (KeyError, ValueError, TypeError):
+        _weekly_cache[slug] = None
+        return None
+
+    by_date = {}
+    for day in daily:
+        frm = (day.get("from") or {}).get("dateLocal", "")
+        day_date = frm[:10] if frm else ""
+        if not day_date:
+            continue
+        by_date[day_date] = day.get("menuItems", [])
+    _weekly_cache[slug] = by_date
+    return by_date
+
+
+def _uzh_category_templates(slug):
+    """Category path segments seen in the current week's detailUrls.
+
+    Detail URLs look like .../mittagsverpflegung,unten,{category}/{date};
+    replacing the date segment yields a valid URL for ANY date, because
+    the detail page resolves dishes by the date in its path. Categories
+    seen this week are the ones that exist for the outlet.
+    """
+    by_date = _load_uzh_weekly(slug) or {}
+    cats = set()
+    for items in by_date.values():
+        for item in items:
+            u = item.get("detailUrl", "")
+            # .../mittagsverpflegung,unten,{cat}/YYYY-MM-DD
+            m = re.search(r",unten,([^/]+)/\d{4}-\d{2}-\d{2}$", u)
+            if m:
+                cats.add(m.group(1))
+    return sorted(cats)
+
+
+def scrape_uzh_date(slug, date):
+    """Dishes + nutrition for an arbitrary calendar date.
+
+    The weekly page only serves the current week: dates inside it are
+    read from its own menuItems; other dates (future) reuse the week's
+    category templates with the date substituted in the detail URL —
+    the detail page resolves by path date, so this works for any date
+    the source publishes.
+    """
+    by_date = _load_uzh_weekly(slug)
+    if by_date is None:
+        return []
+    items = by_date.get(date)
+    if items is not None:
+        # Date is inside the served week — use its own items.
+        dishes = []
+        for item in items:
+            dish_name = (item.get("dish") or {}).get("name", "")
+            if not clean_text(dish_name):
+                continue
+            d = build_uzh_dish(dish_name, (item.get("category") or {}).get("name", ""))
+            detail = scrape_uzh_detail(item.get("detailUrl"))
+            d["photo"] = detail["photo"]
+            d["nutrition"] = detail["nutrition"]
+            dishes.append(d)
+        return dishes
+
+    # Future date: build detail URLs from the category templates.
+    # The weekly page only covers the current week; categories seen in
+    # its detailUrls are the outlet's lines, and the detail page
+    # resolves by path date — so substituting the date works for any
+    # future date the source publishes.
+    dishes = []
+    for cat in _uzh_category_templates(slug):
+        # Base = any detailUrl of this category with the date stripped:
+        # .../mittagsverpflegung,unten,{cat}/YYYY-MM-DD
+        base = next(
+            (u.rsplit("/", 1)[0] for items0 in by_date.values() for u in
+             (i.get("detailUrl", "") for i in items0)
+             if re.search(rf",unten,{re.escape(cat)}/\d{{4}}-\d{{2}}-\d{{2}}$", u)),
+            None,
+        )
+        if not base:
+            continue
+        d = build_uzh_dish_from_detail(f"{base}/{date}")
+        if d is not None:
+            dishes.append(d)
+    return dishes
+
+
+def build_uzh_dish_from_detail(detail_url):
+    """Build a dish from a detail page alone (name + nutrition + photo).
+
+    Returns None when the detail page has no dish for that URL/date.
+    """
+    html = http_get(detail_url)
+    m = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', html)
+    if not m:
+        return None
+    try:
+        data = json.loads(m.group(1))
+        outlet = data["props"]["pageProps"]["organisation"]["outlet"]
+        menu_item = (outlet.get("menuCategory") or {}).get("menuItem") or {}
+        dish = menu_item.get("dish") or {}
+    except (KeyError, ValueError, TypeError):
+        return None
+    dish_name = dish.get("name", "")
+    if not clean_text(dish_name):
+        return None
+    category = (menu_item.get("category") or {}).get("name", "")
+    d = build_uzh_dish(dish_name, category)
+    d["photo"] = clean_text(dish.get("imageUrl"))
+    stats = dish.get("stats") or {}
+    p100, total = {}, {}
+    for key, label in UZH_NUTRIENT_MAP.items():
+        v = stats.get(key)
+        if not isinstance(v, dict):
+            continue
+        per100 = _num(v.get("amountPer100g"))
+        if per100 is not None:
+            p100[label] = round(per100, 1)
+        amount = _keep_number(v.get("amount"))
+        if amount is not None:
+            total[label] = amount
+    sw = stats.get("servingWeight")
+    if isinstance(sw, dict):
+        weight = _keep_number(sw.get("amount"))
+        if weight is not None:
+            total["weight"] = weight
+    d["nutrition"] = {"p100": p100, "total": total}
+    return d
 
 
 def scrape_uzh_detail(detail_url):
@@ -594,17 +745,43 @@ def render_txt(mensas):
 # --------------------------------------------------------------------------
 
 def main():
+    global TODAY  # the multi-date loop swaps the module-level date
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    eth = fetch_eth()
-    uzh = fetch_uzh()
-    mensas = eth + uzh
+    # Calendar data window: today + the next 14 calendar days. Weekends
+    # and days without source data are included as empty-day entries so
+    # the calendar can mark them unavailable; the frontend only enables
+    # dates that actually carry data.
+    today_dt = datetime.strptime(TODAY, "%Y-%m-%d").date()
+    date_window = [TODAY] + [
+        (today_dt + timedelta(days=i)).isoformat()
+        for i in range(1, 15)
+    ]
 
-    payload = {"date": TODAY, "mensas": mensas}
+    days = {}
+    for d in date_window:
+        # ETH: one call returns all facilities for the date.
+        # UZH: weekly page only serves the CURRENT week, so detail URLs
+        # (category + date path segments) are derived from the weekly
+        # page's own links and the date is substituted per day.
+        # (single-threaded, sequential loop, so swapping TODAY is safe)
+        TODAY = d
+        eth = fetch_eth()
+        uzh = fetch_uzh()
+        days[d] = {"mensas": eth + uzh}
+
+    # Restore for the plain-text render (index.txt is always "today").
+    TODAY = date_window[0]
+
+    payload = {
+        "date": TODAY,
+        "days": days,
+        "availableDates": sorted(days.keys()),
+    }
     with open(os.path.join(OUTPUT_DIR, "data.json"), "w") as f:
         json.dump(payload, f, ensure_ascii=False, indent=1)
 
-    txt = render_txt(mensas)
+    txt = render_txt(days[TODAY]["mensas"])
     with open(os.path.join(OUTPUT_DIR, "index.txt"), "w") as f:
         f.write(txt)
 
@@ -636,8 +813,13 @@ def main():
     with open(os.path.join(OUTPUT_DIR, "app.js"), "w") as f:
         f.write(js)
 
-    n = sum(len(m["meals"]["Lunch"]) + len(m["meals"]["Dinner"]) for m in mensas)
-    print(f"Done — {len(mensas)} mensas, {n} dishes")
+    n = sum(len(m["meals"]["Lunch"]) + len(m["meals"]["Dinner"]) for m in days[TODAY]["mensas"])
+    total = sum(
+        len(mm["meals"]["Lunch"]) + len(mm["meals"]["Dinner"])
+        for day in days.values() for mm in day["mensas"]
+    )
+    print(f"Done — {len(days[TODAY]['mensas'])} mensas today ({n} dishes); "
+          f"{len(days)} dates, {total} dishes total")
 
 
 if __name__ == "__main__":

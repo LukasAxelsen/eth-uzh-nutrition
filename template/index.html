@@ -25,7 +25,35 @@
 
     <!-- ======================= Header ======================= -->
     <header class="header">
-      <h1 id="date-heading">Loading…</h1>
+      <!-- Date heading doubles as the calendar trigger: hover shows a
+           slim outline (affordance), click expands the date picker. -->
+      <button class="date-trigger" id="date-trigger" type="button"
+              aria-haspopup="dialog" aria-expanded="false">
+        <h1 id="date-heading">Loading…</h1>
+      </button>
+
+      <!-- Calendar: IN THE DOCUMENT FLOW between the date and the meal
+           switch. Expanding pushes Lunch/Dinner (and everything below)
+           down smoothly; collapsing lets it back up. The frame is a
+           grid-track disclosure (grid-template-rows: 0fr -> 1fr, the
+           modern height-animation pattern): the track clips the frame
+           completely when collapsed — no max-height hack, no leftover
+           border, no JS height measurement. -->
+      <div class="calendar" id="calendar" aria-label="Pick a date">
+        <div class="calendar-inner">
+          <div class="calendar-head">
+            <button class="cal-nav" id="cal-prev" type="button" aria-label="Previous month">&lsaquo;</button>
+            <span class="cal-title" id="cal-title"></span>
+            <button class="cal-nav" id="cal-next" type="button" aria-label="Next month">&rsaquo;</button>
+          </div>
+          <div class="cal-weekdays">
+            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span>
+            <span>Fri</span><span>Sat</span><span>Sun</span>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+          <div class="cal-note" id="cal-note"></div>
+        </div>
+      </div>
 
       <!-- Lunch/Dinner segmented switch (iOS style).
            .seg-thumb is a CSS-driven sliding pill: fixed size at the

@@ -19,7 +19,34 @@
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Text",
           "Helvetica Neue", Helvetica, Arial, sans-serif;
   --content-w: 980px;
-  --ease: cubic-bezier(.4, 0, .2, 1);
+  --ease: cubic-bezier(.32, .72, 0, 1);
+  /* Corner tokens — Apple's continuous-curvature language. Four levels
+     only (enforced by scripts/verify-anim-contract.py):
+       --r-sm  8px   = tight controls (mensa rows, chips)
+       --r-md  12px  = media & small buttons (photos, copy/add buttons)
+       --r-lg  16px  = framed surfaces (calendar, raw panel, big buttons)
+       --r-pill 999px = full-pill controls (segmented, date trigger)
+       --r-circle 50% = dots
+     All radii in the stylesheet MUST come from these tokens. */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-pill: 999px;
+  --r-circle: 50%;
+}
+
+/* Apple's continuous-curvature corners (squircle), progressive
+   enhancement: Chrome 139+ (and any future engine that ships
+   corner-shape) renders TRUE Apple-style corners — curvature that
+   tightens toward the edge instead of the constant-radius circle.
+   Other browsers keep the --r-* token radii (mathematical round
+   corners) — identical layout, slightly different corner shape.
+   This is the CSSWG-sanctioned squircle (superellipse n≈5, the iOS
+   icon shape). Everything else in this file deliberately uses plain
+   border-radius so the fallback is just "round". */
+@supports (corner-shape: squircle) {
+  .calendar-inner,
+  .raw-inner { corner-shape: squircle; }
 }
 
 /* Dark palette — two entry points, same values (keep in sync):
@@ -57,7 +84,7 @@ body, .header, #selector, .segmented, .seg-option, .mensa-title,
 #raw-toggle, #raw-panel, .footer, .menu-btn, .menu-btn::before,
 .menu-btn::after, .mensa-check, .group-add input,
 .nutrition-table td, .nutrition-table th {
-  transition: background-color .3s ease, color .3s ease, border-color .3s ease;
+  transition: background-color .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease);
 }
 
 button { font-family: inherit; -webkit-tap-highlight-color: transparent; }
@@ -73,10 +100,174 @@ input:focus-visible { outline: none; }
 .header { padding: 56px 24px 40px; text-align: center; }
 
 #date-heading {
+  /* Apple's poster serif: `ui-serif` maps to New York on Apple devices
+     (macOS/iOS — the actual system serif); other platforms fall back
+     through Georgia (universal serif) to the platform default serif.
+     New York renders its Display variant at this size automatically. */
+  font-family: ui-serif, "New York", Georgia, "Times New Roman", serif;
   font-size: clamp(32px, 6vw, 56px);
   font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+/* Date heading doubles as the calendar trigger. Hover/press reveal a
+   slim rounded outline (affordance: "this opens something"), matching
+   the site's hairline language. The button wraps the h1 with zero
+   chrome so the heading looks untouched until hovered.
+   The outline is drawn with an inset box-shadow, NOT a border (a real
+   border would occupy layout space). The trigger carries NO negative
+   margins — its padding is honest layout space, so the calendar below
+   aligns to the VISIBLE outline, not to the text box. */
+.date-trigger {
+  position: relative;
+  display: inline-block;
+  padding: 4px 14px 6px;
+  border: none;
+  border-radius: var(--r-pill);
+  background: none;
+  box-shadow: inset 0 0 0 1px transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: box-shadow .2s var(--ease),
+              background-color .2s var(--ease);
+}
+.date-trigger:hover,
+.date-trigger[aria-expanded="true"] { box-shadow: inset 0 0 0 1px var(--border); }
+.date-trigger:active { background: var(--raw-bg); }
+
+/* Calendar: an IN-FLOW disclosure between the date heading and the
+   meal switch (WAI-ARIA date-picker dialog pattern). Expanding animates
+   max-height (JS-measured via expandBody/collapseBody — the same
+   scrollHeight + transition technique as the raw panel and mensa
+   collapse, which works in EVERY browser; grid-template-rows fr
+   animation was rejected: Safari <16 / Chrome <107 jump instead of
+   animating). The 0fr-style clipping problem is avoided structurally:
+   the frame (padding + border) lives on .calendar-inner, a CHILD of
+   the clipped box, so max-height:0 + overflow:hidden clips the whole
+   frame — nothing can linger (padding on the clipped box itself would
+   keep a leftover strip, the border-box trap).
+   Vertical rhythm: 24px of air above AND below the frame is margin on
+   the clipped box, driven by .calendar-open (0 when collapsed — a
+   constant margin would leave a 48px gap in the header). The trigger
+   carries no negative margins, so the grid sits directly below the
+   trigger's visible outline and symmetric margin = symmetric gap. */
+.calendar {
+  max-height: 0;
+  overflow: hidden;
+  width: 292px;
+  max-width: calc(100vw - 40px);
+  margin: 0 auto;               /* constant — NO margin animation */
+  transition: max-height .35s var(--ease);
+}
+/* Vertical rhythm rides the max-height animation via the ::before
+   spacer row (24px): it is CONTENT of the clipped box, so scrollHeight
+   includes it, it grows/clips with the animation, and collapse leaves
+   zero residue. A margin transition on .calendar would animate the
+   margin independently of the clip — the whole calendar visibly
+   "drops down" first, which reads as a jump.
+   The 24px gap BELOW the calendar is the segmented control's own
+   constant margin-top — it never moves when the calendar opens (a
+   margin-top:0 switch there made Lunch/Dinner jump up 24px on open,
+   then get pushed back down by the growing calendar). */
+.calendar::before { content: ''; display: block; height: 24px; }
+.calendar-inner {
+  padding: 14px 16px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--bg);
+}
+.calendar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.cal-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+.cal-nav {
+  width: 28px; height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--r-circle);
+  background: none;
+  color: var(--sub);
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color .2s var(--ease), color .2s var(--ease);
+}
+.cal-nav:hover { background: var(--raw-bg); color: var(--text); }
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 4px;
+}
+.cal-weekdays span {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--sub);
+  padding: 4px 0;
+}
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+.cal-cell {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--r-circle);
+  background: none;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  cursor: pointer;
+  transition: background-color .15s var(--ease),
+              color .15s var(--ease),
+              transform .15s var(--ease);
+}
+.cal-cell:hover { background: var(--raw-bg); }
+.cal-cell:active { transform: scale(.92); }
+/* M3 date-picker: today gets a ring, selected gets the filled pill. */
+.cal-cell.today::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1.5px solid var(--thumb-bg);
+  border-radius: var(--r-circle);
+  pointer-events: none;
+}
+.cal-cell.selected {
+  background: var(--thumb-bg);
+  color: var(--thumb-text);
+  font-weight: 600;
+}
+.cal-cell.selected.today::after { border-color: var(--thumb-text); }
+.cal-cell.disabled {
+  color: var(--sub);
+  opacity: .38;
+  cursor: default;
+}
+.cal-cell.disabled:hover { background: none; }
+.cal-empty { pointer-events: none; }
+.cal-note {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--sub);
+  text-align: center;
 }
 
 /* 3b. Hamburger: three 1px bars, ~40px tap target (36px on small
@@ -98,7 +289,7 @@ input:focus-visible { outline: none; }
   cursor: pointer;
   /* Same duration + easing as #selector/.app: the hamburger and the
      drawer move in lockstep (one shared choreography). */
-  transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+  transition: transform .3s var(--ease);
 }
 .menu-btn::before,
 .menu-btn::after {
@@ -136,7 +327,7 @@ body.menu-open #menu-btn {
   margin-top: 24px;
   padding: 2px;
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   --seg-count: 2;
 }
 .seg-thumb {
@@ -145,11 +336,11 @@ body.menu-open #menu-btn {
   z-index: 0;
   width: calc(100% / var(--seg-count) - 2px);
   background: var(--thumb-bg);
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   transform: translateX(calc(var(--seg-index, 0) * 100%));
   pointer-events: none;
   transition: transform .3s var(--ease),
-              background-color .3s ease;
+              background-color .3s var(--ease);
 }
 .seg-option {
   position: relative;
@@ -162,9 +353,9 @@ body.menu-open #menu-btn {
   color: var(--sub);               /* inactive */
   background: none;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   cursor: pointer;
-  transition: color .3s ease;
+  transition: color .3s var(--ease);
 }
 .seg-option:hover { color: var(--text); }
 .seg-option.active { color: var(--thumb-text); }  /* on the thumb */
@@ -190,27 +381,30 @@ body.menu-open #menu-btn {
   z-index: 200;
   width: min(340px, 85vw);
   background: var(--bg);
-  border-right: 1px solid var(--border);
   overflow-y: auto;
   overscroll-behavior: contain;
+  /* Hide the drawer's own scrollbar (Apple-style: scrollable area with
+     no visible track); the mensa list inside (.selector-mensas) keeps
+     its scrollbar. */
+  scrollbar-width: none;              /* Firefox */
   transform: translateX(-100%);
   visibility: hidden;                    /* no tab focus while closed */
   /* Shared drawer spec — identical to .app and #menu-btn: 0.3s +
-     Material standard cubic-bezier(0.4, 0, 0.2, 1) so the drawer,
-     content and hamburger move in lockstep (the old .35s here caused
-     a 0.05s stall at the end of the close). visibility: 0s duration
-     with a .3s delay on close keeps the drawer painted while it slides
-     out, then makes it inert — exactly one transform duration, no
-     extra stall. */
-  transition: transform .3s cubic-bezier(.4, 0, .2, 1),
+     Apple standard easing (--ease) so the drawer, content and hamburger
+     move in lockstep (the old .35s here caused a 0.05s stall at the end
+     of the close). visibility: 0s duration with a .3s delay on close
+     keeps the drawer painted while it slides out, then makes it inert —
+     exactly one transform duration, no extra stall. */
+  transition: transform .3s var(--ease),
               visibility 0s linear .3s;
 }
+#selector::-webkit-scrollbar { display: none; }  /* Chrome/Safari */
 #selector.open {
   transform: translateX(0);
   visibility: visible;
   /* Both transitions declared on both states: on open, visibility
      flips instantly (0 delay) while the transform animates. */
-  transition: transform .3s cubic-bezier(.4, 0, .2, 1),
+  transition: transform .3s var(--ease),
               visibility 0s linear;
 }
 
@@ -222,7 +416,7 @@ body.menu-open #menu-btn {
    width: 100% is declared EXPLICITLY: transitioning from auto to
    calc(100% - 380px) cannot be interpolated (auto↔length snaps), which
    was the desktop "flash". */
-.app { width: 100%; transition: transform .3s cubic-bezier(.4, 0, .2, 1); }
+.app { width: 100%; transition: transform .3s var(--ease); }
 @media (max-width: 767px) {
   #selector { width: 100%; }
   .app { will-change: transform; }
@@ -250,7 +444,6 @@ body.menu-open #menu-btn {
   padding: 20px 22px 32px;
 }
 .selector-pane + .selector-pane {
-  border-top: 1px solid var(--border);
   margin-top: 14px;
   padding-top: 14px;
 }
@@ -283,10 +476,10 @@ body.menu-open #menu-btn {
   align-items: center;
   gap: 12px;
   padding: 9px 4px;
-  border-radius: 8px;
+  border-radius: var(--r-sm);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition: background-color .15s ease;
+  transition: background-color .15s var(--ease);
 }
 /* M3 state layer: hover/press feedback, same as the group chips. */
 .mensa-row::before {
@@ -309,7 +502,7 @@ body.menu-open #menu-btn {
   flex-shrink: 0;
   width: 18px; height: 18px;
   border: 1.5px solid #86868b;
-  border-radius: 50%;
+  border-radius: var(--r-circle);
   /* The filled dot is a real element (not display:none), scaled to zero —
      so selecting/deselecting animates it in/out instead of popping. */
 }
@@ -319,7 +512,7 @@ body.menu-open #menu-btn {
   inset: 0;
   margin: auto;
   width: 8px; height: 8px;
-  border-radius: 50%;
+  border-radius: var(--r-circle);
   background: var(--thumb-bg);
   transform: scale(0);
   opacity: 0;
@@ -358,7 +551,7 @@ body.menu-open #menu-btn {
   color: var(--text);
   background: none;
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   cursor: pointer;
   transition: border-color .25s var(--ease),
               background-color .25s var(--ease),
@@ -406,7 +599,7 @@ body.menu-open #menu-btn {
   font-size: 13px;
   line-height: 1;
   color: var(--sub);
-  border-radius: 50%;
+  border-radius: var(--r-circle);
   cursor: pointer;
 }
 .group-chip.custom .chip-x:hover { color: var(--text); background: var(--border); }
@@ -437,7 +630,7 @@ body.menu-open #menu-btn {
   color: var(--accent);
   background: none;
   border: none;
-  border-radius: 12px;
+  border-radius: var(--r-md);
   cursor: pointer;
 }
 .group-add button:hover { background: var(--raw-bg); }
@@ -506,17 +699,22 @@ body.menu-open #menu-btn {
   color: var(--body);
 }
 
-/* Dish photo: base styles only. Enter animation is driven by WAAPI
-   (el.animate, opacity+transform) from app.js — same choreography as
-   the raw-panel disclosure; respects prefers-reduced-motion. */
+/* Dish photo: base styles only. Open/close choreography is a HEIGHT
+   transition (layout animation — content slides down/up naturally, no
+   fades), driven by app.js applyPhotos: insert at height:0 -> grow on
+   the next frame; close pins height -> shrinks to 0 -> node removed on
+   transitionend. overflow hidden clips the image while it shrinks. */
 .dish-photo {
   display: block;
   margin-top: 16px;
   width: 100%;
   max-width: 420px;
   aspect-ratio: 4 / 3;
+  overflow: hidden;
   object-fit: cover;
-  border-radius: 12px;
+  transition: height .35s var(--ease),
+              margin-top .35s var(--ease);
+  border-radius: var(--r-md);
 }
 .nutrition-col { width: 100%; flex-shrink: 0; }
 
@@ -570,7 +768,7 @@ body.menu-open #menu-btn {
   color: var(--text);
   background: transparent;
   border: 1px solid var(--border);
-  border-radius: 24px;
+  border-radius: var(--r-lg);
   cursor: pointer;
 }
 #raw-toggle:hover { border-color: var(--text); }
@@ -581,12 +779,12 @@ body.menu-open #menu-btn {
   margin-top: 20px;
   /* Same duration/easing as the .mensa-dishes disclosure (the site's
      reference appear/exit animation) — one shared choreography. */
-  transition: max-height .35s ease;
+  transition: max-height .35s var(--ease);
 }
 .raw-inner {
   padding: 20px;
   background: var(--raw-bg);
-  border-radius: 16px;
+  border-radius: var(--r-lg);
 }
 
 .raw-head {
@@ -610,9 +808,9 @@ body.menu-open #menu-btn {
   color: var(--text);
   background: transparent;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--r-md);
   cursor: pointer;
-  transition: border-color .15s ease, color .15s ease;
+  transition: border-color .15s var(--ease), color .15s var(--ease);
 }
 #copy-btn:hover { border-color: var(--text); }
 #copy-btn.copied { color: #34c759; border-color: #34c759; }
@@ -654,9 +852,9 @@ body.menu-open #menu-btn {
     /* margin-left/width animate alongside transform (shadcn sidebar
        practice: layout-property animation is fine for a one-off 0.3s
        give-way on desktop hardware). */
-    transition: transform .3s cubic-bezier(.4, 0, .2, 1),
-                margin-left .3s cubic-bezier(.4, 0, .2, 1),
-                width .3s cubic-bezier(.4, 0, .2, 1);
+    transition: transform .3s var(--ease),
+                margin-left .3s var(--ease),
+                width .3s var(--ease);
   }
   #selector { width: 380px; }
   /* Drawer open on desktop: the hamburger slides just right of the

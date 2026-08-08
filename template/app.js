@@ -59,11 +59,13 @@ let data = null;
 
 // User preferences. Sets for membership (fast lookup), plain object
 // for custom groups. Mirrors the localStorage schema exactly:
-//   { meal, selected: [ids], photos: bool, customGroups: {name: [ids]}, collapsedMensas: [ids] }
+//   { meal, selected: [ids], photos: bool, theme: 'light'|'dark'|'auto',
+//     customGroups: {name: [ids]}, collapsedMensas: [ids] }
 let prefs = {
   meal: 'Lunch',
   selected: new Set(),
   photos: false,
+  theme: 'auto',
   customGroups: {},
   collapsedMensas: new Set(),
 };
@@ -77,7 +79,7 @@ let rawFiltered = '';
 
 /** Read + sanitize stored prefs; fall back to defaults on any error. */
 function loadPrefs() {
-  const p = { meal: 'Lunch', selected: new Set(), photos: false, customGroups: {}, collapsedMensas: new Set() };
+  const p = { meal: 'Lunch', selected: new Set(), photos: false, theme: 'auto', customGroups: {}, collapsedMensas: new Set() };
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return p;
@@ -85,6 +87,7 @@ function loadPrefs() {
     if (parsed.meal === 'Lunch' || parsed.meal === 'Dinner') p.meal = parsed.meal;
     if (Array.isArray(parsed.selected)) p.selected = new Set(parsed.selected.map(String));
     if (typeof parsed.photos === 'boolean') p.photos = parsed.photos;
+    if (parsed.theme === 'light' || parsed.theme === 'dark' || parsed.theme === 'auto') p.theme = parsed.theme;
     if (parsed.customGroups && typeof parsed.customGroups === 'object' && !Array.isArray(parsed.customGroups)) {
       for (const [name, ids] of Object.entries(parsed.customGroups)) {
         if (Array.isArray(ids)) p.customGroups[String(name)] = ids.map(String);
@@ -104,6 +107,7 @@ function savePrefs() {
       meal: prefs.meal,
       selected: Array.from(prefs.selected),
       photos: prefs.photos,
+      theme: prefs.theme,
       customGroups: prefs.customGroups,
       collapsedMensas: Array.from(prefs.collapsedMensas),
     }));
@@ -295,6 +299,7 @@ function renderAll() {
   const snapshots = FLIP_CONTAINERS().map((c) => [c, flipFirst(c)]);
   updateSegmented();
   updatePhotoToggle();
+  updateAppearance();
   renderSelector();
   renderContent();
   applyPhotos(); // idempotent <img> sync — part of the same diff pass
@@ -379,16 +384,23 @@ function reconcileChildren(container, keys, makeEl, doFlip) {
   }
   const seen = new Set();
 
+  // Walk the desired order with an index into the live children: a node
+  // that is ALREADY at its target position is left untouched — calling
+  // appendChild on a positioned node forces a reflow that kills any
+  // in-flight CSS transition (e.g. the .mensa-check dot scale) on the
+  // very next style change.
+  let targetIdx = 0;
   for (const key of keys) {
     let node = existing.get(key);
     if (!node) {
       node = makeEl(key);
       node.dataset.key = key;
-      container.appendChild(node); // appears in place; neighbors slide via flipPlay
-    } else {
-      container.appendChild(node); // move to its new position if reordered
+      container.insertBefore(node, container.children[targetIdx] || null);
+    } else if (container.children[targetIdx] !== node) {
+      container.insertBefore(node, container.children[targetIdx] || null);
     }
     seen.add(key);
+    targetIdx++;
   }
 
   // Drop stale keyed nodes AND any keyless leftovers (e.g. a no-meals
@@ -416,6 +428,32 @@ function onPhotoToggleClick() {
   // pipeline diffs everything (including the idempotent <img> sync in
   // applyPhotos) and FLIPs all moved containers in one pass.
   renderAll();
+}
+
+/* ---------- appearance (light/dark/auto) ---------- */
+
+/** Apply prefs.theme to <html data-theme> and drive the appearance
+    segmented thumb (CSS container-transform, same as Lunch/Dinner). */
+function updateAppearance() {
+  document.documentElement.dataset.theme = prefs.theme;
+  const seg = document.getElementById('appearance-seg');
+  if (!seg) return;
+  seg.dataset.theme = prefs.theme; // CSS --seg-index moves the thumb
+  seg.querySelectorAll('.seg-option').forEach((btn) => {
+    const active = btn.dataset.theme === prefs.theme;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-pressed', String(active));
+  });
+}
+
+function onAppearanceClick(e) {
+  const btn = e.target.closest('.seg-option');
+  if (!btn || btn.dataset.theme === prefs.theme) return;
+  prefs.theme = btn.dataset.theme;
+  savePrefs();
+  // Theme variables change on <html>; the CSS transition on body/colors
+  // cross-fades the palette (smooth dark-mode switch).
+  updateAppearance();
 }
 
 /* ---------- selector: mensa list (left column) ---------- */
@@ -738,6 +776,15 @@ function bindEvents() {
   // the top-right corner while open, so it stays visible/tappable).
   document.getElementById('menu-btn').addEventListener('click', toggleSelector);
   document.querySelector('.segmented').addEventListener('click', onSegmentedClick);
+
+  const appearanceSeg = document.getElementById('appearance-seg');
+  appearanceSeg.addEventListener('click', onAppearanceClick);
+  appearanceSeg.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onAppearanceClick(e);
+    }
+  });
 
   const photoRow = document.getElementById('photo-row');
   photoRow.addEventListener('click', onPhotoToggleClick);

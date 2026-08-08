@@ -481,21 +481,10 @@ body.menu-open #menu-btn {
   -webkit-tap-highlight-color: transparent;
   transition: background-color .15s var(--ease);
 }
-/* M3 state layer: hover/press feedback, same as the group chips. */
-.mensa-row::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: var(--text);
-  opacity: 0;
-  transition: opacity .2s var(--ease);
-  pointer-events: none;
-}
-.mensa-row:hover::before { opacity: .05; }
-.mensa-row:active::before { opacity: .1; }
-.mensa-row:hover { background: var(--raw-bg); }
-.mensa-row .mensa-label { position: relative; }  /* above state layer */
+/* NO hover grey on the toggle rows (mensa + photo): the product owner
+   rejected the M3 state-layer background — rows keep their flat look
+   on hover; only the check dot and text colour communicate state. */
+.mensa-row .mensa-label { position: relative; }
 
 .mensa-check {
   position: relative;

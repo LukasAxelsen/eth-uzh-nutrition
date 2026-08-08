@@ -45,6 +45,14 @@ event handler -> mutate state only -> renderAll()
   animations. Nodes inside an already-entering ancestor are skipped
   (nested reconciles — a dish inside a fresh section doesn't animate
   twice; the outer grow carries it).
+- WHOLESALE SWAPS (date/meal change — every dish key changes at once)
+  are animated by the #content HEIGHT GLIDE (`animateContentHeight`):
+  lock the old height, swap the DOM instantly, glide to the new height.
+  Per-dish enters on top of a glide double-animate (the flash
+  regression), and a swap without a glide jumps (the no-animation
+  regression). Dishes therefore reconcile with enter=false; fresh
+  sections keep their own grow. The glide is guarded: skipped while any
+  node is entering (a pure-add drives height continuously on its own).
 
 ## Decoupling rules (industry layering, agent-maintainable)
 
@@ -121,6 +129,11 @@ event handler -> mutate state only -> renderAll()
     calendar opened). NEVER animate the calendar's margin to create the
     gap: the margin animates independently of the clip and the whole
     calendar visibly "drops" first (the jump regression).
+11. Toggle rows (mensa + photo) are FLAT on hover — NO state-layer grey
+    (`.mensa-row:hover` background, `::before` overlay). The M3
+    hover-grey on those rows was explicitly rejected by the product
+    owner; only the check dot and text colour communicate state. Group
+    chips keep their own state layer.
 
 ## Product owner's design decisions (hard-coded, non-negotiable)
 

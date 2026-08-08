@@ -102,11 +102,12 @@ Every content change runs through the ONE pipeline:
 
 ## localStorage key: "eth-uzh-nutrition-prefs"
 ```json
-{"meal":"Lunch","selected":["eth-9","uzh-obere-mensa",...],"photos":false,"theme":"light","customGroups":{"My Group":["eth-3",...]},"collapsedMensas":[]}
+{"meal":"Lunch","selected":["eth-9","uzh-obere-mensa",...],"photos":true,"theme":"light","customGroups":{"My Group":["eth-3",...]},"collapsedMensas":[]}
 ```
-- selected: array of mensa ids (Set serialized); theme: "light"|"dark"|"auto",
-  DEFAULT "light" (first visit shows the light switch active, matching the
-  light default palette — "auto" confused users into thinking Light was
-  broken/grey).
+- photos: bool, DEFAULT true (photos on — product owner); selection
+  DEFAULT: all of the Central group when nothing is stored (see
+  validatePrefsAgainstData); theme DEFAULT "light" (first visit shows the
+  light switch active, matching the light default palette — "auto"
+  confused users into thinking Light was broken/grey).
 - The calendar date (selectedDate) is intentionally NOT persisted — the
   site is a "today" product.

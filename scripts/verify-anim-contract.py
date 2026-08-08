@@ -116,6 +116,10 @@ print("== B4. design decisions (product owner, hard-coded) ==")
 check("trigger outline is box-shadow inset (not border)",
       "box-shadow: inset 0 0 0 1px transparent" in CSS and
       not re.search(r"\.date-trigger\s*\{[^}]*border:\s*1px", CSS))
+# Toggle rows (mensa + photo) are FLAT on hover — the M3 state-layer
+# grey was explicitly rejected (product owner). Group chips keep theirs.
+check("no hover grey on toggle rows (mensa/photo)",
+      ".mensa-row:hover" not in CSS and ".mensa-row::before" not in CSS)
 check("calendar gap symmetric (::before spacer + constant seg margin, NO margin animation)",
       ".calendar::before" in CSS and
       "margin: 24px auto" not in CSS and
@@ -136,6 +140,13 @@ check("expandBody/collapseBody exist and are used by calendar",
       "function expandBody(body)" in JS and "collapseBody(cal)" in JS)
 check("raw panel stays a max-height disclosure",
       "expandBody" in JS)
+check("content-height glide exists for wholesale swaps",
+      "function animateContentHeight(node, oldH, newH)" in JS and
+      "node.style.height = oldH + 'px'" in JS and
+      "node.style.height = newH + 'px'" in JS)
+check("glide is driven from renderAll with entering-guard",
+      "!content.querySelector('[data-entering]')" in JS and
+      "animateContentHeight(content, oldH, newH)" in JS)
 
 print("== C2. enter/exit symmetry (pipeline default, not per-feature) ==")
 check("animateEnter exists and grows from 0 height",

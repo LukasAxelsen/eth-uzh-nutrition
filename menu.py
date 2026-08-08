@@ -87,15 +87,22 @@ UZH_LOCATIONS = {
     }),
 }
 
-# Outlets with a public Food2050 weekly page (used for nutrition scraping)
+# Outlets with a public Food2050 weekly page (used for nutrition scraping).
+# NOTE: web slugs/paths differ from the GraphQL API slugs (e.g. API
+# "green-kitchen" -> web "green-kitchen-lab", API "uzh-cityport" -> web
+# "cityport/cityport"). Each entry was verified against the outlet page's
+# own /menu/weekly links.
 UZH_WEEKLY_URLS = {
     "untere-mensa": "https://app.food2050.ch/de/v2/zfv/universitat-zurich,campus-zentrum/untere-mensa/mittagsverpflegung/menu/weekly",
     "obere-mensa": "https://app.food2050.ch/de/v2/zfv/universitat-zurich,campus-zentrum/obere-mensa/mittagsverpflegung/menu/weekly",
     "lichthof": "https://app.food2050.ch/de/v2/zfv/universitat-zurich,campus-zentrum/lichthof/mittagsverpflegung/menu/weekly",
     "mensa": "https://app.food2050.ch/de/v2/zfv/universitat-zurich,campus-irchel/mensa/mittagsverpflegung/menu/weekly",
-    "green-kitchen": "https://app.food2050.ch/de/v2/zfv/universitat-zurich,campus-irchel/green-kitchen/mittagsverpflegung/menu/weekly",
-    "seerose": "https://app.food2050.ch/de/v2/zfv/universitat-zurich,campus-irchel/seerose/mittagsverpflegung/menu/weekly",
+    "green-kitchen": "https://app.food2050.ch/de/v2/zfv/universitat-zurich,campus-irchel/green-kitchen-lab/mittagsverpflegung/menu/weekly",
+    "seerose": "https://app.food2050.ch/de/v2/zfv/universitat-zurich,campus-irchel/seerose/mittag/menu/weekly",
     "uzh-binzmuehle": "https://app.food2050.ch/de/v2/zfv/universitat-zurich,campus-oerlikon/mensa-binzmuhle/mittagsverpflegung/menu/weekly",
+    "uzh-cityport": "https://app.food2050.ch/de/v2/zfv/universitat-zurich,cityport/cityport/mittagsverpflegung/menu/weekly",
+    "tierspital": "https://app.food2050.ch/de/v2/zfv/universitat-zurich,tierspital-1/tierspital/mittagsverpflegung/menu/weekly",
+    "uzh-botanischergarten": "https://app.food2050.ch/de/v2/zfv/universitat-zurich,botanischer-garten/botanischer-garten/mittagsverpflegung/menu/weekly",
 }
 
 # All nutrition rows the frontend table shows (fixed order)
@@ -395,7 +402,11 @@ def fetch_uzh():
             kitchen = by_slug.get(slug)
             if kitchen is not None:
                 dishes = scrape_uzh_weekly(slug)
-                if dishes is None:
+                # Fall back to the list API whenever the weekly page
+                # yields nothing — parse failure (None) or empty list
+                # (outlet publishes names only via displayName, e.g.
+                # Botanischer Garten).
+                if not dishes:
                     dishes = uzh_dishes_from_list(kitchen.get("todayOffer") or [])
 
             result.append({

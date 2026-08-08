@@ -59,10 +59,11 @@ let data = null;
 
 // User preferences. Sets for membership (fast lookup), plain object
 // for custom groups. Mirrors the localStorage schema exactly:
-//   { meal, selected: [ids], customGroups: {name: [ids]}, collapsedMensas: [ids] }
+//   { meal, selected: [ids], photos: bool, customGroups: {name: [ids]}, collapsedMensas: [ids] }
 let prefs = {
   meal: 'Lunch',
   selected: new Set(),
+  photos: false,
   customGroups: {},
   collapsedMensas: new Set(),
 };
@@ -76,13 +77,14 @@ let rawFiltered = '';
 
 /** Read + sanitize stored prefs; fall back to defaults on any error. */
 function loadPrefs() {
-  const p = { meal: 'Lunch', selected: new Set(), customGroups: {}, collapsedMensas: new Set() };
+  const p = { meal: 'Lunch', selected: new Set(), photos: false, customGroups: {}, collapsedMensas: new Set() };
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return p;
     const parsed = JSON.parse(raw);
     if (parsed.meal === 'Lunch' || parsed.meal === 'Dinner') p.meal = parsed.meal;
     if (Array.isArray(parsed.selected)) p.selected = new Set(parsed.selected.map(String));
+    if (typeof parsed.photos === 'boolean') p.photos = parsed.photos;
     if (parsed.customGroups && typeof parsed.customGroups === 'object' && !Array.isArray(parsed.customGroups)) {
       for (const [name, ids] of Object.entries(parsed.customGroups)) {
         if (Array.isArray(ids)) p.customGroups[String(name)] = ids.map(String);
@@ -101,6 +103,7 @@ function savePrefs() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       meal: prefs.meal,
       selected: Array.from(prefs.selected),
+      photos: prefs.photos,
       customGroups: prefs.customGroups,
       collapsedMensas: Array.from(prefs.collapsedMensas),
     }));
@@ -271,9 +274,27 @@ function formatDate(iso) {
 /** Full re-render of everything derived from state. */
 function renderAll() {
   updateSegmented();
+  updatePhotoToggle();
   renderSelector();
   renderContent();
   updateRawText();
+}
+
+/* ---------- photo row (drawer, mensa-row style) ---------- */
+
+/** Reflect prefs.photos on the drawer row (filled dot = on). */
+function updatePhotoToggle() {
+  const row = document.getElementById('photo-row');
+  if (!row) return;
+  row.classList.toggle('selected', prefs.photos);
+  row.setAttribute('aria-pressed', String(prefs.photos));
+}
+
+function onPhotoToggleClick() {
+  prefs.photos = !prefs.photos;
+  savePrefs();
+  updatePhotoToggle();
+  renderContent(); // photos appear/disappear (fade via CSS)
 }
 
 /* ---------- selector: mensa list (left column) ---------- */
@@ -352,11 +373,13 @@ function dishHTML(d) {
   const line = String(d.line || '').trim();
   const dish = String(d.dish || '').trim();
   const label = line && line.toLowerCase() !== dish.toLowerCase() ? line : '';
+  const photo = prefs.photos && d.photo ? '<img class="dish-photo" src="' + esc(d.photo) + '" alt="' + esc(dish) + '" loading="lazy">' : '';
   return '<div class="dish">' +
     '<div class="dish-main">' +
     (label ? '<div class="dish-label">' + esc(label) + '</div>' : '') +
     '<h3 class="dish-name">' + esc(dish) + '</h3>' +
     (d.desc ? '<p class="dish-desc">' + esc(d.desc) + '</p>' : '') +
+    photo +
     '</div>' +
     '<div class="nutrition-col">' + nutritionTableHTML(nutrition) + '</div>' +
     '</div>';
@@ -477,6 +500,15 @@ function bindEvents() {
   // the top-right corner while open, so it stays visible/tappable).
   document.getElementById('menu-btn').addEventListener('click', toggleSelector);
   document.querySelector('.segmented').addEventListener('click', onSegmentedClick);
+
+  const photoRow = document.getElementById('photo-row');
+  photoRow.addEventListener('click', onPhotoToggleClick);
+  photoRow.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onPhotoToggleClick();
+    }
+  });
 
   const mensaList = document.querySelector('.selector-mensas');
   mensaList.addEventListener('click', onMensaListClick);
@@ -680,6 +712,10 @@ function toggleRaw() {
   const open = panel.classList.toggle('open');
   btn.textContent = open ? 'Hide Raw Data' : 'Show Raw Data';
   btn.setAttribute('aria-expanded', String(open));
+  // Same max-height disclosure as the mensa sections — the panel
+  // glides open/closed instead of popping (display:none flash).
+  if (open) expandBody(panel);
+  else collapseBody(panel);
 }
 
 function copyRaw() {

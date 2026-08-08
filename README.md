@@ -2,8 +2,6 @@
 
 Today's menus for every ETH and UZH Mensa — with calories, nutrition facts, and photos for most dishes. Updated automatically every morning, free, no account, no app.
 
-The official ETH and UZH menu pages don't show calories — this site does.
-
 Live: <https://lukasaxelsen.github.io/eth-uzh-nutrition/>
 
 ## Features

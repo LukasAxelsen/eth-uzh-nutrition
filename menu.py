@@ -344,9 +344,10 @@ def fetch_eth():
 
     result = []
     for fid, (name, group) in ETH_FACILITIES.items():
-        meals_by_slot = per_facility.get(fid)
-        if not meals_by_slot:
-            continue  # facility has no dishes today — drop it entirely
+        # Keep every configured facility even when it has no dishes today
+        # (weekends, holidays) so the frontend renders it with its
+        # "no meals" notice instead of silently disappearing.
+        meals_by_slot = per_facility.get(fid, {"Lunch": [], "Dinner": []})
         result.append({
             "id": f"eth-{fid}",
             "name": f"ETH {name}",
@@ -371,7 +372,12 @@ FOOD2050_QUERY = (
 
 
 def fetch_uzh():
-    """Return list of {id, name, group, meals} for all UZH Food2050 outlets."""
+    """Return list of {id, name, group, meals} for all UZH Food2050 outlets.
+
+    Every configured outlet is always included, even with empty meals
+    (weekends, holidays, API hiccups) so the frontend renders it with
+    its "no meals" notice instead of dropping it silently.
+    """
     result = []
     for loc_id, (group, slug_names) in UZH_LOCATIONS.items():
         body = json.dumps({
@@ -382,19 +388,16 @@ def fetch_uzh():
         data = http_post("https://api.app.food2050.ch/", body)
         kitchens = (data.get("data") or {}).get("location") or {}
         kitchens = kitchens.get("kitchens") or []
+        by_slug = {k.get("slug"): k for k in kitchens}
 
-        for k in kitchens:
-            slug = k.get("slug", "")
-            if slug not in slug_names:
-                continue
-            name = slug_names[slug]
+        for slug, name in slug_names.items():
+            dishes = []
+            kitchen = by_slug.get(slug)
+            if kitchen is not None:
+                dishes = scrape_uzh_weekly(slug)
+                if dishes is None:
+                    dishes = uzh_dishes_from_list(kitchen.get("todayOffer") or [])
 
-            dishes = scrape_uzh_weekly(slug)
-            if dishes is None:
-                dishes = uzh_dishes_from_list(k.get("todayOffer") or [])
-
-            if not dishes:
-                continue  # outlet has no dishes today — drop it entirely
             result.append({
                 # Some kitchen slugs already carry a "uzh-" prefix
                 # (uzh-binzmuehle, uzh-cityport, uzh-botanischergarten).

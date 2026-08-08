@@ -317,14 +317,27 @@ const FLIP_CONTAINERS = () => [
     point. Order: snapshot every container -> mutate all DOM (reconciles
     use doFlip=false) -> FLIP all containers once. */
 function renderAll() {
+  const content = document.getElementById('content');
+  // Coalesce a still-running content glide BEFORE measuring: the old
+  // glide's inline height would otherwise be read as the "current"
+  // height (oldH) AND as the post-render height (newH), locking the
+  // layout to a stale mid-flight value — rapid date toggling then
+  // never settles and the page feels stuck. Snap to natural height,
+  // then measure and glide cleanly from true old -> true new.
+  if (content._heightGlideEnd) settleContentHeight(content);
   const snapshots = FLIP_CONTAINERS().map((c) => [c, flipFirst(c)]);
   updateSegmented();
   updatePhotoToggle();
   updateAppearance();
   renderSelector();
-  const content = document.getElementById('content');
   const oldH = content.getBoundingClientRect().height;
   renderContent();
+  applyPhotos(); // idempotent <img> sync — BEFORE the height measurement:
+                // fresh dishes insert photos at natural height so newH
+                // includes them (a glide to a photo-less height would
+                // jump by the photo stack when the inline height drops);
+                // reused dishes (photo toggle) keep their 0->natural
+                // grow animation, which drives the height itself.
   const newH = content.getBoundingClientRect().height;
   // Content-height glide: when the day/meal swap dishes wholesale (no
   // section entering), lock the OLD height and glide to the new one —
@@ -336,7 +349,7 @@ function renderAll() {
       Math.abs(newH - oldH) > 2 && animationsAllowed()) {
     animateContentHeight(content, oldH, newH);
   } else {
-    content.style.height = '';
+    settleContentHeight(content); // also clears any stale timer/listener
   }
   applyPhotos(); // idempotent <img> sync — part of the same diff pass
   updateRawText();
@@ -781,7 +794,9 @@ function renderContent() {
     reconcileChildren(body, dishes.map((d, i) => dishKey(m, d, i)), (key) => {
       const dish = document.createElement('div');
       dish.innerHTML = dishHTML(dishes[Number(key.split('|').pop())]);
-      return dish.firstChild;
+      const node = dish.firstChild;
+      node.dataset.fresh = '1'; // new dish this render (photo at natural height)
+      return node;
     }, false, false);
     // enter=false: wholesale swaps (date/meal) are animated by the
     // #content height glide in renderAll — per-dish grows on top of it
@@ -816,36 +831,45 @@ function applyPhotos() {
       el.src = url;
       el.alt = (dishEl.querySelector('.dish-name') || {}).textContent || '';
       el.loading = 'lazy';
-      // Insert at 0 height (no layout shift), then grow on the next
-      // frame so the height transition actually animates. height:auto
-      // can't transition (0px -> auto doesn't interpolate), so measure
-      // the natural height first, reset to 0, then animate to the
-      // pixel value.
+      const fresh = dishEl.dataset.fresh === '1';
+      // FRESH dish (wholesale swap): insert at NATURAL height — the
+      // #content height glide animates the swap, a per-photo grow on
+      // top would double-animate and the glide target would miss the
+      // photo stack (jump on cleanup). REUSED dish (photo toggle):
+      // keep the 0->natural grow choreography.
+      if (fresh) {
+        el.style.height = 'auto';
+        el.style.marginTop = '16px';
+        el.style.display = 'block';
+        main.appendChild(el);
+        delete dishEl.dataset.fresh; // one-shot: next toggle reuses the dish normally
+      } else if (animationsAllowed()) {
       el.style.height = '0';
       el.style.marginTop = '0';
       main.appendChild(el);
-      if (animationsAllowed()) {
-        requestAnimationFrame(() => {
-          el.style.height = 'auto';
-          const h = el.offsetHeight; // natural height (aspect-ratio)
-          el.style.height = '0px';
-          void el.offsetHeight; // reflow: transition starts from 0
-          el.style.height = h + 'px';
-          el.style.marginTop = '16px';
-          // After the grow finishes, drop the inline height so the
-          // layout returns to the natural aspect-ratio height (keeps
-          // it responsive on resize).
-          const onEnd = (e) => {
-            if (e.propertyName === 'height') {
-              el.style.height = '';
-              el.removeEventListener('transitionend', onEnd);
-            }
-          };
-          el.addEventListener('transitionend', onEnd);
-        });
+      requestAnimationFrame(() => {
+        el.style.height = 'auto';
+        const h = el.offsetHeight; // natural height (aspect-ratio)
+        el.style.height = '0px';
+        void el.offsetHeight; // reflow: transition starts from 0
+        el.style.height = h + 'px';
+        el.style.marginTop = '16px';
+        // After the grow finishes, drop the inline height so the
+        // layout returns to the natural aspect-ratio height (keeps
+        // it responsive on resize).
+        const onEnd = (e) => {
+          if (e.propertyName === 'height') {
+            el.style.height = '';
+            el.removeEventListener('transitionend', onEnd);
+          }
+        };
+        el.addEventListener('transitionend', onEnd);
+      });
       } else {
-        el.style.height = '';
-        el.style.marginTop = '';
+        el.style.height = 'auto';
+        el.style.marginTop = '16px';
+        el.style.display = 'block';
+        main.appendChild(el);
       }
     } else if (!show && img) {
       if (animationsAllowed()) {
@@ -889,16 +913,36 @@ function updateRawText() {
 
 /* ---------- collapse animation (max-height) ---------- */
 
+/** Instantly settle a node to its natural height: cancel any inline
+    height transition and drop the inline height (no animation). Used
+    to coalesce rapid wholesale swaps — the old glide's mid-flight
+    height must never leak into the next render's measurements. */
+function settleContentHeight(node) {
+  node.style.transition = 'none';
+  node.style.height = '';
+  node.style.overflow = '';
+  if (node._glideTimer) { clearTimeout(node._glideTimer); node._glideTimer = null; }
+  if (node._heightGlideEnd) {
+    node.removeEventListener('transitionend', node._heightGlideEnd);
+    node._heightGlideEnd = null;
+  }
+  void node.offsetHeight; // reflow: settle at the natural height
+}
+
 /** Glide a container's height from oldH to newH (Apple ease). Used when
     content swaps wholesale (date/meal switch): the DOM swap is instant,
     but locking the old height and transitioning to the new one makes
     the layout glide instead of jump. Interrupt-safe: a running glide
-    is cleaned up before a new one starts. */
+    is cleaned up before a new one starts; a timeout fallback settles
+    the node even when the browser never fires transitionend (e.g. the
+    target equals the locked height to sub-pixel — no transition runs,
+    so no event; without the fallback the inline height would stick). */
 function animateContentHeight(node, oldH, newH) {
   if (node._heightGlideEnd) {
     node.removeEventListener('transitionend', node._heightGlideEnd);
     node._heightGlideEnd = null;
   }
+  if (node._glideTimer) { clearTimeout(node._glideTimer); node._glideTimer = null; }
   const cur = getComputedStyle(node).transition;
   node.style.transition = (cur && cur !== 'all 0s ease 0s' ? cur + ', ' : '') +
                           'height .35s ' + ANIM_EASE;
@@ -913,10 +957,14 @@ function animateContentHeight(node, oldH, newH) {
       node.style.transition = '';
       node.removeEventListener('transitionend', onEnd);
       node._heightGlideEnd = null;
+      if (node._glideTimer) { clearTimeout(node._glideTimer); node._glideTimer = null; }
     }
   };
   node._heightGlideEnd = onEnd;
   node.addEventListener('transitionend', onEnd);
+  node._glideTimer = setTimeout(() => {
+    if (node._heightGlideEnd) settleContentHeight(node);
+  }, 500); // 350ms glide + margin; transitionend is the normal path
 }
 
 function expandBody(body) {

@@ -380,8 +380,9 @@ body.menu-open #menu-btn {
   transition: transform .3s var(--ease);
 }
 .mensa-section.collapsed .mensa-caret { transform: rotate(135deg); } /* +90° → right */
-.mensa-section.collapsed .dish,
-.mensa-section.collapsed .no-meals { display: none; }
+/* Collapse is driven by max-height on .mensa-dishes (JS collapseBody/
+   expandBody) — NO display:none here: that would pop the content out
+   instantly instead of letting it slide closed under overflow:hidden. */
 .no-meals { padding: 12px 0; font-size: 15px; color: var(--sub); }
 
 /* Dishes: column mobile / text + nutrition desktop. NO borders between dishes. */
@@ -414,10 +415,9 @@ body.menu-open #menu-btn {
   color: var(--body);
 }
 
-/* Dish photo: fades + slides in gently (opacity/transform only —
-   compositor-friendly, no layout jank). 400ms matches the dish
-   appear/exit feel; respects prefers-reduced-motion via the global
-   media query. */
+/* Dish photo: base styles only. Enter animation is driven by WAAPI
+   (el.animate, opacity+transform) from app.js — same choreography as
+   the raw-panel disclosure; respects prefers-reduced-motion. */
 .dish-photo {
   display: block;
   margin-top: 16px;
@@ -426,11 +426,6 @@ body.menu-open #menu-btn {
   aspect-ratio: 4 / 3;
   object-fit: cover;
   border-radius: 12px;
-  animation: dish-photo-in .4s var(--ease) both;
-}
-@keyframes dish-photo-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
 }
 .nutrition-col { width: 100%; flex-shrink: 0; }
 

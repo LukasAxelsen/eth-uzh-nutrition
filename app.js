@@ -280,7 +280,104 @@ function renderAll() {
   updateRawText();
 }
 
-/* ---------- photo row (drawer, mensa-row style) ---------- */
+/* ---------- keyed reconciliation + FLIP (Vue TransitionGroup pattern) ----------
+   Every mensa section and dish carries a stable data-key. On re-render we
+   diff the key lists: nodes with an existing key are REUSED untouched (no
+   diff => no re-render, no animation); new keys fade/slide in; removed
+   keys disappear; surviving nodes whose position changed slide smoothly
+   via FLIP (First-Last-Invert-Play, transform-only, 60fps). This replaces
+   the full innerHTML swap that used to snap, and the View-Transition
+   snapshot approach that caused jank on height changes. */
+
+const ANIM_MS = 350;
+const ANIM_EASE = 'cubic-bezier(.4, 0, .2, 1)';
+
+// Animations are enabled ONLY after the initial render completes — the
+// first paint must be silent (content just appears), per FLIP practice
+// (Vue TransitionGroup / react-flip-toolkit): transitions are for user
+// interactions, not for page load.
+let animEnabled = false;
+
+/** Respect the user's reduced-motion preference (same as the CSS guard). */
+function prefersReducedMotion() {
+  return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+/** Animations run only for user-driven updates, never on first paint. */
+function animationsAllowed() {
+  return animEnabled && !prefersReducedMotion();
+}
+
+/** First: record each child's top offset, keyed by the node itself.
+    Any in-flight transform animation is committed first (WAAPI finish)
+    so the measured position is the true layout spot, never a mid-flight
+    offset — otherwise overlapping FLIP passes would compute wrong deltas. */
+function flipFirst(container) {
+  const first = new Map();
+  for (const child of container.children) {
+    if (child.getAnimations) {
+      for (const a of child.getAnimations()) {
+        if (a.playState === 'running' || a.playState === 'pending') a.finish();
+      }
+    }
+    first.set(child, child.getBoundingClientRect().top);
+  }
+  return first;
+}
+
+/** Invert + Play: slide every surviving child from its old top to the new
+    one via a transform-only WAAPI animation. Newly added children (not in
+    `first`) are skipped — they run their own enter animation. */
+function flipPlay(container, first) {
+  if (!animationsAllowed()) return;
+  for (const child of container.children) {
+    if (!first.has(child)) continue;
+    const delta = first.get(child) - child.getBoundingClientRect().top;
+    if (delta) {
+      child.animate(
+        [{ transform: 'translateY(' + delta + 'px)' }, { transform: 'translateY(0)' }],
+        { duration: ANIM_MS, easing: ANIM_EASE }
+      );
+    }
+  }
+}
+
+/** Keyed reconciliation: keep existing nodes in order, create missing ones
+    via makeEl(key), drop stale ones. No enter/leave fades — newly added
+    nodes just appear, and every surviving node whose position changed
+    slides smoothly via FLIP (the Vue TransitionGroup move choreography:
+    the list "makes room" for additions/removals instead of popping).
+    Pass doFlip=false when the caller wants to batch one FLIP pass across
+    several containers (see renderContent) to avoid double-measuring. */
+function reconcileChildren(container, keys, makeEl, doFlip) {
+  const first = flipFirst(container);
+  const existing = new Map();
+  for (const child of container.children) {
+    if (child.dataset.key) existing.set(child.dataset.key, child);
+  }
+  const seen = new Set();
+
+  for (const key of keys) {
+    let node = existing.get(key);
+    if (!node) {
+      node = makeEl(key);
+      node.dataset.key = key;
+      container.appendChild(node); // appears in place; neighbors slide via flipPlay
+    } else {
+      container.appendChild(node); // move to its new position if reordered
+    }
+    seen.add(key);
+  }
+
+  // Drop stale keyed nodes AND any keyless leftovers (e.g. a no-meals
+  // div from a previous render path) — every surviving child must be
+  // keyed and present in the new list.
+  for (const child of Array.from(container.children)) {
+    if (!child.dataset.key || !seen.has(child.dataset.key)) child.remove();
+  }
+
+  if (doFlip !== false) flipPlay(container, first);
+}
 
 /** Reflect prefs.photos on the drawer row (filled dot = on). */
 function updatePhotoToggle() {
@@ -294,7 +391,7 @@ function onPhotoToggleClick() {
   prefs.photos = !prefs.photos;
   savePrefs();
   updatePhotoToggle();
-  renderContent(); // photos appear/disappear (fade via CSS)
+  applyPhotos(); // pure DOM insert/remove — no re-render
 }
 
 /* ---------- selector: mensa list (left column) ---------- */
@@ -366,20 +463,20 @@ function renderGroupList() {
 
 /* ---------- content: mensa sections ---------- */
 
-function dishHTML(d) {
+function dishHTML(d, key) {
   const nutrition = d.nutrition || { p100: {}, total: {} };
   // The label is dropped when it duplicates the dish name (Rice Up!
   // publishes "Rice Up! Bowl" as both line and dish).
   const line = String(d.line || '').trim();
   const dish = String(d.dish || '').trim();
   const label = line && line.toLowerCase() !== dish.toLowerCase() ? line : '';
-  const photo = prefs.photos && d.photo ? '<img class="dish-photo" src="' + esc(d.photo) + '" alt="' + esc(dish) + '" loading="lazy">' : '';
-  return '<div class="dish">' +
+  const keyAttr = key ? ' data-key="' + esc(key) + '"' : '';
+  const photo = d.photo ? ' data-photo="' + esc(d.photo) + '"' : '';
+  return '<div class="dish"' + keyAttr + photo + '>' +
     '<div class="dish-main">' +
     (label ? '<div class="dish-label">' + esc(label) + '</div>' : '') +
     '<h3 class="dish-name">' + esc(dish) + '</h3>' +
     (d.desc ? '<p class="dish-desc">' + esc(d.desc) + '</p>' : '') +
-    photo +
     '</div>' +
     '<div class="nutrition-col">' + nutritionTableHTML(nutrition) + '</div>' +
     '</div>';
@@ -411,7 +508,7 @@ function mensaSectionHTML(m) {
   const bodyStyle = 'overflow:hidden;transition:max-height .35s ease' + (collapsed ? ';max-height:0' : '');
   const body = '<div class="mensa-dishes" style="' + bodyStyle + '">' +
     (dishes.length
-      ? dishes.map(dishHTML).join('')
+      ? dishes.map((d, i) => dishHTML(d, dishKey(m, d, i))).join('')
       : '<div class="no-meals">' + EMPTY_MEALS_TEXT + '</div>') +
     '</div>';
 
@@ -423,15 +520,128 @@ function mensaSectionHTML(m) {
     '</section>';
 }
 
+/** Stable key for one dish inside its mensa: meal slot + line + name.
+    Collision-safe enough in practice (same line+name twice in one slot
+    is rare; duplicates then share one key and reuse the first node). */
+function dishKey(m, d, i) {
+  return prefs.meal + '|' + (d.line || '') + '|' + (d.dish || '') + '|' + i;
+}
+
+/**
+ * Keyed re-render of #content. Mensa sections are reconciled by mensa id;
+ * dishes inside each section by dishKey. Nodes with unchanged keys are
+ * REUSED (no re-render, no animation). One FLIP pass measures ALL old
+ * positions up front, performs every DOM change (section add/remove AND
+ * dish content swaps that change section heights), then slides every
+ * surviving section from its old spot to the new one. This is the Vue
+ * TransitionGroup move choreography: the list makes room dynamically —
+ * nothing pops, nothing fades. First paint stays silent (animEnabled).
+ */
 function renderContent() {
   const content = document.getElementById('content');
   const selected = data.mensas.filter((m) => prefs.selected.has(m.id));
 
   if (!selected.length) {
-    content.innerHTML = '<div class="no-meals">' + EMPTY_MEALS_TEXT + '</div>';
+    reconcileChildren(content, ['__empty__'], () => {
+      const div = document.createElement('div');
+      div.className = 'no-meals';
+      div.textContent = EMPTY_MEALS_TEXT;
+      return div;
+    });
     return;
   }
-  content.innerHTML = selected.map(mensaSectionHTML).join('');
+
+  // ONE measurement of every current position, before ANY change.
+  const first = flipFirst(content);
+
+  // Section level: key = mensa id. Reuse existing sections untouched.
+  reconcileChildren(content, selected.map((m) => m.id), (key) => {
+    const section = document.createElement('section');
+    section.innerHTML = mensaSectionHTML(mensaById(key));
+    return section.firstChild;
+  }, false); // defer flip — dish pass below also shifts heights
+
+  // Dish level inside each surviving section.
+  for (const section of content.querySelectorAll('.mensa-section')) {
+    const m = mensaById(section.dataset.mensa);
+    if (!m) continue;
+    const body = section.querySelector('.mensa-dishes');
+    const dishes = m.meals[prefs.meal];
+
+    if (!dishes.length) {
+      reconcileChildren(body, ['__empty__'], () => {
+        const div = document.createElement('div');
+        div.className = 'no-meals';
+        div.textContent = EMPTY_MEALS_TEXT;
+        return div;
+      }, false);
+      continue;
+    }
+    reconcileChildren(body, dishes.map((d, i) => dishKey(m, d, i)), (key) => {
+      const dish = document.createElement('div');
+      dish.innerHTML = dishHTML(dishes[Number(key.split('|').pop())]);
+      return dish.firstChild;
+    }, false);
+  }
+
+  // ONE slide: every surviving section glides from its old top to the new.
+  flipPlay(content, first);
+
+  // Rebuilt dishes carry no <img> (dishHTML never renders it) — restore
+  // photos when the toggle is on so meal switches keep the photo state.
+  if (prefs.photos) applyPhotos();
+}
+
+/** Photo toggle: insert/remove <img class="dish-photo"> on existing
+    dishes with FULL FLIP participation — the height change slides every
+    section below (same choreography as mensa toggling). Photos are
+    preloaded via Image() + decode() so the browser cache makes repeated
+    on/off toggling instant (web.dev image decode practice). No re-render:
+    only the <img> nodes are touched. */
+function applyPhotos() {
+  const show = prefs.photos;
+  const dishes = [...document.querySelectorAll('.dish')];
+  const content = document.getElementById('content');
+
+  if (show) {
+    const pending = [];
+
+    for (const dishEl of dishes) {
+      const url = dishEl.dataset.photo;
+      if (!url || dishEl.querySelector('.dish-photo')) continue;
+      const img = document.createElement('img');
+      img.className = 'dish-photo';
+      img.alt = (dishEl.querySelector('.dish-name') || {}).textContent || '';
+      img.loading = 'lazy';
+      // Preload + decode BEFORE inserting: the layout shift (and its FLIP
+      // slide) then happens once, with the image already available — no
+      // pop-in after the slide, no second reflow when bytes arrive.
+      const pre = new Image();
+      pre.src = url;
+      pending.push({ dishEl, img, pre });
+    }
+
+    if (!pending.length) return;
+
+    // Wait for all decodes, then insert + FLIP once.
+    Promise.all(pending.map((p) => p.pre.decode().catch(() => {}))).then(() => {
+      if (!prefs.photos) return; // toggled off while loading
+      const first = flipFirst(content); // positions measured with photos absent
+      for (const p of pending) {
+        if (!p.dishEl.isConnected || p.dishEl.querySelector('.dish-photo')) continue;
+        p.dishEl.querySelector('.dish-main').appendChild(p.img); // appears; neighbors slide via flipPlay
+      }
+      flipPlay(content, first);
+    });
+  } else {
+    // Off: remove photos. Record positions first so the collapse slides.
+    const first = flipFirst(content);
+    for (const dishEl of dishes) {
+      const img = dishEl.querySelector('.dish-photo');
+      if (img) img.remove();
+    }
+    flipPlay(content, first);
+  }
 }
 
 /* ---------- segmented switch + sliding thumb ---------- */
@@ -581,7 +791,7 @@ function onSegmentedClick(e) {
   prefs.meal = btn.dataset.meal;
   savePrefs();
   updateSegmented(); // animates the thumb
-  renderContent();   // only this meal slot's dishes
+  renderContent();   // keyed reconcile: only changed dishes animate
   updateRawText();
 }
 
@@ -769,7 +979,8 @@ async function init() {
     const json = await fetchData();
     data = { date: json.date, mensas: normalizeMensas(json.mensas) };
     validatePrefsAgainstData();
-    renderAll();
+    renderAll(); // silent first paint — animations stay disabled
+    animEnabled = true; // from here on, user interactions animate
     positionThumb();
   } catch (err) {
     console.error(err);

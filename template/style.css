@@ -67,7 +67,7 @@ input:focus-visible { outline: none; }
   line-height: 1.05;
 }
 
-/* 3a. Hamburger: three 1px bars, ~40px tap target (36px on small
+/* 3b. Hamburger: three 1px bars, ~40px tap target (36px on small
    phones). Lives at BODY level as a sibling of .app and #selector,
    position:fixed — deliberately OUTSIDE .app: a fixed element inside a
    transformed ancestor is positioned relative to that ancestor
@@ -277,6 +277,10 @@ body.menu-open #menu-btn {
 
 .mensa-label { font-size: 14px; color: var(--text); }
 
+/* Photos row in the drawer: sits below the group-add box, styled like
+   a mensa row (filled dot = photos on). */
+.photo-row { margin-top: 4px; }
+
 /* 4b. Groups — horizontal filter chips (Material-style).
    Chips wrap onto multiple lines; click applies the group. */
 .group-rows { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -409,6 +413,25 @@ body.menu-open #menu-btn {
   line-height: 1.55;
   color: var(--body);
 }
+
+/* Dish photo: fades + slides in gently (opacity/transform only —
+   compositor-friendly, no layout jank). 400ms matches the dish
+   appear/exit feel; respects prefers-reduced-motion via the global
+   media query. */
+.dish-photo {
+  display: block;
+  margin-top: 16px;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 12px;
+  animation: dish-photo-in .4s var(--ease) both;
+}
+@keyframes dish-photo-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 .nutrition-col { width: 100%; flex-shrink: 0; }
 
 /* Nutrition table: fixed layout, 9 rows, 34% / 33% / 33% */
@@ -444,7 +467,12 @@ body.menu-open #menu-btn {
   font-variant-numeric: tabular-nums;
 }
 
-/* 6. Raw data section */
+/* 6. Raw data section.
+   The panel is a max-height disclosure (same pattern as .mensa-dishes
+   collapse): overflow hidden + animated max-height, NOT display none/block
+   — that would pop in/out with no transition (the "flash" bug). The
+   visible chrome (padding, tinted bg) lives on .raw-inner so only the
+   height animates; JS expandBody/collapseBody drive the max-height. */
 .raw-section { max-width: min(var(--content-w), 100%); margin: 0 auto; padding: 0 24px 48px; }
 
 #raw-toggle {
@@ -461,14 +489,19 @@ body.menu-open #menu-btn {
 }
 #raw-toggle:hover { border-color: var(--text); }
 
-#raw-panel {                         /* flat disclosure panel (tinted bg intentional) */
-  display: none;
+#raw-panel {
+  overflow: hidden;
+  max-height: 0;
   margin-top: 20px;
+  /* Same duration/easing as the .mensa-dishes disclosure (the site's
+     reference appear/exit animation) — one shared choreography. */
+  transition: max-height .35s ease;
+}
+.raw-inner {
   padding: 20px;
   background: var(--raw-bg);
   border-radius: 16px;
 }
-#raw-panel.open { display: block; }
 
 .raw-head {
   display: flex;

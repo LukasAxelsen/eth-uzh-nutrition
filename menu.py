@@ -332,6 +332,9 @@ def fetch_eth():
             "line": title_slug(m.get("line-name", "")),
             "dish": clean_dish_name(name_parts[0]),
             "desc": normalize_desc(raw_desc),
+            # ETH image URLs require the client-id query param — without
+            # it the API returns an error text, not the JPEG.
+            "photo": (m.get("image-url") or "").rstrip("/") + "?client-id=ethz-wcms" if m.get("image-url") else "",
             "nutrition": {},
         }
         # ETH reports energy in kJ — convert to kcal. Missing/zero values
@@ -435,6 +438,7 @@ def uzh_dishes_from_list(today_offer):
             if not clean_text(name):
                 continue
             d = build_uzh_dish(name, "")
+            d["photo"] = ""
             d["nutrition"] = {"p100": {}, "total": {}}
             dishes.append(d)
     return dishes
@@ -478,22 +482,28 @@ def scrape_uzh_weekly(slug):
         if not clean_text(dish_name):
             continue
         d = build_uzh_dish(dish_name, (item.get("category") or {}).get("name", ""))
-        d["nutrition"] = scrape_uzh_stats(item.get("detailUrl"))
+        detail = scrape_uzh_detail(item.get("detailUrl"))
+        d["photo"] = detail["photo"]
+        d["nutrition"] = detail["nutrition"]
         dishes.append(d)
     return dishes
 
 
-def scrape_uzh_stats(detail_url):
-    """Fetch one Food2050 dish page and extract per-100g + per-serving stats."""
+def scrape_uzh_detail(detail_url):
+    """Fetch one Food2050 dish page: nutrition stats + dish photo.
+
+    Returns {"nutrition": {"p100": …, "total": …}, "photo": url-or-""}.
+    """
     html = http_get(detail_url)
     m = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', html)
     if not m:
-        return {"p100": {}, "total": {}}
+        return {"nutrition": {"p100": {}, "total": {}}, "photo": ""}
     try:
         data = json.loads(m.group(1))
-        stats = data["props"]["pageProps"]["organisation"]["outlet"]["menuCategory"]["menuItem"]["dish"]["stats"]
+        dish = data["props"]["pageProps"]["organisation"]["outlet"]["menuCategory"]["menuItem"]["dish"]
+        stats = dish["stats"]
     except (KeyError, ValueError, TypeError):
-        return {"p100": {}, "total": {}}
+        return {"nutrition": {"p100": {}, "total": {}}, "photo": ""}
 
     p100, total = {}, {}
     for key, label in UZH_NUTRIENT_MAP.items():
@@ -514,7 +524,10 @@ def scrape_uzh_stats(detail_url):
         if weight is not None:
             total["weight"] = weight
 
-    return {"p100": p100, "total": total}
+    return {
+        "nutrition": {"p100": p100, "total": total},
+        "photo": clean_text(dish.get("imageUrl")),
+    }
 
 
 # --------------------------------------------------------------------------

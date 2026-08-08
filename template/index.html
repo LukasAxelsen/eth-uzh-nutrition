@@ -47,11 +47,13 @@
       <button class="raw-btn" id="raw-toggle" type="button"
               aria-expanded="false" aria-controls="raw-panel">Show Raw Data</button>
       <div class="raw-panel" id="raw-panel">
-        <div class="raw-head">
-          <span class="raw-title">Raw Data</span>
-          <button class="copy-btn" id="copy-btn" type="button">Copy</button>
+        <div class="raw-inner">
+          <div class="raw-head">
+            <span class="raw-title">Raw Data</span>
+            <button class="copy-btn" id="copy-btn" type="button">Copy</button>
+          </div>
+          <pre class="raw-text" id="raw-text"></pre>
         </div>
-        <pre class="raw-text" id="raw-text"></pre>
       </div>
     </div>
 
@@ -90,6 +92,16 @@
             <button id="group-add-btn" type="button">Add</button>
             <span class="group-add-msg" id="group-add-msg" role="status" aria-live="polite"></span>
           </div>
+        </div>
+      </section>
+
+      <!-- Bottom-most pane: settings (photos row, mensa-row style) -->
+      <section class="selector-pane">
+        <h3 class="selector-pane-title">Setting</h3>
+        <div class="mensa-row photo-row" id="photo-row" role="button" tabindex="0"
+             aria-pressed="false">
+          <span class="mensa-check" aria-hidden="true"></span>
+          <span class="mensa-label">Show menu photos</span>
         </div>
       </section>
     </div>

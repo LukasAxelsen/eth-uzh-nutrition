@@ -10,7 +10,7 @@
       "name": "ETH Mensa Polyterrasse",
       "group": "Central",
       "meals": {
-        "Lunch":  [{"line": "STREET", "dish": "Lomo Saltado", "desc": "ingredients...", "nutrition": {"p100": {"kcal": 152.0, "protein": 5.3, "fat": 9.9, "saturated": 1.1, "carbs": 12.0, "sugar": 1.3, "salt": 0.53}, "total": {}}}],
+        "Lunch":  [{"line": "STREET", "dish": "Lomo Saltado", "desc": "ingredients...", "photo": "https://…", "nutrition": {"p100": {"kcal": 152.0, "protein": 5.3, "fat": 9.9, "saturated": 1.1, "carbs": 12.0, "sugar": 1.3, "salt": 0.53}, "total": {}}}],
         "Dinner": []
       }
     }
@@ -20,7 +20,8 @@
 - nutrition keys (fixed set): kcal, protein, fat, saturated, carbs, sugar, salt, fiber, weight
 - Values are NUMBERS (no units). kcal unit=kcal, all others = g. weight only in total.
 - p100 = per-100g values; total = per-serving values. Empty object {} means no data.
-- group values: Central, Medizin, Hoengg, Irchel, Oerlikon, City, Other
+- `photo`: absolute image URL or "" (ETH URLs carry `?client-id=ethz-wcms`; UZH photos are dish.imageUrl on the detail page). Empty string = no photo.
+- group values: Central, Hoengg, Irchel, Oerlikon, Other
 - meal slots: "Lunch" | "Dinner"
 
 ## index.txt (backend produces, AI raw text)
@@ -43,13 +44,17 @@ header .header
     .selector-groups
       .group-row (group name + .group-select-all + count)
       .group-add (input + button to add custom group)
+    .selector-pane-title "Setting" (bottom-most pane)
+    .photo-row (.mensa-row style; .selected = photos on; label "Show menu photos")
 main#content
   section.mensa-section (collapsible: click .mensa-title toggles)
     h2.mensa-title (with .mensa-caret)
     .dish (one per dish)
       .dish-main (.dish-label, .dish-name, .dish-desc)
+      img.dish-photo (optional; only rendered when photos enabled; fades in)
       .nutrition-col > table.nutrition-table (thead Nutrition|per 100g|Total; tbody 9 fixed rows)
-.raw-section (#raw-toggle button, #raw-panel with #copy-btn, #raw-text)
+.raw-section (#raw-toggle button, #raw-panel > .raw-inner with #copy-btn, #raw-text)
+  #raw-panel is a max-height disclosure (overflow hidden; JS animates)
 footer.footer
 ```
 - Mensa row selected style: filled circle (•) vs empty circle
@@ -58,5 +63,5 @@ footer.footer
 
 ## localStorage key: "eth-uzh-nutrition-prefs"
 ```json
-{"meal":"Lunch","selected":["eth-9","uzh-obere-mensa",...],"customGroups":{"My Group":["eth-3",...]},"collapsedMensas":[]}
+{"meal":"Lunch","selected":["eth-9","uzh-obere-mensa",...],"photos":false,"customGroups":{"My Group":["eth-3",...]},"collapsedMensas":[]}
 ```

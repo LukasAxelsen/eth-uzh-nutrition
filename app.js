@@ -13,9 +13,11 @@
 
    DOM contract: class names in CONTRACT.md are mandatory — the
    design stylesheet targets them; do not rename. Inline styles
-   in this file are functional fallbacks only (segmented thumb
-   geometry, collapse animation) and may be overridden by the
-   design stylesheet.
+   in this file are TRANSIENT animation state only (heights/
+   transitions applied while an animation runs); they take
+   precedence over stylesheet rules and are always cleaned up on
+   transitionend. Geometry, tokens and steady-state styles live
+   in style.css.
    ============================================================ */
 
 'use strict';
@@ -25,7 +27,7 @@
    ------------------------------------------------------------ */
 
 // Replaced at deploy time (e.g. "2026-08-07"). Keep the token verbatim.
-const DATE_STR = '2026-08-09';
+const DATE_STR = '2026-08-10';
 const STORAGE_KEY = 'eth-uzh-nutrition-prefs';
 
 // Default groups, in display order (custom groups are appended after).
@@ -445,7 +447,11 @@ function animateEnter(node) {
   // any existing transition so state feedback (hover etc.) keeps
   // working during the grow. Cleaned up with the height afterwards.
   const cur = getComputedStyle(node).transition;
-  node.style.transition = (cur && cur !== 'all 0s ease 0s' ? cur + ', ' : '') +
+  // Defensive: 'none' or the default must not be prepended — "none,
+  // height ..." is an invalid transition list that silently kills the
+  // animation. Only append to a real transition (e.g. 'all').
+  node.style.transition = (cur && cur !== 'all 0s ease 0s' && cur !== 'none'
+                           ? cur + ', ' : '') +
                           'height .35s ' + ANIM_EASE;
   node.style.height = '0';
   node.style.overflow = 'hidden';
@@ -721,10 +727,12 @@ function mensaSectionHTML(m) {
   const dishes = m.meals[prefs.meal];
   const collapsed = prefs.collapsedMensas.has(m.id);
 
-  // .mensa-dishes is the collapsible body (inline styles are the
-  // functional fallback for the max-height animation).
-  const bodyStyle = 'overflow:hidden;transition:max-height .35s ease' + (collapsed ? ';max-height:0' : '');
-  const body = '<div class="mensa-dishes" style="' + bodyStyle + '">' +
+  // .mensa-dishes is the collapsible body. The collapsed state is a
+  // CLASS (.mensa-section.collapsed -> max-height:0) and the transition
+  // lives in style.css with the --ease token — no inline transition:
+  // an inline one would smuggle a second easing curve past the
+  // contract verifier (which only greps stylesheet text).
+  const body = '<div class="mensa-dishes">' +
     (dishes.length
       ? dishes.map((d, i) => dishHTML(d, dishKey(m, d, i))).join('')
       : '<div class="no-meals">' + EMPTY_MEALS_TEXT + '</div>') +
@@ -918,7 +926,12 @@ function updateRawText() {
     to coalesce rapid wholesale swaps — the old glide's mid-flight
     height must never leak into the next render's measurements. */
 function settleContentHeight(node) {
-  node.style.transition = 'none';
+  // '' (not 'none') — 'none' stays as an inline declaration and poisons
+  // the NEXT glide: animateContentHeight would build the invalid
+  // "none, height .35s ..." transition and the animation silently dies
+  // (the "content appears without animation" regression). '' removes
+  // the inline rule, so the computed value goes back to the default.
+  node.style.transition = '';
   node.style.height = '';
   node.style.overflow = '';
   if (node._glideTimer) { clearTimeout(node._glideTimer); node._glideTimer = null; }
@@ -944,7 +957,11 @@ function animateContentHeight(node, oldH, newH) {
   }
   if (node._glideTimer) { clearTimeout(node._glideTimer); node._glideTimer = null; }
   const cur = getComputedStyle(node).transition;
-  node.style.transition = (cur && cur !== 'all 0s ease 0s' ? cur + ', ' : '') +
+  // Defensive: 'none' or the default must not be prepended — "none,
+  // height ..." is an invalid transition list that silently kills the
+  // animation. Only append to a real transition (e.g. 'all').
+  node.style.transition = (cur && cur !== 'all 0s ease 0s' && cur !== 'none'
+                           ? cur + ', ' : '') +
                           'height .35s ' + ANIM_EASE;
   node.style.height = oldH + 'px';
   node.style.overflow = 'hidden';
@@ -1327,7 +1344,11 @@ function toggleSection(section) {
     section.classList.add('collapsed');
     if (body) collapseBody(body);
   }
-  if (title) title.setAttribute('aria-expanded', String(!collapsed));
+  // aria-expanded reflects the POST-toggle state — reading prefs again
+  // (mutated above), not the captured `collapsed`: the old code used
+  // !collapsed, which inverted the attribute on every toggle (a section
+  // that just collapsed announced aria-expanded=true to screen readers).
+  if (title) title.setAttribute('aria-expanded', String(!prefs.collapsedMensas.has(id)));
   savePrefs();
 }
 

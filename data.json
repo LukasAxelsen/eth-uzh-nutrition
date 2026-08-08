@@ -1,309 +1,6 @@
 {
- "date": "2026-08-09",
+ "date": "2026-08-10",
  "days": {
-  "2026-08-09": {
-   "mensas": [
-    {
-     "id": "eth-1",
-     "name": "ETH bQm",
-     "group": "Central",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-2",
-     "name": "ETH CafeBar",
-     "group": "Central",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-3",
-     "name": "ETH Clausiusbar",
-     "group": "Central",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-4",
-     "name": "ETH Kiosk CLA",
-     "group": "Central",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-5",
-     "name": "ETH Dozentenfoyer",
-     "group": "Central",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-6",
-     "name": "ETH Einstein & Zweistein",
-     "group": "Central",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-7",
-     "name": "ETH food&lab",
-     "group": "Central",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-8",
-     "name": "ETH Archimedes",
-     "group": "Central",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-9",
-     "name": "ETH Mensa Polyterrasse",
-     "group": "Central",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-10",
-     "name": "ETH Polysnack",
-     "group": "Central",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-11",
-     "name": "ETH Tannenbar",
-     "group": "Central",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-12",
-     "name": "ETH Eureka Take Away",
-     "group": "Central",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-13",
-     "name": "ETH Zwei Grad Bistro",
-     "group": "Central",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-14",
-     "name": "ETH Alumni quattro Lounge",
-     "group": "Central",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-15",
-     "name": "ETH Bellavista",
-     "group": "Hoengg",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-16",
-     "name": "ETH Mendokoro",
-     "group": "Hoengg",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-19",
-     "name": "ETH food market",
-     "group": "Irchel",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-20",
-     "name": "ETH FUSION meal",
-     "group": "Hoengg",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-22",
-     "name": "ETH Rice Up!",
-     "group": "Hoengg",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-23",
-     "name": "ETH Octavo",
-     "group": "Oerlikon",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-27",
-     "name": "ETH Science Lounge",
-     "group": "Irchel",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-28",
-     "name": "ETH Flavour Kitchen",
-     "group": "Irchel",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-untere-mensa",
-     "name": "Untere Mensa",
-     "group": "Central",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-obere-mensa",
-     "name": "Obere Mensa",
-     "group": "Central",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-lichthof",
-     "name": "Lichthof",
-     "group": "Central",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-mensa",
-     "name": "Mensa Irchel",
-     "group": "Irchel",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-green-kitchen",
-     "name": "Green Kitchen Lab",
-     "group": "Irchel",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-seerose",
-     "name": "Seerose",
-     "group": "Irchel",
-     "meals": {
-      "Lunch": [
-       {
-        "line": "",
-        "dish": "Belugalinsen Salat mit geräuchertem Tofu",
-        "desc": "Fenchel und Apfel",
-        "photo": "",
-        "nutrition": {
-         "p100": {},
-         "total": {}
-        }
-       }
-      ],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-binzmuehle",
-     "name": "Mensa Oerlikon",
-     "group": "Oerlikon",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-cityport",
-     "name": "Cityport Mensa",
-     "group": "Other",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-tierspital",
-     "name": "Tierspital Mensa",
-     "group": "Other",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-botanischergarten",
-     "name": "Botanischer Garten",
-     "group": "Other",
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    }
-   ]
-  },
   "2026-08-10": {
    "mensas": [
     {
@@ -11982,10 +11679,629 @@
      }
     }
    ]
+  },
+  "2026-08-24": {
+   "mensas": [
+    {
+     "id": "eth-1",
+     "name": "ETH bQm",
+     "group": "Central",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-2",
+     "name": "ETH CafeBar",
+     "group": "Central",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-3",
+     "name": "ETH Clausiusbar",
+     "group": "Central",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-4",
+     "name": "ETH Kiosk CLA",
+     "group": "Central",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-5",
+     "name": "ETH Dozentenfoyer",
+     "group": "Central",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-6",
+     "name": "ETH Einstein & Zweistein",
+     "group": "Central",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-7",
+     "name": "ETH food&lab",
+     "group": "Central",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-8",
+     "name": "ETH Archimedes",
+     "group": "Central",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-9",
+     "name": "ETH Mensa Polyterrasse",
+     "group": "Central",
+     "meals": {
+      "Lunch": [
+       {
+        "line": "STREET",
+        "dish": "Pad Kra Pao",
+        "desc": "Rindshackfleisch | Chili | Thaibasilikum | grüne Bohnen | Austernsauce | Soja | Jasminreis | Spiegelei",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 140.5,
+          "protein": 8.6,
+          "fat": 4.9,
+          "saturated": 1.9,
+          "carbs": 15.0,
+          "sugar": 1.3,
+          "salt": 2.1
+         },
+         "total": {}
+        }
+       },
+       {
+        "line": "GARDEN",
+        "dish": "Dal Makhani",
+        "desc": "Belugalinsen | Masala Sauce | Gemüsewürfel | Basmatireis | Joghurt- Dip alternative | Koriander | Naan Brot ..",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 126.4,
+          "protein": 3.7,
+          "fat": 2.6,
+          "saturated": 1.3,
+          "carbs": 21.0,
+          "sugar": 0.9,
+          "salt": 0.57
+         },
+         "total": {}
+        }
+       },
+       {
+        "line": "HOME",
+        "dish": "Fleischkäse",
+        "desc": "Senfsauce | Kartoffel-Erbsenpüree | glasierte Karotten | Petersilie",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 153.2,
+          "protein": 5.7,
+          "fat": 12.0,
+          "saturated": 3.8,
+          "carbs": 5.9,
+          "sugar": 2.0,
+          "salt": 0.69
+         },
+         "total": {}
+        }
+       },
+       {
+        "line": "Hot & Cold 100g",
+        "dish": "Hot & Cold Buffet",
+        "desc": "Reichhaltiges Salatbuffet und zusätzlich warme Komponenten - Gesund und Lecker!",
+        "photo": "",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        }
+       }
+      ],
+      "Dinner": [
+       {
+        "line": "STREET ABEND",
+        "dish": "Beef Rendang",
+        "desc": "Rindsvoressen | Rendang Currysauce | Karotten | Sellerie | Auberginen | Basmatireis | Chili | Frühlingszwieb..",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 89.1,
+          "protein": 4.7,
+          "fat": 2.1,
+          "saturated": 1.3,
+          "carbs": 12.0,
+          "sugar": 1.6,
+          "salt": 0.59
+         },
+         "total": {}
+        }
+       },
+       {
+        "line": "GARDEN ABEND",
+        "dish": "Pflanzen Geschnetzeltes Walliser Art",
+        "desc": "Tomaten-Champignon Rahmsauce | Rösti | Broccoli",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 105.4,
+          "protein": 7.5,
+          "fat": 2.9,
+          "saturated": 0.6,
+          "carbs": 11.0,
+          "sugar": 2.0,
+          "salt": 0.58
+         },
+         "total": {}
+        }
+       },
+       {
+        "line": "HOME ABEND",
+        "dish": "Schweinsgeschnetzeltes Walliser Art",
+        "desc": "Tomaten-Champignon Rahmsauce | Rösti | Broccoli",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 102.3,
+          "protein": 4.9,
+          "fat": 5.5,
+          "saturated": 1.3,
+          "carbs": 7.2,
+          "sugar": 1.2,
+          "salt": 0.61
+         },
+         "total": {}
+        }
+       }
+      ]
+     }
+    },
+    {
+     "id": "eth-10",
+     "name": "ETH Polysnack",
+     "group": "Central",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-11",
+     "name": "ETH Tannenbar",
+     "group": "Central",
+     "meals": {
+      "Lunch": [
+       {
+        "line": "World",
+        "dish": "Beef Buddha Bowl",
+        "desc": "Rindshackbällchen | Teriyaki-Sauce | Karotten | Blattspinat | Edamame | Mango | Koriander | Ingwer | Chili+Basmatireis",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 123.3,
+          "protein": 7.1,
+          "fat": 3.6,
+          "saturated": 1.3,
+          "carbs": 15.0,
+          "sugar": 2.2,
+          "salt": 1.1
+         },
+         "total": {}
+        }
+       },
+       {
+        "line": "Green",
+        "dish": "Vegan Bowl",
+        "desc": "Vegane Hackbällchen | Teriyaki-Sauce | Karotten | Blattspinat | Edamame | Mango | Koriander | Ingwer | Chili+Basmatireis",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 106.1,
+          "protein": 6.0,
+          "fat": 2.1,
+          "saturated": 0.2,
+          "carbs": 14.0,
+          "sugar": 2.7,
+          "salt": 0.9
+         },
+         "total": {}
+        }
+       }
+      ],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-12",
+     "name": "ETH Eureka Take Away",
+     "group": "Central",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-13",
+     "name": "ETH Zwei Grad Bistro",
+     "group": "Central",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-14",
+     "name": "ETH Alumni quattro Lounge",
+     "group": "Central",
+     "meals": {
+      "Lunch": [
+       {
+        "line": "Classic Pot",
+        "dish": "G'hacktes mit Hörnli",
+        "desc": "Rindsgehacktes | Hörnli | Apfelmus | Extrahartkäse",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/72215?client-id=ethz-wcms",
+        "nutrition": {
+         "p100": {
+          "kcal": 141.5,
+          "protein": 6.1,
+          "fat": 3.2,
+          "saturated": 1.5,
+          "carbs": 21.0,
+          "sugar": 3.5,
+          "salt": 0.36
+         },
+         "total": {}
+        }
+       }
+      ],
+      "Dinner": [
+       {
+        "line": "Classic Pot Abend",
+        "dish": "G'hacktes mit Hörnli Vegan",
+        "desc": "Sojagehacktes | Hörnli | Apfelmus | veganer Käse",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/72216?client-id=ethz-wcms",
+        "nutrition": {
+         "p100": {
+          "kcal": 125.7,
+          "protein": 4.6,
+          "fat": 1.4,
+          "saturated": 0.7,
+          "carbs": 23.0,
+          "sugar": 3.5,
+          "salt": 0.58
+         },
+         "total": {}
+        }
+       }
+      ]
+     }
+    },
+    {
+     "id": "eth-15",
+     "name": "ETH Bellavista",
+     "group": "Hoengg",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-16",
+     "name": "ETH Mendokoro",
+     "group": "Hoengg",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-19",
+     "name": "ETH food market",
+     "group": "Irchel",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-20",
+     "name": "ETH FUSION meal",
+     "group": "Hoengg",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-22",
+     "name": "ETH Rice Up!",
+     "group": "Hoengg",
+     "meals": {
+      "Lunch": [
+       {
+        "line": "Rice Up! Bowl",
+        "dish": "Rice Up! Bowl",
+        "desc": "Jasmine Rice | Poulet-Bällchen | Broccoli | Grünes Curry | Asia Krautsalat | Kräutersalat | Saison Topping",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/71784?client-id=ethz-wcms",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        }
+       },
+       {
+        "line": "Tofu Cashew Bowl",
+        "dish": "Tofu Cashew Bowl",
+        "desc": "Roter Reis | Marinierter Tofu | Saison Gemüse | Satay Sauce | Asia Krautsalat | Kräutersalat | Saison Topping",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/71785?client-id=ethz-wcms",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        }
+       },
+       {
+        "line": "Chicken Satay Bowl",
+        "dish": "Chicken Satay Bowl",
+        "desc": "Reisnudeln | Gegrilltes Poulet Satay | Grüne Bohnen | Rotes Curry | Asia Krautsalat | Kräutersalat | Thai Chilli",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/71786?client-id=ethz-wcms",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        }
+       },
+       {
+        "line": "Planted Bowl",
+        "dish": "Planted Bowl",
+        "desc": "Salatmischung | Planted Chicken Teriyaki | Sweet Corn | Tamarinden Sauce | Asia Kräutersalat | Erdnüsse",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/71787?client-id=ethz-wcms",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        }
+       },
+       {
+        "line": "Grilled Shrimps",
+        "dish": "Grilled Shrimps Bowl",
+        "desc": "Jasmine Rice | Grilled Shrimps | Broccoli | rotes Curry | Asia Krautsalat | Kräutersalat | Puffed Rice",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/71788?client-id=ethz-wcms",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        }
+       }
+      ],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-23",
+     "name": "ETH Octavo",
+     "group": "Oerlikon",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-27",
+     "name": "ETH Science Lounge",
+     "group": "Irchel",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-28",
+     "name": "ETH Flavour Kitchen",
+     "group": "Irchel",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-untere-mensa",
+     "name": "Untere Mensa",
+     "group": "Central",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-obere-mensa",
+     "name": "Obere Mensa",
+     "group": "Central",
+     "meals": {
+      "Lunch": [
+       {
+        "line": "",
+        "dish": "Poulet Cordon Bleu",
+        "desc": "Kartoffelspalten | Erbsen | Ketchup Zitrone",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 136.5,
+          "protein": 6.5,
+          "fat": 5.0,
+          "carbs": 14.3,
+          "sugar": 4.3,
+          "salt": 0.7,
+          "fiber": 2.7
+         },
+         "total": {
+          "kcal": 819,
+          "protein": 39,
+          "fat": 30,
+          "carbs": 86,
+          "sugar": 26,
+          "salt": 4,
+          "fiber": 16,
+          "weight": 600
+         }
+        }
+       },
+       {
+        "line": "",
+        "dish": "Riz Casimir",
+        "desc": "Tofu | Bananen | Äpfel | Trauben | Mandel Reis | Menüsalat | Apfelmus",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 129.0,
+          "protein": 3.9,
+          "fat": 5.0,
+          "carbs": 16.5,
+          "sugar": 3.1,
+          "salt": 0.6,
+          "fiber": 1.1
+         },
+         "total": {
+          "kcal": 703,
+          "protein": 21,
+          "fat": 27,
+          "carbs": 90,
+          "sugar": 17,
+          "salt": 3,
+          "fiber": 6,
+          "weight": 545
+         }
+        }
+       },
+       {
+        "line": "",
+        "dish": "Paniertes Schnitzel",
+        "desc": "Ketchup Mayo Zitrone | Pommes frites | Menüsalat | Apfelmus",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F3b86aedb-3a55-44d7-a543-542443d71803%2F2026-08-24-mittagsverpflegung-voll-anders%2F1782969441221-l5imysjasw",
+        "nutrition": {
+         "p100": {
+          "kcal": 221.2,
+          "protein": 6.4,
+          "fat": 12.4,
+          "carbs": 19.5,
+          "sugar": 4.8,
+          "salt": 1.0,
+          "fiber": 1.2
+         },
+         "total": {
+          "kcal": 929,
+          "protein": 27,
+          "fat": 52,
+          "carbs": 82,
+          "sugar": 20,
+          "salt": 4,
+          "fiber": 5,
+          "weight": 420
+         }
+        }
+       }
+      ],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-lichthof",
+     "name": "Lichthof",
+     "group": "Central",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-mensa",
+     "name": "Mensa Irchel",
+     "group": "Irchel",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-green-kitchen",
+     "name": "Green Kitchen Lab",
+     "group": "Irchel",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-seerose",
+     "name": "Seerose",
+     "group": "Irchel",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-binzmuehle",
+     "name": "Mensa Oerlikon",
+     "group": "Oerlikon",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-cityport",
+     "name": "Cityport Mensa",
+     "group": "Other",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-tierspital",
+     "name": "Tierspital Mensa",
+     "group": "Other",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-botanischergarten",
+     "name": "Botanischer Garten",
+     "group": "Other",
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    }
+   ]
   }
  },
  "availableDates": [
-  "2026-08-09",
   "2026-08-10",
   "2026-08-11",
   "2026-08-12",
@@ -11999,6 +12315,7 @@
   "2026-08-20",
   "2026-08-21",
   "2026-08-22",
-  "2026-08-23"
+  "2026-08-23",
+  "2026-08-24"
  ]
 }

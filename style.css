@@ -655,7 +655,15 @@ body.menu-open #menu-btn {
 .mensa-section.collapsed .mensa-caret { transform: rotate(135deg); } /* +90° → right */
 /* Collapse is driven by max-height on .mensa-dishes (JS collapseBody/
    expandBody) — NO display:none here: that would pop the content out
-   instantly instead of letting it slide closed under overflow:hidden. */
+   instantly instead of letting it slide closed under overflow:hidden.
+   The transition and the collapsed state are CSS-owned so the curve is
+   the single --ease token (an inline transition here would hardcode a
+   second curve — the mensa collapse once shipped bare `ease`). */
+.mensa-dishes {
+  overflow: hidden;
+  transition: max-height .35s var(--ease);
+}
+.mensa-section.collapsed .mensa-dishes { max-height: 0; }
 .no-meals { padding: 12px 0; font-size: 15px; color: var(--sub); }
 
 /* Dishes: column mobile / text + nutrition desktop. NO borders between dishes. */

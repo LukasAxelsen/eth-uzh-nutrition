@@ -147,6 +147,15 @@ check("content-height glide exists for wholesale swaps",
 check("glide is driven from renderAll with entering-guard",
       "!content.querySelector('[data-entering]')" in JS and
       "animateContentHeight(content, oldH, newH)" in JS)
+check("rapid toggles coalesce (settle before measuring)",
+      "function settleContentHeight(node)" in JS and
+      "if (content._heightGlideEnd) settleContentHeight(content)" in JS)
+check("glide has timeout fallback (transitionend may never fire)",
+      "_glideTimer = setTimeout" in JS)
+check("glide target includes photos (applyPhotos before newH, fresh at natural height)",
+      "applyPhotos(); // idempotent <img> sync — BEFORE the height measurement" in JS and
+      "dishEl.dataset.fresh === '1'" in JS and
+      "delete dishEl.dataset.fresh" in JS)
 
 print("== C2. enter/exit symmetry (pipeline default, not per-feature) ==")
 check("animateEnter exists and grows from 0 height",

@@ -53,6 +53,16 @@ event handler -> mutate state only -> renderAll()
   regression). Dishes therefore reconcile with enter=false; fresh
   sections keep their own grow. The glide is guarded: skipped while any
   node is entering (a pure-add drives height continuously on its own).
+- RAPID TOGGLES COALESCE (`settleContentHeight`): renderAll snaps a
+  still-running glide to its natural height BEFORE measuring — the old
+  glide's inline height must never leak into oldH/newH (it locked the
+  layout to a stale mid-flight value and the page felt stuck).
+  A 500ms timeout fallback settles the node even when transitionend
+  never fires (target == locked height to sub-pixel). The glide's
+  target MUST include photos: applyPhotos runs before the newH
+  measurement, and FRESH dishes (one-shot `data-fresh` marker, deleted
+  after use) insert photos at natural height — reused dishes (photo
+  toggle) keep the 0->natural grow animation.
 
 ## Decoupling rules (industry layering, agent-maintainable)
 

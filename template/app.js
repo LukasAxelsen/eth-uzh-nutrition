@@ -342,12 +342,15 @@ function renderAll() {
                 // grow animation, which drives the height itself.
   const newH = content.getBoundingClientRect().height;
   // Content-height glide: when the day/meal swap dishes wholesale (no
-  // section entering), lock the OLD height and glide to the new one —
-  // the dish swap itself is instant, but the layout glides smoothly
-  // instead of jumping (the date/meal-switch "flash" regression). Fresh
-  // sections (checkbox adds) are exempt: their own grow animation
-  // drives the height continuously.
+  // section entering or exiting), lock the OLD height and glide to the
+  // new one — the dish swap itself is instant, but the layout glides
+  // smoothly instead of jumping (the date/meal-switch "flash"
+  // regression). Fresh sections (checkbox adds) are exempt: their own
+  // grow animation drives the height continuously. Exiting nodes
+  // (animateExit shrinks) likewise drive the height themselves, so a
+  // glide on top would fight them.
   if (!content.querySelector('[data-entering]') &&
+      !content.querySelector('[data-exiting]') &&
       Math.abs(newH - oldH) > 2 && animationsAllowed()) {
     animateContentHeight(content, oldH, newH);
   } else {
@@ -412,11 +415,13 @@ function flipFirst(container) {
     `first`) are skipped — they run their own enter animation. */
 function flipPlay(container, first) {
   if (!animationsAllowed()) return;
-  // A container with entering nodes skips FLIP entirely: the enters
-  // grow via continuous height transitions which push siblings along
-  // smoothly. FLIP here would measure the mid-grow layout and fight
-  // the growth with a reverse displacement (the date-switch "flash").
-  if (container.querySelector('[data-entering]')) return;
+  // A container with entering/exiting nodes skips FLIP entirely: the
+  // enter/exit height transitions drive layout continuously (siblings
+  // slide with the growth/shrink). FLIP here would measure the
+  // mid-animation layout and fight it with a reverse displacement
+  // (the date-switch "flash").
+  if (container.querySelector('[data-entering]') ||
+      container.querySelector('[data-exiting]')) return;
   for (const child of container.children) {
     if (!first.has(child)) continue;
     const delta = first.get(child) - child.getBoundingClientRect().top;
@@ -470,10 +475,90 @@ function animateEnter(node) {
         node.style.transition = '';
         delete node.dataset.entering;
         node.removeEventListener('transitionend', onEnd);
+        if (node._enterTimer) { clearTimeout(node._enterTimer); node._enterTimer = null; }
       }
     };
     node.addEventListener('transitionend', onEnd);
+    // Fallback: transitionend may never fire (interrupted transition,
+    // background tab) — clear the enter state anyway (same pattern as
+    // animateExit / glide / expandBody).
+    node._enterTimer = setTimeout(() => {
+      if (node.dataset.entering) {
+        node.style.height = '';
+        node.style.transition = '';
+        node.style.overflow = '';
+        delete node.dataset.entering;
+      }
+    }, 500); // 350ms transition + margin; transitionend is the normal path
   });
+}
+
+/** Exit animation — the mirror of animateEnter (AnimatePresence /
+    Vue TransitionGroup "leave" hook, vanilla): a node leaving the list
+    shrinks from its natural height to 0, and is physically removed only
+    after the shrink finishes (deferred removal). During the shrink the
+    node still occupies flow, so siblings slide up continuously — no
+    FLIP needed, no jump. Reconcile ignores nodes marked data-exiting;
+    a key that reappears while its node is still shrinking is REVIVED
+    (reviveExit) instead of removed. Same transition-list 'none' poison
+    guard as animateEnter. */
+function animateExit(node) {
+  if (!node.isConnected) return;
+  if (node.dataset.exiting) return; // already exiting — let it finish
+  if (node.dataset.entering) {
+    // An entering node is being removed (rapid toggling): hand over to
+    // the exit cleanly — the enter timer/state must not linger.
+    if (node._enterTimer) { clearTimeout(node._enterTimer); node._enterTimer = null; }
+    delete node.dataset.entering;
+  }
+  if (!animationsAllowed()) { node.remove(); return; }
+  node.dataset.exiting = '1';
+  const cur = getComputedStyle(node).transition;
+  node.style.transition = (cur && cur !== 'all 0s ease 0s' && cur !== 'none'
+                           ? cur + ', ' : '') +
+                          'height .35s ' + ANIM_EASE;
+  const h = node.offsetHeight; // natural height (before shrinking)
+  node.style.height = h + 'px';
+  node.style.overflow = 'hidden';
+  void node.offsetHeight; // reflow: lock current height, then shrink
+  node.style.height = '0px';
+  const onEnd = (e) => {
+    if (e.propertyName === 'height') {
+      if (node._exitTimer) { clearTimeout(node._exitTimer); node._exitTimer = null; }
+      node.remove();
+    }
+  };
+  node.addEventListener('transitionend', onEnd);
+  // Fallback: transitionend may never fire (interrupted transition,
+  // background tab, sub-pixel target) — remove anyway (MDN: the event
+  // is not generated when a transition is removed before completion).
+  node._exitTimer = setTimeout(() => {
+    if (node.isConnected) node.remove();
+  }, 500); // 350ms transition + margin; transitionend is the normal path
+}
+
+/** Cancel an in-flight exit when the node's key reappears in the same
+    render (rapid toggling): restore natural height, drop all exit
+    state, so the node is reused normally instead of being removed. */
+function reviveExit(node) {
+  if (!node.dataset.exiting) return;
+  if (node._exitTimer) { clearTimeout(node._exitTimer); node._exitTimer = null; }
+  node.style.transition = '';
+  node.style.height = '';
+  node.style.overflow = '';
+  delete node.dataset.exiting;
+}
+
+/** The idx-th child that is NOT exiting (exiting nodes are shrinking
+    away and must not be used as insertion anchors). */
+function nextLiveChild(container, idx) {
+  let i = 0;
+  for (const child of container.children) {
+    if (child.dataset.exiting) continue;
+    if (i === idx) return child;
+    i++;
+  }
+  return null;
 }
 
 /** Keyed reconciliation: keep existing nodes in order, create missing ones
@@ -497,27 +582,36 @@ function reconcileChildren(container, keys, makeEl, doFlip, enter = true) {
   // that is ALREADY at its target position is left untouched — calling
   // appendChild on a positioned node forces a reflow that kills any
   // in-flight CSS transition (e.g. the .mensa-check dot scale) on the
-  // very next style change.
+  // very next style change. Exiting nodes (shrinking away) are skipped
+  // as anchors — a key that reappears while its node is still exiting
+  // is REVIVED instead of duplicated.
   let targetIdx = 0;
   for (const key of keys) {
     let node = existing.get(key);
+    if (node && node.dataset.exiting) reviveExit(node);
     if (!node) {
       node = makeEl(key);
       node.dataset.key = key;
-      container.insertBefore(node, container.children[targetIdx] || null);
+      container.insertBefore(node, nextLiveChild(container, targetIdx) || null);
       added.push(node);
-    } else if (container.children[targetIdx] !== node) {
-      container.insertBefore(node, container.children[targetIdx] || null);
+    } else if (nextLiveChild(container, targetIdx) !== node) {
+      container.insertBefore(node, nextLiveChild(container, targetIdx) || null);
     }
     seen.add(key);
     targetIdx++;
   }
 
   // Drop stale keyed nodes AND any keyless leftovers (e.g. a no-meals
-  // div from a previous render path) — every surviving child must be
-  // keyed and present in the new list.
+  // div from a previous render path). Nodes shrink away first
+  // (animateExit — deferred removal), so siblings slide up smoothly;
+  // a node already exiting is left to finish. Every surviving child
+  // must be keyed and present in the new list.
   for (const child of Array.from(container.children)) {
-    if (!child.dataset.key || !seen.has(child.dataset.key)) child.remove();
+    if (child.dataset.exiting) continue;
+    if (!child.dataset.key || !seen.has(child.dataset.key)) {
+      if (enter) animateExit(child);
+      else child.remove();
+    }
   }
 
   // Enter choreography for freshly added nodes: grow from 0 height.
@@ -772,7 +866,7 @@ function renderContent() {
       div.className = 'no-meals';
       div.textContent = EMPTY_MEALS_TEXT;
       return div;
-    }, false, false);
+    }, false, true);
     return;
   }
 
@@ -796,7 +890,7 @@ function renderContent() {
         div.className = 'no-meals';
         div.textContent = EMPTY_MEALS_TEXT;
         return div;
-      }, false, false);
+      }, false, true);
       continue;
     }
     reconcileChildren(body, dishes.map((d, i) => dishKey(m, d, i)), (key) => {
@@ -805,11 +899,15 @@ function renderContent() {
       const node = dish.firstChild;
       node.dataset.fresh = '1'; // new dish this render (photo at natural height)
       return node;
-    }, false, false);
-    // enter=false: wholesale swaps (date/meal) are animated by the
-    // #content height glide in renderAll — per-dish grows on top of it
-    // would double-animate. Fresh sections still grow as one unit (their
-    // own animateEnter carries the nested dishes via the enter guard).
+    }, false, true);
+    // enter/exit symmetry: replaced dishes (date/meal swap) shrink out
+    // (animateExit) while the new ones grow in (animateEnter) — the
+    // section height changes continuously, so even an equal-height swap
+    // animates (the old "same-height content flashed" case). The
+    // #content glide stays off while any node is entering/exiting
+    // (renderAll guard); sections added by a checkbox carry their
+    // dishes via the nested-enter guard. Fresh sections still grow as
+    // one unit.
   }
 }
 
@@ -833,6 +931,14 @@ function applyPhotos() {
     const url = dishEl.dataset.photo;
     const main = dishEl.querySelector('.dish-main');
     const img = dishEl.querySelector('.dish-photo');
+    if (show && url && img && img.dataset.photoClosing) {
+      // A closing photo is being reopened (rapid toggle): cancel the
+      // shrink and restore it — don't wait for the next render.
+      if (img._photoTimer) { clearTimeout(img._photoTimer); img._photoTimer = null; }
+      img.style.height = '';
+      img.style.marginTop = '16px';
+      delete img.dataset.photoClosing;
+    }
     if (show && url && !img) {
       const el = document.createElement('img');
       el.className = 'dish-photo';
@@ -880,14 +986,36 @@ function applyPhotos() {
         main.appendChild(el);
       }
     } else if (!show && img) {
+      if (img.dataset.photoClosing) {
+        // Already shrinking (applyPhotos runs twice per renderAll —
+        // before and after the height measurement). Idempotence: one
+        // shrink per img, do not re-bind listeners or restart the
+        // transition, or the first transitionend would remove the img
+        // out from under the second listener.
+        continue;
+      }
       if (animationsAllowed()) {
         // Pin current height, force reflow, then shrink to 0; the
         // transitionend removes the node once the collapse finished.
+        // Fallback timer: transitionend may never fire (interrupted
+        // transition, target already 0 on rapid toggles) — remove
+        // anyway so no hidden <img> accumulates.
+        if (img._photoTimer) { clearTimeout(img._photoTimer); img._photoTimer = null; }
+        img.dataset.photoClosing = '1';
         img.style.height = img.clientHeight + 'px';
         void img.offsetHeight; // reflow so the transition starts from the pinned height
         img.style.height = '0';
         img.style.marginTop = '0';
-        img.addEventListener('transitionend', () => img.remove(), { once: true });
+        const onEnd = () => {
+          // Revived (reopened) photos are NOT removed — only closing ones.
+          if (!img.dataset.photoClosing) return;
+          delete img.dataset.photoClosing;
+          img.remove();
+        };
+        img.addEventListener('transitionend', onEnd, { once: true });
+        img._photoTimer = setTimeout(() => {
+          if (img.dataset.photoClosing) img.remove();
+        }, 500); // 350ms transition + margin; transitionend is the normal path
       } else {
         img.remove();
       }
@@ -1010,6 +1138,10 @@ function expandBody(body) {
 }
 
 function collapseBody(body) {
+  // The expand timer must not fire mid-collapse: it would force
+  // max-height back to 'none' and the content would spring open
+  // (the collapse-interrupt "flash" regression, 890eb0c follow-up).
+  if (body._expandTimer) { clearTimeout(body._expandTimer); body._expandTimer = null; }
   if (body._onExpandEnd) {
     body.removeEventListener('transitionend', body._onExpandEnd);
     body._onExpandEnd = null;

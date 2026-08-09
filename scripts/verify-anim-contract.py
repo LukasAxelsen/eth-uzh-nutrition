@@ -169,8 +169,9 @@ check("content-height glide exists for wholesale swaps",
       "function animateContentHeight(node, oldH, newH)" in JS and
       "node.style.height = oldH + 'px'" in JS and
       "node.style.height = newH + 'px'" in JS)
-check("glide is driven from renderAll with entering-guard",
+check("glide is driven from renderAll with entering/exiting guard",
       "!content.querySelector('[data-entering]')" in JS and
+      "!content.querySelector('[data-exiting]')" in JS and
       "animateContentHeight(content, oldH, newH)" in JS)
 check("rapid toggles coalesce (settle before measuring)",
       "function settleContentHeight(node)" in JS and
@@ -201,6 +202,44 @@ check("nested-enter guard (closest data-entering)",
       "closest('[data-entering]')" in JS)
 check("no per-feature enter fades elsewhere",
       "opacity" not in JS[JS.index("function animateEnter"):JS.index("function reconcileChildren")])
+# Deferred removal (AnimatePresence / Vue TransitionGroup "leave" hook):
+# removed nodes shrink to 0 height first, then are physically removed —
+# siblings slide up during the shrink (no jump); a key that reappears
+# mid-exit is REVIVED, not duplicated. The 500ms timer is the
+# transitionend fallback (the event is not generated when a transition
+# is removed before completion — MDN).
+exit_sec = JS[JS.index("function animateExit"):JS.index("function reconcileChildren")]
+check("animateExit shrinks then removes (deferred removal)",
+      "function animateExit(node)" in JS and
+      "node.style.height = '0px'" in exit_sec and
+      "node.remove()" in exit_sec and
+      "_exitTimer = setTimeout" in exit_sec and
+      "clearTimeout(node._exitTimer)" in exit_sec)
+check("reconcile exits removed nodes (not instant remove)",
+      "animateExit(child)" in JS[JS.index("function reconcileChildren"):JS.index("function updatePhotoToggle")])
+check("reappearing key revives exiting node (rapid toggles)",
+      "reviveExit(node)" in JS and
+      "delete node.dataset.exiting" in JS)
+check("exiting nodes skipped as insertion anchors (nextLiveChild)",
+      "function nextLiveChild(container, idx)" in JS and
+      "child.dataset.exiting) continue" in JS)
+check("FLIP skipped while entering OR exiting (no fight with height anims)",
+      "container.querySelector('[data-exiting]')" in JS and
+      "container.querySelector('[data-entering]')" in JS)
+check("collapseBody clears the expand timer (no mid-collapse spring-open)",
+      "clearTimeout(body._expandTimer)" in JS)
+check("enter state has fallback timer (transitionend may never fire)",
+      "_enterTimer = setTimeout" in JS and
+      "clearTimeout(node._enterTimer)" in JS)
+check("animateExit takes over entering nodes cleanly (rapid toggles)",
+      "delete node.dataset.entering" in JS[JS.index("function animateExit"):JS.index("function reviveExit")])
+check("closing photo revived on reopen (photoClosing guard)",
+      "img.dataset.photoClosing" in JS and
+      "delete img.dataset.photoClosing" in JS and
+      "if (img.dataset.photoClosing) img.remove()" in JS)
+check("dishes swap symmetrically (enter=true in renderContent)",
+      ", false, true);" in JS[JS.index("function renderContent"):JS.index("function applyPhotos")] and
+      ", false, false);" not in JS[JS.index("function renderContent"):JS.index("function applyPhotos")])
 
 print("== D. data model ==")
 check("activeMensas is the single dataset accessor",

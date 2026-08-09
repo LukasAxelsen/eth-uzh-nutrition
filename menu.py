@@ -540,8 +540,11 @@ def _uzh_category_templates(slug):
     for items in by_date.values():
         for item in items:
             u = item.get("detailUrl", "")
-            # .../mittagsverpflegung,unten,{cat}/YYYY-MM-DD
-            m = re.search(r",unten,([^/]+)/\d{4}-\d{2}-\d{2}$", u)
+            # .../mittagsverpflegung,unten,{cat}/YYYY-MM-DD (and the
+            # seerose variant .../mittag,{cat}/YYYY-MM-DD). The last
+            # comma-separated path segment before the date is always
+            # the category slug.
+            m = re.search(r"([^/,]+)/\d{4}-\d{2}-\d{2}$", u)
             if m:
                 cats.add(m.group(1))
     return sorted(cats)
@@ -586,7 +589,7 @@ def scrape_uzh_date(slug, date):
         base = next(
             (u.rsplit("/", 1)[0] for items0 in by_date.values() for u in
              (i.get("detailUrl", "") for i in items0)
-             if re.search(rf",unten,{re.escape(cat)}/\d{{4}}-\d{{2}}-\d{{2}}$", u)),
+             if re.search(rf"{re.escape(cat)}/\d{{4}}-\d{{2}}-\d{{2}}$", u)),
             None,
         )
         if not base:
@@ -616,7 +619,16 @@ def build_uzh_dish_from_detail(detail_url):
     dish_name = dish.get("name", "")
     if not clean_text(dish_name):
         return None
+    # The detail page's menuItem carries no category field — the
+    # category slug lives in the URL path (.../mittagsverpflegung,unten,
+    # {cat}/{date}, seerose: .../mittag,{cat}/{date}). Recover it from
+    # the last path segment before the date, restoring hyphens that
+    # stand in for spaces ("voll-anders" -> "voll anders").
     category = (menu_item.get("category") or {}).get("name", "")
+    if not category:
+        m = re.search(r"([^/,]+)/\d{4}-\d{2}-\d{2}$", detail_url)
+        if m:
+            category = m.group(1).replace("-", " ")
     d = build_uzh_dish(dish_name, category)
     d["photo"] = clean_text(dish.get("imageUrl"))
     stats = dish.get("stats") or {}

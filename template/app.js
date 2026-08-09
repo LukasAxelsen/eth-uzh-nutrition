@@ -985,15 +985,28 @@ function animateContentHeight(node, oldH, newH) {
 }
 
 function expandBody(body) {
+  if (body._expandTimer) { clearTimeout(body._expandTimer); body._expandTimer = null; }
   body.style.maxHeight = body.scrollHeight + 'px';
   const onEnd = (e) => {
     if (e.propertyName === 'max-height') {
       body.style.maxHeight = 'none';
       body.removeEventListener('transitionend', onEnd);
+      body._onExpandEnd = null;
     }
   };
   body._onExpandEnd = onEnd; // so an interrupted expand can be cleaned up
   body.addEventListener('transitionend', onEnd);
+  // Fallback: if transitionend never fires (interrupted transition, or
+  // target == current height so no transition runs — rapid re-expand),
+  // the inline pin must still be dropped: a stale pin + overflow:hidden
+  // clips content (photo toggles, resize). Same pattern as the glide.
+  body._expandTimer = setTimeout(() => {
+    if (body._onExpandEnd) {
+      body.removeEventListener('transitionend', body._onExpandEnd);
+      body._onExpandEnd = null;
+    }
+    body.style.maxHeight = 'none';
+  }, 500); // 350ms transition + margin; transitionend is the normal path
 }
 
 function collapseBody(body) {

@@ -27,7 +27,7 @@
    ------------------------------------------------------------ */
 
 // Replaced at deploy time (e.g. "2026-08-07"). Keep the token verbatim.
-const DATE_STR = '2026-08-09';
+const DATE_STR = '2026-08-10';
 const STORAGE_KEY = 'eth-uzh-nutrition-prefs';
 
 // Default groups, in display order (custom groups are appended after).

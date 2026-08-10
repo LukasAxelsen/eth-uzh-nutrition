@@ -307,6 +307,20 @@ check("expand duration scales with content height",
 check("sections contain layout (meal-switch reflow isolation)",
       "contain: layout style paint" in CSS and
       "content-visibility: auto" not in CSS)
+# Duplicate-section regression guards: every section rendered by
+# mensaSectionHTML carries its own data-key (outerHTML replacements
+# keep it, so keyed reconcile never duplicates), and reconcile drops
+# keyless leftovers IMMEDIATELY (no exit animation — they are dirty
+# data that would linger as text-less duplicates).
+check("mensaSectionHTML renders data-key (duplicate-section guard)",
+      'data-key="' in JS[JS.index("function mensaSectionHTML"):JS.index("function updateHoursLines")] and
+      "data-key" in JS[JS.index("function mensaSectionHTML"):JS.index("function updateHoursLines")])
+check("reconcile removes keyless nodes immediately",
+      "if (!child.dataset.key) {" in JS and
+      "child.remove();" in JS[JS.index("for (const child of Array.from(container.children))"):JS.index("// Enter choreography")])
+check("hours text rendered at section creation (no text-less duplicates)",
+      "hoursText" in JS and
+      "esc(hoursText)" in JS)
 
 print("== D2. decoupling (no duplicate sync helpers, no stray DOM surgery) ==")
 check("no positionThumb duplicate (updateSegmented is the only sync)",

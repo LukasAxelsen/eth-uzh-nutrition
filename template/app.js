@@ -633,10 +633,16 @@ function reconcileChildren(container, keys, makeEl, doFlip, enter = true) {
   // div from a previous render path). Nodes shrink away first
   // (animateExit — deferred removal), so siblings slide up smoothly;
   // a node already exiting is left to finish. Every surviving child
-  // must be keyed and present in the new list.
+  // must be keyed and present in the new list. KEYLESS nodes are
+  // removed IMMEDIATELY (no exit animation): they are dirty data —
+  // e.g. an outerHTML-replaced section that lost its data-key would
+  // otherwise linger as a duplicate while animating out and be
+  // re-triggered on every render (the duplicate-section bug).
   for (const child of Array.from(container.children)) {
     if (child.dataset.exiting) continue;
-    if (!child.dataset.key || !seen.has(child.dataset.key)) {
+    if (!child.dataset.key) {
+      child.remove();
+    } else if (!seen.has(child.dataset.key)) {
       if (enter) animateExit(child);
       else child.remove();
     }
@@ -913,9 +919,18 @@ function mensaSectionHTML(m) {
       : '<div class="no-meals">' + EMPTY_MEALS_TEXT + '</div>') +
     '</div>';
 
+  // Opening hours strip: "No meals available" when the slot is
+  // closed (always visible, setting-independent); the current meal
+  // slot's hours otherwise (slid by the Show opening times setting).
+  // The text is rendered HERE (not left for updateHoursLines) so a
+  // section created by outerHTML replacement is complete from birth —
+  // a text-less duplicate was the "no hours shown" repeat bug.
+  const hoursText = slotClosed
+    ? 'No meals available'
+    : ((m.opening || {})[prefs.meal] || 'Not open today');
   return '<section class="mensa-section' +
     (slotClosed ? ' no-meal-slot' : collapsed ? ' collapsed' : '') +
-    '" data-mensa="' + esc(m.id) + '">' +
+    '" data-mensa="' + esc(m.id) + '" data-key="' + esc(m.id) + '">' +
     '<h2 class="mensa-title"' +
     (slotClosed ? '' : ' role="button" tabindex="0" aria-expanded="' + !collapsed + '"') +
     '>' +
@@ -923,11 +938,8 @@ function mensaSectionHTML(m) {
       ? ''
       : '<span class="mensa-caret" aria-hidden="true"></span>') +
     esc(m.name) +
-    // Opening hours strip: "No meals available" when the slot is
-    // closed (always visible, setting-independent); the current meal
-    // slot's hours otherwise (slid by the Show opening times setting).
     '<span class="hours-line-wrap" aria-hidden="' + slotClosed + '">' +
-    '<span class="hours-line">' + (slotClosed ? 'No meals available' : '') + '</span>' +
+    '<span class="hours-line">' + esc(hoursText) + '</span>' +
     '</span>' +
     '</h2>' +
     (slotClosed ? '' : body) +

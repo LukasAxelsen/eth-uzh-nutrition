@@ -735,16 +735,21 @@ html.show-prices .price-wrap { max-height: 18px; }
 .hours-line-wrap {
   display: inline-block;
   overflow: hidden;
-  /* Flex item (inside .mensa-title): baseline-align the hours text
-     with the title text — "ETH Archimedes 11:00 - 14:00" reads as one
-     line. (vertical-align is meaningless for flex items.) */
-  align-self: baseline;
+  /* Flex item (inside .mensa-title): vertically CENTER the hours text
+     against the title text — "ETH Archimedes 11:00 - 14:00" reads as
+     one line. CRITICAL: the title's line-height (46px) is inherited
+     here; without an explicit small line-height the inner text sits on
+     the 46px line box's baseline (i.e. at the very bottom, below the
+     clipped 16px strip — the "hours text sits too low" bug).
+     (vertical-align is meaningless for flex items.) */
+  line-height: 15px;
   max-height: 0;
   transition: max-height .45s var(--ease-sym);
 }
 html.show-opening .hours-line-wrap { max-height: 16px; }
 .hours-line {
-  display: inline-block;
+  display: block;              /* no inline baseline drift inside the strip */
+  line-height: 15px;
   padding: 0 0 0 10px;
   font-size: 13px;
   font-weight: 500;

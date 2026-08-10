@@ -937,7 +937,7 @@ function mensaSectionHTML(m) {
     (slotClosed
       ? ''
       : '<span class="mensa-caret" aria-hidden="true"></span>') +
-    esc(m.name) +
+    '<span class="mensa-name">' + esc(m.name) + '</span>' +
     '<span class="hours-line-wrap" aria-hidden="' + slotClosed + '">' +
     '<span class="hours-line">' + esc(hoursText) + '</span>' +
     '</span>' +

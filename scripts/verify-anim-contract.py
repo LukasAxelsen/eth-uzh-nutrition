@@ -296,6 +296,17 @@ check("closed slots: no caret/body, always 'No meals available'",
       "No meals available" in JS[JS.index("function updateHoursLines"):JS.index("function dishKey")] and
       "slotClosed ? '' : body" in JS and
       "if (section.classList.contains('no-meal-slot')) return;" in JS)
+# Expand/collapse: duration scales with content height (a 3000px menu
+# must not "snap" at the same duration as a 40px empty slot), and the
+# section contains its layout so meal-switch reflows stay local.
+check("expand duration scales with content height",
+      "function expandDuration" in JS and
+      "--expand-d" in JS and
+      "var(--expand-d" in CSS and
+      "Math.min(1200, Math.max(450" in JS)
+check("sections contain layout (meal-switch reflow isolation)",
+      "contain: layout style paint" in CSS and
+      "content-visibility: auto" not in CSS)
 
 print("== D2. decoupling (no duplicate sync helpers, no stray DOM surgery) ==")
 check("no positionThumb duplicate (updateSegmented is the only sync)",

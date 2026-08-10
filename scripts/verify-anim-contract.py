@@ -272,16 +272,24 @@ check("calendar date NOT persisted (today-product)",
       "selectedDate" not in JS[JS.index("function loadPrefs"):JS.index("function savePrefs")])
 # Prices + opening hours: the frontend renders them from the dish/mensa
 # records — data.json must carry them or the UI silently shows nothing.
-check("dish price rendered from record (priceHTML + label hook)",
+check("dish price rendered from record (priceHTML + slide wrap)",
       "function priceHTML(d)" in JS and
-      "d.price" in JS and "dish-price" in JS)
-check("opening hours rendered from record (hours-dot + pop)",
-      "hours-dot" in JS and "hours-pop" in JS and
+      "d.price" in JS and "price-wrap" in JS and "dish-price" in JS)
+check("price slide driven by show-prices setting (no parens)",
+      "show-prices" in JS and "show-opening" in JS and
+      "html.show-prices .price-wrap" in CSS and
+      "max-height: 0" in CSS[CSS.index(".price-wrap"):CSS.index(".dish-price")] and
+      "(' + parts.join" not in JS)
+check("opening hours rendered from record (hours-line + setting)",
+      "hours-line" in JS and "hours-pop" not in JS and
+      "hours-dot" not in JS and
       "Not open today" in JS and "(m.opening || {})" in JS)
-check("normalizeMensas keeps opening (hours-dot regression guard)",
+check("normalizeMensas keeps opening (hours regression guard)",
       "m.opening" in JS[JS.index("function normalizeMensas"):JS.index("function validatePrefsAgainstData")])
-check("hours-dot click does not collapse the section",
-      "stopPropagation" in JS[JS.index("function onHoursDotClick"):JS.index("function onContentKeydown")])
+check("settings rows bound (opening-row / price-row)",
+      "opening-row" in JS and "price-row" in JS and
+      "function updateHoursLines" in JS and
+      "updateHoursLines();" in JS[JS.index("function renderAll"):JS.index("function flipPlay")])
 
 print("== D2. decoupling (no duplicate sync helpers, no stray DOM surgery) ==")
 check("no positionThumb duplicate (updateSegmented is the only sync)",

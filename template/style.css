@@ -704,11 +704,22 @@ body.menu-open #menu-btn {
   letter-spacing: 0.1em;
   color: var(--sub);
 }
-/* Price suffix on the label/name: "(STUD 7.90 | INT 10.90 | EXT 13.90)".
-   Same grey family, one step smaller, no uppercase (the label itself
-   is already caps; the prices stay numeric). */
+/* Price suffix: "STUD 7.90 | INT 10.90 | EXT 13.90". Same grey family,
+   one step smaller, no uppercase (the label itself is already caps).
+   The wrapper is inline-block with a max-height slide — the
+   html.show-prices class (the "Show prices" setting) opens/closes it
+   with the same symmetric curve as every disclosure. */
+.price-wrap {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  max-height: 0;
+  transition: max-height .45s var(--ease-sym);
+}
+html.show-prices .price-wrap { max-height: 18px; }
 .dish-price {
-  margin-left: 8px;
+  display: inline-block;
+  padding: 0 0 0 8px;
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.04em;
@@ -716,26 +727,23 @@ body.menu-open #menu-btn {
   color: var(--sub);
   white-space: nowrap;
 }
-/* Opening-hours dot after the mensa title: small grey bullet; clicking
-   toggles the .hours-pop text next to it ("11:00 - 14:00" or
-   "Not open today"). The popover is plain text — no animation, it is a
-   status hint (micro-interaction), not content motion. */
-.hours-dot {
-  margin-left: 2px;
-  padding: 4px 6px;
-  border: none;
-  background: none;
-  font-size: 8px;
-  line-height: 1;
-  color: var(--sub);
-  cursor: pointer;
-  border-radius: var(--r-pill);
-  transition: color .2s var(--ease);
+/* Opening-hours strip after the mensa title ("11:00 - 14:00" or
+   "Not open today"). Slide open/closed via max-height — driven by the
+   html.show-opening class (the "Show opening times" setting), same
+   symmetric curve as the disclosures. The strip is inline-block so it
+   sits next to the title text. */
+.hours-line-wrap {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  max-height: 0;
+  transition: max-height .45s var(--ease-sym);
 }
-.hours-dot:hover { color: var(--text); }
-.hours-pop {
-  margin-left: -4px;
-  font-size: 12px;
+html.show-opening .hours-line-wrap { max-height: 22px; }
+.hours-line {
+  display: inline-block;
+  padding: 0 0 0 10px;
+  font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.01em;
   color: var(--sub);

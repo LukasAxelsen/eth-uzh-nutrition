@@ -88,7 +88,7 @@ let rawFiltered = '';
 
 /** Read + sanitize stored prefs; fall back to defaults on any error. */
 function loadPrefs() {
-  const p = { meal: 'Lunch', selected: new Set(), photos: true, theme: 'light', customGroups: {}, collapsedMensas: new Set() };
+  const p = { meal: 'Lunch', selected: new Set(), photos: true, openingTimes: true, prices: true, theme: 'light', customGroups: {}, collapsedMensas: new Set() };
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return p;
@@ -96,6 +96,8 @@ function loadPrefs() {
     if (parsed.meal === 'Lunch' || parsed.meal === 'Dinner') p.meal = parsed.meal;
     if (Array.isArray(parsed.selected)) p.selected = new Set(parsed.selected.map(String));
     if (typeof parsed.photos === 'boolean') p.photos = parsed.photos;
+    if (typeof parsed.openingTimes === 'boolean') p.openingTimes = parsed.openingTimes;
+    if (typeof parsed.prices === 'boolean') p.prices = parsed.prices;
     if (parsed.theme === 'light' || parsed.theme === 'dark' || parsed.theme === 'auto') p.theme = parsed.theme;
     if (parsed.customGroups && typeof parsed.customGroups === 'object' && !Array.isArray(parsed.customGroups)) {
       for (const [name, ids] of Object.entries(parsed.customGroups)) {
@@ -146,7 +148,7 @@ async function fetchData() {
 }
 
 /** Guarantee every mensa has id/name/group, Lunch/Dinner arrays and
-    opening hours (the hours-dot reads them — dropping them here made
+    opening hours (the hours-line reads them — dropping them here made
     every mensa show "Not open today"). */
 function normalizeMensas(raw) {
   return raw.map((m) => ({
@@ -353,10 +355,13 @@ function renderAll() {
   const snapshots = FLIP_CONTAINERS().map((c) => [c, flipFirst(c)]);
   updateSegmented();
   updatePhotoToggle();
+  updateOpeningToggle();
+  updatePriceToggle();
   updateAppearance();
   renderSelector();
   const oldH = content.getBoundingClientRect().height;
   renderContent();
+  updateHoursLines(); // sections survive meal switches — refresh the text
   applyPhotos(); // idempotent <img> sync — BEFORE the height measurement:
                 // fresh dishes insert photos at natural height so newH
                 // includes them (a glide to a photo-less height would
@@ -672,6 +677,37 @@ function onPhotoToggleClick() {
   renderAll();
 }
 
+/* Opening-times / prices settings: plain CSS-class toggles (the
+   .hours-line-wrap / .price-wrap strips slide via max-height), so NO
+   renderAll — the DOM stays untouched, only html gets the class. */
+function updateOpeningToggle() {
+  const row = document.getElementById('opening-row');
+  if (!row) return;
+  row.classList.toggle('selected', prefs.openingTimes);
+  row.setAttribute('aria-pressed', String(prefs.openingTimes));
+  document.documentElement.classList.toggle('show-opening', prefs.openingTimes);
+}
+
+function onOpeningToggleClick() {
+  prefs.openingTimes = !prefs.openingTimes;
+  savePrefs();
+  updateOpeningToggle();
+}
+
+function updatePriceToggle() {
+  const row = document.getElementById('price-row');
+  if (!row) return;
+  row.classList.toggle('selected', prefs.prices);
+  row.setAttribute('aria-pressed', String(prefs.prices));
+  document.documentElement.classList.toggle('show-prices', prefs.prices);
+}
+
+function onPriceToggleClick() {
+  prefs.prices = !prefs.prices;
+  savePrefs();
+  updatePriceToggle();
+}
+
 /* ---------- appearance (light/dark/auto) ---------- */
 
 /** Apply prefs.theme to <html data-theme> and drive the appearance
@@ -826,15 +862,18 @@ function dishHTML(d, key) {
     '</div>';
 }
 
-/** Price suffix: "(STUD 7.90 | INT 10.90 | EXT 13.90)" — grey, small,
+/** Price suffix: "STUD 7.90 | INT 10.90 | EXT 13.90" — grey, small,
     after the grey line label (or the dish name when the label is
-    dropped). Per-100g dishes get the unit appended. */
+    dropped). Wrapped in .price-wrap so the Show prices setting can
+    slide it open/closed (max-height transition, symmetric ease). */
 function priceHTML(d) {
   const prices = d.price || [];
   if (!prices.length) return '';
   const parts = prices.map((p) => esc(String(p.label)) + ' ' + Number(p.value).toFixed(2));
   const unit = d.priceUnit === '100 g' ? ' / 100g' : '';
-  return '<span class="dish-price">(' + parts.join(' | ') + unit + ')</span>';
+  return '<span class="price-wrap" aria-hidden="true">' +
+    '<span class="dish-price">' + parts.join(' | ') + unit + '</span>' +
+    '</span>';
 }
 
 function nutritionTableHTML(nutrition) {
@@ -873,27 +912,28 @@ function mensaSectionHTML(m) {
     '<h2 class="mensa-title" role="button" tabindex="0" aria-expanded="' + !collapsed + '">' +
     '<span class="mensa-caret" aria-hidden="true"></span>' +
     esc(m.name) +
-    '<button type="button" class="hours-dot" aria-label="Opening hours" aria-expanded="false">&#9679;</button>' +
-    '<span class="hours-pop" hidden></span>' +
+    // Opening hours for the CURRENT meal slot, as a slide-open/closed
+    // strip (max-height transition driven by the html.show-opening
+    // class — the "Show opening times" setting).
+    '<span class="hours-line-wrap" aria-hidden="true">' +
+    '<span class="hours-line"></span>' +
+    '</span>' +
     '</h2>' + body +
     '</section>';
 }
 
-/** Toggle the opening-hours popover of one mensa (grey dot after the
-    title). Shows the CURRENT meal slot's hours, or "Not open today".
-    stopPropagation so the section itself doesn't collapse. */
-function onHoursDotClick(e) {
-  e.stopPropagation();
-  // Called via content-level delegation — e.currentTarget is #content,
-  // so resolve the button from the event target.
-  const btn = e.target.closest('.hours-dot');
-  const m = mensaById(btn.closest('.mensa-section').dataset.mensa);
-  const pop = btn.nextElementSibling;
-  const willOpen = pop.hidden;
-  const hours = (m.opening || {})[prefs.meal];
-  pop.textContent = hours || 'Not open today';
-  pop.hidden = !willOpen;
-  btn.setAttribute('aria-expanded', String(willOpen));
+/** Fill every .hours-line with the current meal slot's hours (or
+    "Not open today"). Called from renderAll — the sections survive
+    meal switches, so the text must be refreshed there, not only at
+    section creation. */
+function updateHoursLines() {
+  for (const section of document.querySelectorAll('.mensa-section')) {
+    const m = mensaById(section.dataset.mensa);
+    const line = section.querySelector('.hours-line');
+    if (!m || !line) continue;
+    const hours = (m.opening || {})[prefs.meal];
+    line.textContent = hours || 'Not open today';
+  }
 }
 
 /** Stable key for one dish inside its mensa: meal slot + line + name.
@@ -1241,6 +1281,24 @@ function bindEvents() {
     }
   });
 
+  const openingRow = document.getElementById('opening-row');
+  openingRow.addEventListener('click', onOpeningToggleClick);
+  openingRow.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onOpeningToggleClick();
+    }
+  });
+
+  const priceRow = document.getElementById('price-row');
+  priceRow.addEventListener('click', onPriceToggleClick);
+  priceRow.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onPriceToggleClick();
+    }
+  });
+
   const mensaList = document.querySelector('.selector-mensas');
   mensaList.addEventListener('click', onMensaListClick);
   mensaList.addEventListener('keydown', onMensaListKeydown);
@@ -1516,14 +1574,8 @@ function showGroupMsg(text) {
   if (text) groupMsgTimer = setTimeout(() => { msg.textContent = ''; }, 2000);
 }
 
-/** Content-level click delegation: mensa titles collapse/expand,
-    hours-dots toggle the opening-hours popover. */
+/** Content-level click delegation: mensa titles collapse/expand. */
 function onContentClick(e) {
-  const dot = e.target.closest('.hours-dot');
-  if (dot) {
-    onHoursDotClick(e);
-    return;
-  }
   const title = e.target.closest('.mensa-title');
   if (title) {
     e.preventDefault();

@@ -1237,8 +1237,20 @@ function animateContentHeight(node, oldH, newH) {
   }, 600); // 450ms glide + margin; transitionend is the normal path
 }
 
+/** Duration for one disclosure toggle: scales with content height so
+    the perceived slide speed matches a small (empty) slot — a 3000px
+    menu gets ~1200ms instead of snapping through at 6.9px/ms while a
+    40px slot crawls at 0.1px/ms ("opens too fast" report). Clamped to
+    [450, 1200]ms (NN/g large-motion band + perceived-response cap). */
+function expandDuration(body) {
+  const h = body.scrollHeight || 0;
+  return Math.min(1200, Math.max(450, Math.round(h * 0.5)));
+}
+
 function expandBody(body) {
   if (body._expandTimer) { clearTimeout(body._expandTimer); body._expandTimer = null; }
+  const dur = expandDuration(body);
+  body.style.setProperty('--expand-d', dur + 'ms');
   body.style.maxHeight = body.scrollHeight + 'px';
   const onEnd = (e) => {
     if (e.propertyName === 'max-height') {
@@ -1259,7 +1271,7 @@ function expandBody(body) {
       body._onExpandEnd = null;
     }
     body.style.maxHeight = 'none';
-  }, 600); // 450ms transition + margin; transitionend is the normal path
+  }, dur + 150); // dur transition + margin; transitionend is the normal path
 }
 
 function collapseBody(body) {
@@ -1271,6 +1283,8 @@ function collapseBody(body) {
     body.removeEventListener('transitionend', body._onExpandEnd);
     body._onExpandEnd = null;
   }
+  const dur = expandDuration(body);
+  body.style.setProperty('--expand-d', dur + 'ms');
   body.style.maxHeight = body.scrollHeight + 'px';
   void body.offsetHeight; // force reflow so the transition actually runs
   body.style.maxHeight = '0px';

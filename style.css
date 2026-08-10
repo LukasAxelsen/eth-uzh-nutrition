@@ -653,7 +653,13 @@ body.menu-open #menu-btn {
    (that was the desktop "flash": the content snapped to full width in
    one frame, then the margin/width animation caught up). */
 #content { max-width: min(var(--content-w), 100%); margin: 0 auto; padding: 8px 24px 80px; }
-.mensa-section { padding: 40px 0 8px; }
+/* contain (web.dev animation/rendering guidance): layout/style/paint
+   of one section never leak into its neighbours — meal-switch reflows
+   stay local. NOTE: content-visibility:auto was tried and REVERTED:
+   transitions inside skipped-rendering sections never run (the
+   "first expand flashes, no animation" symptom) and getBoundingClientRect
+   returns the intrinsic-size placeholder, breaking FLIP/glide. */
+.mensa-section { padding: 40px 0 8px; contain: layout style paint; }
 
 .mensa-title {
   display: flex;
@@ -683,7 +689,11 @@ body.menu-open #menu-btn {
    second curve — the mensa collapse once shipped bare `ease`). */
 .mensa-dishes {
   overflow: hidden;
-  transition: max-height .45s var(--ease-sym);
+  /* --expand-d is set per-toggle by expandBody/collapseBody: the
+     duration scales with content height so a 3000px menu slides at
+     the same perceived speed as a 40px empty slot (both "smooth").
+     Default .45s matches every other disclosure. */
+  transition: max-height var(--expand-d, .45s) var(--ease-sym);
 }
 .mensa-section.collapsed .mensa-dishes { max-height: 0; }
 .no-meals { padding: 12px 0; font-size: 15px; color: var(--sub); }

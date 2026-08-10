@@ -301,9 +301,10 @@ check("closed slots: no caret/body, always 'No meals available'",
 # section contains its layout so meal-switch reflows stay local.
 check("expand duration scales with content height",
       "function expandDuration" in JS and
-      "--expand-d" in JS and
-      "var(--expand-d" in CSS and
-      "Math.min(1200, Math.max(450" in JS)
+      "transitionDuration" in JS and
+      "Math.min(900, Math.max(450" in JS and
+      "var(--expand-d" not in CSS and
+      "var(--expand-d" not in JS)
 check("sections contain layout (meal-switch reflow isolation)",
       "contain: layout style paint" in CSS and
       "content-visibility: auto" not in CSS)

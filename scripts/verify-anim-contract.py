@@ -87,8 +87,10 @@ APPLE_EASE = "cubic-bezier(.32, .72, 0, 1)"
 ease_decl = re.search(r"--ease:\s*([^;]+);", CSS)
 check("--ease token is Apple's curve",
       bool(ease_decl) and APPLE_EASE in ease_decl.group(1))
-# bare `ease` keyword = NOT var(--ease): strip the variable refs first
-no_var = CSS.replace("var(--ease)", "")
+# bare `ease` keyword = NOT var(--ease)/var(--ease-sym): strip the
+# variable refs first (longest first — "var(--ease)" is NOT a substring
+# of "var(--ease-sym)", both must go or the sym token self-triggers)
+no_var = CSS.replace("var(--ease-sym)", "").replace("var(--ease)", "")
 check("no bare `ease` keyword transitions",
       not re.search(r"transition:[^;]*\bease\b", no_var))
 # JS-generated inline transitions must honor the same rule — the mensa
@@ -100,6 +102,25 @@ check("no hardcoded Material curve leftovers",
       "cubic-bezier(.4, 0, .2, 1)" not in CSS)
 check("JS ANIM_EASE matches --ease",
       "const ANIM_EASE = '" + APPLE_EASE + "'" in JS)
+# Disclosures (expand/collapse) use a SYMMETRIC curve --ease-sym —
+# the Apple ease-out opens with a snap (11% of time = 76% of travel)
+# and drags on close, so open/close felt different speeds. Content
+# enter/exit/glide/FLIP keep --ease; ONLY max-height disclosures use
+# --ease-sym. Both tokens are single sources of truth.
+SYM_EASE = "cubic-bezier(.42, 0, .58, 1)"
+sym_decl = re.search(r"--ease-sym:\s*([^;]+);", CSS)
+check("--ease-sym token is the symmetric ease-in-out",
+      bool(sym_decl) and SYM_EASE in sym_decl.group(1))
+no_var2 = CSS.replace("var(--ease-sym)", "")
+check("every max-height transition uses var(--ease-sym)",
+      not re.search(r"transition:[^;]*max-height[^;]*var\(--ease\)", no_var2))
+check("no max-height transition with bare ease",
+      not re.search(r"transition:[^;]*max-height[^;]*\bease\b", no_var2))
+# renderAll coalesces in-flight disclosures (content rebuild would
+# otherwise clip/snap against the stale max-height lock).
+ra = JS[JS.index("function renderAll"):JS.index("function flipPlay")]
+check("renderAll coalesces in-flight disclosures",
+      "el._expandTimer" in ra and "el.style.maxHeight = 'none'" in ra)
 
 print("== B3. corners (Apple tokens + squircle upgrade) ==")
 # All border-radius values must be tokens (exclude comment lines).
@@ -249,6 +270,18 @@ check("no raw data.mensas refs",
 check("calendar date NOT persisted (today-product)",
       "selectedDate" in JS and
       "selectedDate" not in JS[JS.index("function loadPrefs"):JS.index("function savePrefs")])
+# Prices + opening hours: the frontend renders them from the dish/mensa
+# records — data.json must carry them or the UI silently shows nothing.
+check("dish price rendered from record (priceHTML + label hook)",
+      "function priceHTML(d)" in JS and
+      "d.price" in JS and "dish-price" in JS)
+check("opening hours rendered from record (hours-dot + pop)",
+      "hours-dot" in JS and "hours-pop" in JS and
+      "Not open today" in JS and "(m.opening || {})" in JS)
+check("normalizeMensas keeps opening (hours-dot regression guard)",
+      "m.opening" in JS[JS.index("function normalizeMensas"):JS.index("function validatePrefsAgainstData")])
+check("hours-dot click does not collapse the section",
+      "stopPropagation" in JS[JS.index("function onHoursDotClick"):JS.index("function onContentKeydown")])
 
 print("== D2. decoupling (no duplicate sync helpers, no stray DOM surgery) ==")
 check("no positionThumb duplicate (updateSegmented is the only sync)",

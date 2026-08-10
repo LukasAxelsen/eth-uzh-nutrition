@@ -68,6 +68,42 @@ ETH_FACILITIES = {
 ETH_LUNCH_NAMES = ("Mittag", "Mittagessen", "Lunch")
 ETH_DINNER_NAMES = ("Abend", "Abendessen", "Dinner")
 
+# ETH customer-group codes -> display labels (user's STUD/INT/EXT format)
+ETH_PRICE_LABELS = {
+    10: "STUD",       # Studierende
+    11: "INT",        # Interne
+    12: "INT&STUD",   # Interne & Studierende
+    13: "EXT",        # Extern
+    14: "ALL",        # Alle Besucher (single-price outlets)
+}
+
+# UZH outlet opening hours (lunch service), verified 2026-08-10 from the
+# ZFV operator pages (zfv.ch/de/essen-gehen/...) — Food2050 has no
+# structured hours, so this table is the source of truth. Weekends are
+# closed for every UZH outlet (all pages say Montag-Freitag). Lichthof
+# is closed for renovation (page: "vorübergehend geschlossen").
+UZH_OPENING = {
+    "untere-mensa": {"Lunch": "11:00 - 14:30", "Dinner": "17:00 - 19:00"},
+    "obere-mensa": {"Lunch": "11:00 - 14:30", "Dinner": None},
+    "lichthof": {"Lunch": None, "Dinner": None},
+    "mensa": {"Lunch": "11:00 - 14:00", "Dinner": None},
+    "green-kitchen": {"Lunch": "11:00 - 14:00", "Dinner": None},
+    "seerose": {"Lunch": "07:30 - 19:30", "Dinner": None},
+    "uzh-binzmuehle": {"Lunch": "11:15 - 14:15", "Dinner": None},
+    "uzh-cityport": {"Lunch": "09:00 - 14:30", "Dinner": None},
+    "tierspital": {"Lunch": "06:30 - 16:30", "Dinner": None},
+    "uzh-botanischergarten": {"Lunch": "08:00 - 17:00", "Dinner": None},
+}
+
+# UZH price-category names -> display labels (Food2050 detail pages)
+UZH_PRICE_LABELS = {
+    "Studierende": "STUD",
+    "Mitarbeitende": "INT",
+    "Externe": "EXT",
+    "Gäste": "GUEST",
+    "Alle": "ALL",
+}
+
 # Food2050 location-id -> (default group, kitchen-slug -> display name)
 UZH_LOCATIONS = {
     "e321519e-3f83-4a10-b6d8-22d395ebfc5d": ("Central", {
@@ -304,11 +340,28 @@ def fetch_eth():
     meals = data.get("meals", [])
     meal_times = data.get("meal-times", [])
 
-    # meal-time-id -> (facility-id, meal-time-name)
+    # meal-time-id -> (facility-id, meal-time-name, time-from, time-to)
     mt_map = {
-        mt.get("meal-time-id"): (mt.get("facility-id"), mt.get("meal-time-name", ""))
+        mt.get("meal-time-id"): (
+            mt.get("facility-id"),
+            mt.get("meal-time-name", ""),
+            mt.get("time-from", ""),
+            mt.get("time-to", ""),
+        )
         for mt in meal_times if mt.get("meal-time-id")
     }
+
+    # facility-id -> {slot: "HH:MM - HH:MM"} (opening hours per meal)
+    opening = {}
+    for mt in meal_times:
+        fid = mt.get("facility-id")
+        slot = eth_meal_slot(mt.get("meal-time-name", ""))
+        if fid not in ETH_FACILITIES or slot is None:
+            continue
+        tf = fmt_eth_time(mt.get("time-from", ""))
+        tt = fmt_eth_time(mt.get("time-to", ""))
+        if tf and tt:
+            opening.setdefault(fid, {})[slot] = f"{tf} - {tt}"
 
     # facility-id -> {Lunch: [dishes], Dinner: [dishes]}
     per_facility = {}
@@ -318,7 +371,7 @@ def fetch_eth():
         mt_id = m.get("meal-time-id")
         if mt_id not in mt_map:
             continue
-        fid, mt_name = mt_map[mt_id]
+        fid, mt_name, _, _ = mt_map[mt_id]
         if fid not in ETH_FACILITIES:
             continue
         slot = eth_meal_slot(mt_name)
@@ -333,6 +386,20 @@ def fetch_eth():
         if extra:
             raw_desc = f"{extra} | {raw_desc}"
 
+        # Prices: customer-group array -> [{label, value}] (STUD/INT/EXT)
+        prices = []
+        for p in (m.get("meal-price-array") or []):
+            val = _num(p.get("price"))
+            if val is None:
+                continue
+            prices.append({
+                "label": ETH_PRICE_LABELS.get(
+                    p.get("customer-group-code"),
+                    (p.get("customer-group-desc-short") or "").strip() or "CHF",
+                ),
+                "value": val,
+            })
+
         dish = {
             "line": title_slug(m.get("line-name", "")),
             "dish": clean_dish_name(name_parts[0]),
@@ -341,6 +408,8 @@ def fetch_eth():
             # it the API returns an error text, not the JPEG.
             "photo": (m.get("image-url") or "").rstrip("/") + "?client-id=ethz-wcms" if m.get("image-url") else "",
             "nutrition": {},
+            "price": prices,
+            "priceUnit": (m.get("price-unit-desc-short") or "").strip(),
         }
         # ETH reports energy in kJ — convert to kcal. Missing/zero values
         # are skipped so dishes never carry fabricated 0s.
@@ -367,12 +436,24 @@ def fetch_eth():
             "id": f"eth-{fid}",
             "name": f"ETH {name}",
             "group": group,
+            "opening": {
+                "Lunch": (opening.get(fid) or {}).get("Lunch"),
+                "Dinner": (opening.get(fid) or {}).get("Dinner"),
+            },
             "meals": {
                 "Lunch": meals_by_slot.get("Lunch", []),
                 "Dinner": meals_by_slot.get("Dinner", []),
             },
         })
     return result
+
+
+def fmt_eth_time(ts):
+    """'11:00:00+02:00' -> '11:00' ('' when missing/invalid)."""
+    m = re.match(r"(\d{1,2}):(\d{2})", ts or "")
+    if not m:
+        return ""
+    return f"{int(m.group(1)):02d}:{m.group(2)}"
 
 
 # --------------------------------------------------------------------------
@@ -423,12 +504,19 @@ def fetch_uzh():
                 if kitchen is not None:
                     dishes = uzh_dishes_from_list(kitchen.get("todayOffer") or [])
 
+            # Opening hours: table + weekend rule (every UZH outlet is
+            # closed Sat/Sun per the operator pages).
+            opening = UZH_OPENING.get(slug, {"Lunch": None, "Dinner": None})
+            if datetime.strptime(TODAY, "%Y-%m-%d").weekday() >= 5:
+                opening = {"Lunch": None, "Dinner": None}
+
             result.append({
                 # Some kitchen slugs already carry a "uzh-" prefix
                 # (uzh-binzmuehle, uzh-cityport, uzh-botanischergarten).
                 "id": "uzh-" + slug.removeprefix("uzh-"),
                 "name": name,
                 "group": group,
+                "opening": opening,
                 "meals": {"Lunch": dishes, "Dinner": []},
             })
     return result
@@ -450,6 +538,7 @@ def uzh_dishes_from_list(today_offer):
                 continue
             d = build_uzh_dish(name, "")
             d["photo"] = ""
+            d["price"] = []
             d["nutrition"] = {"p100": {}, "total": {}}
             dishes.append(d)
     return dishes
@@ -476,6 +565,7 @@ def scrape_uzh_weekly(slug):
         d = build_uzh_dish(dish_name, (item.get("category") or {}).get("name", ""))
         detail = scrape_uzh_detail(item.get("detailUrl"))
         d["photo"] = detail["photo"]
+        d["price"] = detail["price"]
         d["nutrition"] = detail["nutrition"]
         dishes.append(d)
     return dishes
@@ -573,6 +663,7 @@ def scrape_uzh_date(slug, date):
             d = build_uzh_dish(dish_name, (item.get("category") or {}).get("name", ""))
             detail = scrape_uzh_detail(item.get("detailUrl"))
             d["photo"] = detail["photo"]
+            d["price"] = detail["price"]
             d["nutrition"] = detail["nutrition"]
             dishes.append(d)
         return dishes
@@ -631,6 +722,19 @@ def build_uzh_dish_from_detail(detail_url):
             category = m.group(1).replace("-", " ")
     d = build_uzh_dish(dish_name, category)
     d["photo"] = clean_text(dish.get("imageUrl"))
+    # Prices live on the menuItem (not the dish) — same shape as
+    # scrape_uzh_detail returns.
+    prices = []
+    for p in (menu_item.get("prices") or []):
+        amount = _num(p.get("amount"))
+        if amount is None:
+            continue
+        cat = (p.get("priceCategory") or {}).get("name", "")
+        prices.append({
+            "label": UZH_PRICE_LABELS.get(cat, cat.upper() or "CHF"),
+            "value": amount,
+        })
+    d["price"] = prices
     stats = dish.get("stats") or {}
     p100, total = {}, {}
     for key, label in UZH_NUTRIENT_MAP.items():
@@ -687,9 +791,23 @@ def scrape_uzh_detail(detail_url):
         if weight is not None:
             total["weight"] = weight
 
+    # Prices: menuItem.prices -> [{label, value}] (Food2050 category names)
+    prices = []
+    for p in (data["props"]["pageProps"]["organisation"]["outlet"]
+              ["menuCategory"]["menuItem"].get("prices") or []):
+        amount = _num(p.get("amount"))
+        if amount is None:
+            continue
+        cat = (p.get("priceCategory") or {}).get("name", "")
+        prices.append({
+            "label": UZH_PRICE_LABELS.get(cat, cat.upper() or "CHF"),
+            "value": amount,
+        })
+
     return {
         "nutrition": {"p100": p100, "total": total},
         "photo": clean_text(dish.get("imageUrl")),
+        "price": prices,
     }
 
 

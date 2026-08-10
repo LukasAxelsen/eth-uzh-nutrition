@@ -145,12 +145,18 @@ async function fetchData() {
   return { date: json.date, days, availableDates: json.availableDates || [] };
 }
 
-/** Guarantee every mensa has id/name/group and Lunch/Dinner arrays. */
+/** Guarantee every mensa has id/name/group, Lunch/Dinner arrays and
+    opening hours (the hours-dot reads them — dropping them here made
+    every mensa show "Not open today"). */
 function normalizeMensas(raw) {
   return raw.map((m) => ({
     id: String(m.id),
     name: m.name || String(m.id),
     group: m.group || 'Other',
+    opening: {
+      Lunch: (m.opening && m.opening.Lunch) || null,
+      Dinner: (m.opening && m.opening.Dinner) || null,
+    },
     meals: {
       Lunch: Array.isArray(m.meals && m.meals.Lunch) ? m.meals.Lunch : [],
       Dinner: Array.isArray(m.meals && m.meals.Dinner) ? m.meals.Dinner : [],
@@ -327,6 +333,23 @@ function renderAll() {
   // never settles and the page feels stuck. Snap to natural height,
   // then measure and glide cleanly from true old -> true new.
   if (content._heightGlideEnd) settleContentHeight(content);
+  // Coalesce in-flight disclosure animations (expandBody): their
+  // max-height lock was measured against the PRE-render content. The
+  // render below rebuilds dishes (meal/date switch, photo toggle), so
+  // the old lock would clip the new content or snap at transitionend.
+  // Same philosophy as the glide coalesce above — snap the disclosure
+  // to its natural height; the next open/close animates cleanly.
+  for (const el of content.querySelectorAll('.mensa-dishes, .calendar, #raw-panel')) {
+    if (el._expandTimer) {
+      clearTimeout(el._expandTimer);
+      el._expandTimer = null;
+      if (el._onExpandEnd) {
+        el.removeEventListener('transitionend', el._onExpandEnd);
+        el._onExpandEnd = null;
+      }
+      el.style.maxHeight = 'none';
+    }
+  }
   const snapshots = FLIP_CONTAINERS().map((c) => [c, flipFirst(c)]);
   updateSegmented();
   updatePhotoToggle();
@@ -790,14 +813,28 @@ function dishHTML(d, key) {
   // photos never re-renders the dish text/nutrition (no flash). The dish
   // key deliberately excludes the photo bit for the same reason.
   const photo = d.photo ? ' data-photo="' + esc(d.photo) + '"' : '';
+  const price = priceHTML(d);
   return '<div class="dish"' + keyAttr + photo + '>' +
     '<div class="dish-main">' +
-    (label ? '<div class="dish-label">' + esc(label) + '</div>' : '') +
-    '<h3 class="dish-name">' + esc(dish) + '</h3>' +
+    (label
+      ? '<div class="dish-label">' + esc(label) + price + '</div>'
+      : '') +
+    '<h3 class="dish-name">' + esc(dish) + (label ? '' : price) + '</h3>' +
     (d.desc ? '<p class="dish-desc">' + esc(d.desc) + '</p>' : '') +
     '</div>' +
     '<div class="nutrition-col">' + nutritionTableHTML(nutrition) + '</div>' +
     '</div>';
+}
+
+/** Price suffix: "(STUD 7.90 | INT 10.90 | EXT 13.90)" — grey, small,
+    after the grey line label (or the dish name when the label is
+    dropped). Per-100g dishes get the unit appended. */
+function priceHTML(d) {
+  const prices = d.price || [];
+  if (!prices.length) return '';
+  const parts = prices.map((p) => esc(String(p.label)) + ' ' + Number(p.value).toFixed(2));
+  const unit = d.priceUnit === '100 g' ? ' / 100g' : '';
+  return '<span class="dish-price">(' + parts.join(' | ') + unit + ')</span>';
 }
 
 function nutritionTableHTML(nutrition) {
@@ -836,8 +873,27 @@ function mensaSectionHTML(m) {
     '<h2 class="mensa-title" role="button" tabindex="0" aria-expanded="' + !collapsed + '">' +
     '<span class="mensa-caret" aria-hidden="true"></span>' +
     esc(m.name) +
+    '<button type="button" class="hours-dot" aria-label="Opening hours" aria-expanded="false">&#9679;</button>' +
+    '<span class="hours-pop" hidden></span>' +
     '</h2>' + body +
     '</section>';
+}
+
+/** Toggle the opening-hours popover of one mensa (grey dot after the
+    title). Shows the CURRENT meal slot's hours, or "Not open today".
+    stopPropagation so the section itself doesn't collapse. */
+function onHoursDotClick(e) {
+  e.stopPropagation();
+  // Called via content-level delegation — e.currentTarget is #content,
+  // so resolve the button from the event target.
+  const btn = e.target.closest('.hours-dot');
+  const m = mensaById(btn.closest('.mensa-section').dataset.mensa);
+  const pop = btn.nextElementSibling;
+  const willOpen = pop.hidden;
+  const hours = (m.opening || {})[prefs.meal];
+  pop.textContent = hours || 'Not open today';
+  pop.hidden = !willOpen;
+  btn.setAttribute('aria-expanded', String(willOpen));
 }
 
 /** Stable key for one dish inside its mensa: meal slot + line + name.
@@ -1460,10 +1516,23 @@ function showGroupMsg(text) {
   if (text) groupMsgTimer = setTimeout(() => { msg.textContent = ''; }, 2000);
 }
 
+/** Content-level click delegation: mensa titles collapse/expand,
+    hours-dots toggle the opening-hours popover. */
 function onContentClick(e) {
+  const dot = e.target.closest('.hours-dot');
+  if (dot) {
+    onHoursDotClick(e);
+    return;
+  }
   const title = e.target.closest('.mensa-title');
-  if (title) toggleSection(title.closest('.mensa-section'));
+  if (title) {
+    e.preventDefault();
+    toggleSection(title.closest('.mensa-section'));
+  }
 }
+
+/** Keydown on content: Enter/Space toggles a focused mensa title
+    (button role on the h2). */
 
 function onContentKeydown(e) {
   if (e.key !== 'Enter' && e.key !== ' ') return;

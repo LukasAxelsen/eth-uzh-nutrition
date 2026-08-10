@@ -1120,7 +1120,7 @@
       "Lunch": [
        {
         "line": "Fire",
-        "dish": "Teriyaki Chicken Balls",
+        "dish": "Teriyaki Beef Balls",
         "desc": "Teriyaki Sauce | Sesam | Ginger | Thai-Schnittlauch | Bambussprossen | Parfumreis",
         "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73975?client-id=ethz-wcms",
         "nutrition": {
@@ -1186,8 +1186,8 @@
        },
        {
         "line": "Green Daily",
-        "dish": "Lasagne",
-        "desc": "Plantbased Hack | Béchamelsauce | Salat",
+        "dish": "Gnocchi mit Tomatensauce",
+        "desc": "Gnocchi | Tomatensauce | Ratatouille | Reibkäse | Salat",
         "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73977?client-id=ethz-wcms",
         "nutrition": {
          "p100": {

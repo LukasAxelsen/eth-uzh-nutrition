@@ -747,6 +747,12 @@ html.show-prices .price-wrap { max-height: 18px; }
   transition: max-height .45s var(--ease-sym);
 }
 html.show-opening .hours-line-wrap { max-height: 16px; }
+/* Closed slot: the "No meals available" strip is ALWAYS visible —
+   independent of the Show opening times setting — and the section has
+   no caret / is not interactive (no body to expand). */
+html .mensa-section.no-meal-slot .hours-line-wrap { max-height: 16px; }
+.mensa-section.no-meal-slot .mensa-caret { display: none; }
+.mensa-section.no-meal-slot .mensa-title { cursor: default; }
 .hours-line {
   display: block;              /* no inline baseline drift inside the strip */
   line-height: 15px;

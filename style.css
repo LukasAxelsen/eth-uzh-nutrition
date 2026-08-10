@@ -132,7 +132,15 @@ input:focus-visible { outline: none; }
   transition: box-shadow .2s var(--ease),
               background-color .2s var(--ease);
 }
-.date-trigger:hover,
+/* The slim outline comes from hover (desktop) or an OPEN calendar.
+   Touch devices must NOT get the hover outline: after a tap the
+   browser keeps :hover sticky, so the outline would stay forever
+   (the "outline won't go away on mobile" bug). (hover: hover) +
+   (pointer: fine) = mouse/trackpad primary input — phones/tablets
+   fall through to the aria-expanded rule only. */
+@media (hover: hover) and (pointer: fine) {
+  .date-trigger:hover { box-shadow: inset 0 0 0 1px var(--border); }
+}
 .date-trigger[aria-expanded="true"] { box-shadow: inset 0 0 0 1px var(--border); }
 .date-trigger:active { background: var(--raw-bg); }
 
@@ -158,7 +166,7 @@ input:focus-visible { outline: none; }
   width: 292px;
   max-width: calc(100vw - 40px);
   margin: 0 auto;               /* constant — NO margin animation */
-  transition: max-height .35s var(--ease);
+  transition: max-height .45s var(--ease);
 }
 /* Vertical rhythm rides the max-height animation via the ::before
    spacer row (24px): it is CONTENT of the clipped box, so scrollHeight
@@ -526,7 +534,7 @@ body.menu-open #menu-btn {
    Motion follows M3 chips: a state layer (::before) fades in on
    hover/press, the container colour transitions on selection, and the
    active chip gets a subtle scale pop — the M3 container-transform
-   feel, matched to the site's 350ms Material easing. */
+   feel, matched to the site's 450ms content choreography. */
 .group-rows { display: flex; flex-wrap: wrap; gap: 8px; }
 .group-chip {
   position: relative;
@@ -604,7 +612,11 @@ body.menu-open #menu-btn {
   flex: 1;
   min-width: 0;
   padding: 6px 0;
-  font-size: 12px;
+  /* 16px — NOT 12: iOS Safari auto-zooms the page when an input with
+     font-size < 16px gains focus (the "typing zooms the viewport"
+     bug). 16px is the standard fix (WebKit behaviour); the hairline
+     style keeps it visually light. */
+  font-size: 16px;
   color: var(--text);
   background: transparent;
   border: none;
@@ -661,7 +673,7 @@ body.menu-open #menu-btn {
    second curve — the mensa collapse once shipped bare `ease`). */
 .mensa-dishes {
   overflow: hidden;
-  transition: max-height .35s var(--ease);
+  transition: max-height .45s var(--ease);
 }
 .mensa-section.collapsed .mensa-dishes { max-height: 0; }
 .no-meals { padding: 12px 0; font-size: 15px; color: var(--sub); }
@@ -709,8 +721,8 @@ body.menu-open #menu-btn {
   aspect-ratio: 4 / 3;
   overflow: hidden;
   object-fit: cover;
-  transition: height .35s var(--ease),
-              margin-top .35s var(--ease);
+  transition: height .45s var(--ease),
+              margin-top .45s var(--ease);
   border-radius: var(--r-md);
 }
 .nutrition-col { width: 100%; flex-shrink: 0; }
@@ -776,7 +788,7 @@ body.menu-open #menu-btn {
   margin-top: 20px;
   /* Same duration/easing as the .mensa-dishes disclosure (the site's
      reference appear/exit animation) — one shared choreography. */
-  transition: max-height .35s var(--ease);
+  transition: max-height .45s var(--ease);
 }
 .raw-inner {
   padding: 20px;

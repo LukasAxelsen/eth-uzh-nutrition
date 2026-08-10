@@ -30,7 +30,7 @@
        {
         "line": "WOK STREET",
         "dish": "Yang Kung",
-        "desc": "Truthahn | Myanmar Currysauce | Myanmar Currysauce | Karotten | Sellerie | Paprika | Jasminreis",
+        "desc": "Truthahn | Myanmar Currysauce | Karotten | Sellerie | Paprika | Jasminreis",
         "photo": "",
         "nutrition": {
          "p100": {
@@ -84,7 +84,7 @@
        {
         "line": "GARDEN",
         "dish": "Kinoko No Misoshiru",
-        "desc": "Ramen | Dachi | Karotten | Cipollotti | Rettich | Shiitake | Austernseitlinge | Nori Algen | Ei | Sojaspross..",
+        "desc": "Ramen | Dachi | Karotten | Cipollotti | Rettich | Shiitake | Austernseitlinge | Nori | Ei | Sojasprossen",
         "photo": "",
         "nutrition": {
          "p100": {
@@ -204,7 +204,7 @@
         "line": "The Gardener",
         "dish": "Samosas",
         "desc": "Sweet Chili Sauce | Nudeln | Asia Gemüse",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73658?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 167.5,
@@ -222,7 +222,7 @@
         "line": "The Chef",
         "dish": "Schweinsplätzli",
         "desc": "Biersauce | Pilawreis | Bohnen | Bohnenkraut",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73659?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 108.3,
@@ -240,7 +240,7 @@
         "line": "The Expert",
         "dish": "Calamaresringli im Backteig",
         "desc": "Tomaten Salsa | Aioli Dip | Country Cuts | Peperonata",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73660?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 153.2,
@@ -341,7 +341,7 @@
        {
         "line": "POLY GRILL",
         "dish": "Grillplausch @Alumni 11:30-13:30",
-        "desc": "-",
+        "desc": "Adana Kebab (9.90 CHF) | Grillkäse Panini (9.90 CHF) | Bratwurst mit Bürli (7.50 CHF)",
         "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74457?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
@@ -853,7 +853,7 @@
         "line": "Eins",
         "dish": "Chicken (CH)",
         "desc": "Jalfrezi | Indisches Pouletbrust Geschnetzeltes | Gemüse | Fenchelsamen | Reis | Raita | Beilagensalat",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74010?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 101.6,
@@ -871,7 +871,7 @@
         "line": "Zwei",
         "dish": "Kalbs (100%) Bratwurst",
         "desc": "Senf | Gerstensalat | Sellerie | Lauch | Apfel | Tomaten | Beilagensalat",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74011?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 127.9,
@@ -889,7 +889,7 @@
         "line": "Drei",
         "dish": "Medaglioni",
         "desc": "Hummus Oliven | Tomaten Oliven Sugo | Reibkäse | Rucola | Beilagensalat",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74012?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 153.0,
@@ -907,7 +907,7 @@
         "line": "Vier",
         "dish": "Bowl4You",
         "desc": "„Gestalten Sie Ihre Bowl ganz nach Ihrem Geschmack.“",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74013?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 75.8,
@@ -923,9 +923,9 @@
        },
        {
         "line": "5uppe",
-        "dish": "Tagessuppe",
+        "dish": "Pilzrahmsuppe",
         "desc": "Tagessuppe lt. Chef",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74014?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 15.5,
@@ -961,7 +961,7 @@
         "line": "PASTA OF THE DAY",
         "dish": "Pasta Estragon Pesto",
         "desc": "Estragon Pesto | Räuchertofu | Wurzelgemüse",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73092?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -1011,7 +1011,7 @@
         "line": "Garden",
         "dish": "Wir bedienen dich gerne in der Oberen Mensa.",
         "desc": "",
-        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F711ba529-04da-4e03-af65-0276557b334e%2F2026-08-10-mittagsverpflegung-garden%2F1783301097462-edlz6v569rm",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F7f9ff10a-6d16-4566-8b66-8bf922732e17%2F2026-08-10-mittagsverpflegung-garden%2F1786350315703-8s7ywu06vhe",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -1031,7 +1031,7 @@
         "line": "Butcher",
         "dish": "Wir bedienen dich gerne in der Oberen Mensa.",
         "desc": "",
-        "photo": "",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F8c6ecc9b-65ba-4b30-a8b5-ae07de0e8101%2F2026-08-10-mittagsverpflegung-butcher%2F1786350292939-t72iv7i3de9",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -1051,7 +1051,7 @@
         "line": "Farm",
         "dish": "Jaffna Curry",
         "desc": "Kokosmilch | Okara | Auberginen | Bulgur Koriander | Menüsalat | Apfelmus",
-        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F27a3103e-ea65-409a-933b-1165fe434658%2F2026-08-10-mittagsverpflegung-farm%2F1784784909688-mtsba85bkuc",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F0854e58c-5ba3-44f0-a7ad-236cc8afb675%2F2026-08-10-mittagsverpflegung-farm%2F1786350336331-x3rqqy5czw",
         "nutrition": {
          "p100": {
           "kcal": 116.8,
@@ -1078,7 +1078,7 @@
         "line": "Butcher",
         "dish": "Gnocchi",
         "desc": "Blattspinat Feigen | Salbeibutter | Baumnüsse | Gemüse Salat",
-        "photo": "",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2Fb77bbc38-b8a2-4818-b393-f0096a01f279%2F2026-08-10-mittagsverpflegung-butcher%2F1786350268844-1jwkflpxz2y",
         "nutrition": {
          "p100": {
           "kcal": 160.2,
@@ -1151,7 +1151,7 @@
         "line": "Garden",
         "dish": "Jaffna Curry",
         "desc": "Kokosmilch | Okara | Auberginen | Couscous Koriander | Menüsalat oder Apfelmus",
-        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F1ac433ca-05ad-4dae-b78f-17fc5e75560f%2F2026-08-10-mittagsverpflegung-garden%2F1783301101415-j6rxuvbddwk",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F6c927fe3-459a-4168-8305-ee3fb89ab87f%2F2026-08-10-mittagsverpflegung-garden%2F1786350082074-7su5yvc1rko",
         "nutrition": {
          "p100": {
           "kcal": 110.5,
@@ -1178,7 +1178,7 @@
         "line": "Farm",
         "dish": "Gnocchi",
         "desc": "Blattspinat | Feigen | Salbeibutter | Baumnüsse | Gemüse Salat",
-        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F01015fd2-2f50-4e11-b62d-7f2e02749d1e%2F2026-08-10-mittagsverpflegung-farm%2F1784338392697-flc3ea3sk8",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F3b30a7c1-9a20-4d43-8a8d-4fbf6ec77079%2F2026-08-10-mittagsverpflegung-farm%2F1786350112267-ghiyrfa802o",
         "nutrition": {
          "p100": {
           "kcal": 162.8,
@@ -1873,7 +1873,7 @@
        {
         "line": "POLY GRILL",
         "dish": "Grillplausch @Alumni 11:30-13:30",
-        "desc": "-",
+        "desc": "Adana Kebab (9.90 CHF) | Grillkäse Panini (9.90 CHF) | Bratwurst mit Bürli (7.50 CHF)",
         "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74460?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
@@ -2513,7 +2513,7 @@
         "line": "PASTA OF THE DAY",
         "dish": "Pasta Estragon Pesto",
         "desc": "Estragon Pesto | Räuchertofu | Wurzelgemüse",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74388?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -2523,7 +2523,7 @@
         "line": "PLANTS & MORE",
         "dish": "Yaki Soba",
         "desc": "Sobanudeln | Pack Choi | Austern Pilze | Seitan | Ingwer | Sesam",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74389?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -2533,7 +2533,7 @@
         "line": "CLASSIC FLAVOUR",
         "dish": "Wolfenschiesser Brätchügeli",
         "desc": "Brätchügeli | Rotwein-Rosmarinsauce | Spätzli | grüne Bohnen",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74390?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -3417,7 +3417,7 @@
        {
         "line": "POLY GRILL",
         "dish": "Grillplausch @Alumni 11:30-13:30",
-        "desc": "-",
+        "desc": "Adana Kebab (9.90 CHF) | Grillkäse Panini (9.90 CHF) | Bratwurst mit Bürli (7.50 CHF)",
         "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74464?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
@@ -4939,7 +4939,7 @@
        {
         "line": "POLY GRILL",
         "dish": "Grillplausch @Alumni 11:30-13:30",
-        "desc": "-",
+        "desc": "Adana Kebab (9.90 CHF) | Grillkäse Panini (9.90 CHF) | Bratwurst mit Bürli (7.50 CHF)",
         "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74467?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},

@@ -679,15 +679,23 @@ body.menu-open #menu-btn {
 /* The name never compresses (flex would squeeze it and force an ugly
    mid-title wrap while the hours strip sits far right). */
 .mensa-name { flex-shrink: 0; }
+/* Caret: inline SVG chevron — not a rotated-border span. Rotated
+   borders render with artifacts/clipping in Safari (known issue,
+   e.g. foobartel.com/notes/overflow-x-and-borders) and the rotated
+   box's visual footprint exceeds its layout box (border 8px +
+   rotate(45deg) → 11.3px visual), which is why the old caret looked
+   cut off at the left edge. SVG: exact geometry, no clipping, and
+   margin-left pushes it clear of the content edge. */
 .mensa-caret {
   flex-shrink: 0;
-  width: 8px; height: 8px;
-  border-right: 1.5px solid var(--sub);
-  border-bottom: 1.5px solid var(--sub);
-  transform: rotate(45deg);         /* chevron down */
+  width: 12px; height: 12px;
+  margin-left: 4px;          /* clear of the content-area left edge */
+  color: var(--sub);
+  display: block;
+  transform: rotate(0deg);   /* chevron down (open) */
   transition: transform .3s var(--ease);
 }
-.mensa-section.collapsed .mensa-caret { transform: rotate(135deg); } /* +90° → right */
+.mensa-section.collapsed .mensa-caret { transform: rotate(90deg); } /* +90° → left "<" */
 /* Collapse is driven by max-height on .mensa-dishes (JS collapseBody/
    expandBody) — NO display:none here: that would pop the content out
    instantly instead of letting it slide closed under overflow:hidden.

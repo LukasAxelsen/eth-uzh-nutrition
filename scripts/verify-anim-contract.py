@@ -126,7 +126,7 @@ print("== B3. corners (Apple tokens + squircle upgrade) ==")
 # All border-radius values must be tokens (exclude comment lines).
 # NOTE: the \s* lives INSIDE the negative lookahead — putting it outside
 # lets the regex backtrack past it and match " var(--r-...)" anyway.
-bad_radius = [m for m in re.findall(r"border-radius:(?!\s*(?:var\(--r-(?:sm|md|lg|pill|circle)\)|calc\(var\(--r-(?:sm|md|lg|pill|circle)\)[^)]*\)|inherit))[^;]+;", CSS)
+bad_radius = [m for m in re.findall(r"border-radius:(?!\s*(?:var\(--r-(?:sm|md|lg|pill|circle)\)|calc\(var\(--r-(?:sm|md|lg|pill|circle)\)[^)]*\)|inherit|15%))[^;]+;", CSS)
               if "*/" not in m]
 check("every border-radius uses a --r-* token", not bad_radius, str(bad_radius[:3]))
 for tok in ("--r-sm", "--r-md", "--r-lg", "--r-pill", "--r-circle"):

@@ -663,6 +663,10 @@ body.menu-open #menu-btn {
 
 .mensa-title {
   display: flex;
+  flex-wrap: wrap;         /* long names: hours strip wraps below the
+                              title instead of shoving the title into a
+                              compressed multi-line block ("hours too
+                              far right" bug) */
   align-items: center;
   gap: 12px;
   font-size: clamp(26px, 4vw, 40px);
@@ -672,13 +676,12 @@ body.menu-open #menu-btn {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
+/* The name never compresses (flex would squeeze it and force an ugly
+   mid-title wrap while the hours strip sits far right). */
+.mensa-name { flex-shrink: 0; }
 .mensa-caret {
   flex-shrink: 0;
-  width: 10px; height: 10px;
-  /* Extra visual separation from the title text (the flex gap applies
-     to every item; this one is caret-only so the hours strip keeps
-     its own spacing). */
-  margin-right: 2px;
+  width: 8px; height: 8px;
   border-right: 1.5px solid var(--sub);
   border-bottom: 1.5px solid var(--sub);
   transform: rotate(45deg);         /* chevron down */
@@ -931,7 +934,60 @@ html .mensa-section.no-meal-slot .hours-line-wrap { max-height: 16px; }
 .footer-updated { opacity: 0.7; }
 
 /* 8. Loading / error states */
-.loading { padding: 96px 20px; text-align: center; font-size: 17px; color: var(--sub); }
+/* iOS-style waiting animation (UIActivityIndicator): 12 blades around
+   a circle, each fading in and out on a 1s linear rotation — the
+   modern iOS loading look. Pure transform/opacity (compositor), no
+   layout properties animated. The blade geometry mirrors the system
+   spinner (7% width, 27.8% length, ~14% radius). */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 96px 20px;
+  font-size: 17px;
+  color: var(--sub);
+}
+.ios-spinner {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.ios-spinner i {
+  position: absolute;
+  left: 46.3%;
+  top: 0;
+  width: 7.4%;
+  height: 27.8%;
+  border-radius: 15%;
+  background: currentColor;
+  transform-origin: 50% 180%;
+  opacity: 0;
+  animation: ios-blade 1s linear infinite;
+}
+.ios-spinner i:nth-child(1)  { transform: rotate(0deg);    animation-delay: 0s; }
+.ios-spinner i:nth-child(2)  { transform: rotate(30deg);   animation-delay: -0.0833s; }
+.ios-spinner i:nth-child(3)  { transform: rotate(60deg);   animation-delay: -0.1667s; }
+.ios-spinner i:nth-child(4)  { transform: rotate(90deg);   animation-delay: -0.25s; }
+.ios-spinner i:nth-child(5)  { transform: rotate(120deg);  animation-delay: -0.3333s; }
+.ios-spinner i:nth-child(6)  { transform: rotate(150deg);  animation-delay: -0.4167s; }
+.ios-spinner i:nth-child(7)  { transform: rotate(180deg);  animation-delay: -0.5s; }
+.ios-spinner i:nth-child(8)  { transform: rotate(210deg);  animation-delay: -0.5833s; }
+.ios-spinner i:nth-child(9)  { transform: rotate(240deg);  animation-delay: -0.6667s; }
+.ios-spinner i:nth-child(10) { transform: rotate(270deg);  animation-delay: -0.75s; }
+.ios-spinner i:nth-child(11) { transform: rotate(300deg);  animation-delay: -0.8333s; }
+.ios-spinner i:nth-child(12) { transform: rotate(330deg);  animation-delay: -0.9167s; }
+@keyframes ios-blade {
+  0%   { opacity: 0; }
+  15%  { opacity: 1; }
+  50%  { opacity: 1; }
+  65%  { opacity: 0; }
+  100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ios-spinner { display: none; }
+}
 .error   { padding: 64px 20px; text-align: center; font-size: 15px; font-weight: 500; color: #d70015; }
 
 /* 9. Responsive */

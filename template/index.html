@@ -68,7 +68,11 @@
 
     <!-- ======================= Content ======================= -->
     <main class="main" id="content" aria-live="polite">
-      <div class="loading">Loading menu data…</div>
+      <!-- iOS-style activity indicator (UIActivityIndicator look):
+           12 fading blades rotating — pure CSS, compositor-friendly. -->
+      <div class="loading">
+        <span class="ios-spinner" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        Loading menu data…</div>
     </main>
 
     <!-- ====================== Raw data ======================= -->

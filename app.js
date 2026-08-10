@@ -1251,18 +1251,22 @@ function animateContentHeight(node, oldH, newH) {
 
 /** Duration for one disclosure toggle: scales with content height so
     the perceived slide speed matches a small (empty) slot — a 3000px
-    menu gets ~1200ms instead of snapping through at 6.9px/ms while a
+    menu gets ~900ms instead of snapping through at 6.9px/ms while a
     40px slot crawls at 0.1px/ms ("opens too fast" report). Clamped to
-    [450, 1200]ms (NN/g large-motion band + perceived-response cap). */
+    [450, 900]ms: 450 is the NN/g large-motion floor, 900 the ceiling
+    before a disclosure feels draggy ("sometimes normal but too slow"). */
 function expandDuration(body) {
   const h = body.scrollHeight || 0;
-  return Math.min(1200, Math.max(450, Math.round(h * 0.5)));
+  return Math.min(900, Math.max(450, Math.round(h * 0.35)));
 }
 
 function expandBody(body) {
   if (body._expandTimer) { clearTimeout(body._expandTimer); body._expandTimer = null; }
   const dur = expandDuration(body);
-  body.style.setProperty('--expand-d', dur + 'ms');
+  // Override the transition DURATION directly (transitionDuration is
+  // its own property — the shorthand stays CSS-owned so the curve
+  // token can't be smuggled past the contract verifier).
+  body.style.transitionDuration = dur + 'ms';
   body.style.maxHeight = body.scrollHeight + 'px';
   const onEnd = (e) => {
     if (e.propertyName === 'max-height') {
@@ -1296,7 +1300,7 @@ function collapseBody(body) {
     body._onExpandEnd = null;
   }
   const dur = expandDuration(body);
-  body.style.setProperty('--expand-d', dur + 'ms');
+  body.style.transitionDuration = dur + 'ms';
   body.style.maxHeight = body.scrollHeight + 'px';
   void body.offsetHeight; // force reflow so the transition actually runs
   body.style.maxHeight = '0px';

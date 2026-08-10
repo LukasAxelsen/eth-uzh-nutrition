@@ -674,7 +674,11 @@ body.menu-open #menu-btn {
 }
 .mensa-caret {
   flex-shrink: 0;
-  width: 8px; height: 8px;
+  width: 10px; height: 10px;
+  /* Extra visual separation from the title text (the flex gap applies
+     to every item; this one is caret-only so the hours strip keeps
+     its own spacing). */
+  margin-right: 2px;
   border-right: 1.5px solid var(--sub);
   border-bottom: 1.5px solid var(--sub);
   transform: rotate(45deg);         /* chevron down */
@@ -689,11 +693,14 @@ body.menu-open #menu-btn {
    second curve — the mensa collapse once shipped bare `ease`). */
 .mensa-dishes {
   overflow: hidden;
-  /* --expand-d is set per-toggle by expandBody/collapseBody: the
-     duration scales with content height so a 3000px menu slides at
-     the same perceived speed as a 40px empty slot (both "smooth").
-     Default .45s matches every other disclosure. */
-  transition: max-height var(--expand-d, .45s) var(--ease-sym);
+  /* Base duration .45s; expandBody/collapseBody override the DURATION
+     via transitionDuration (JS) to scale with content height so a
+     3000px menu slides at the same perceived speed as a 40px empty
+     slot. NOT via a var() in the shorthand: var() inside the
+     transition shorthand fails to parse in some engines (Safari),
+     which silently kills the whole transition — the "content snaps
+     with no animation" bug. */
+  transition: max-height .45s var(--ease-sym);
 }
 .mensa-section.collapsed .mensa-dishes { max-height: 0; }
 .no-meals { padding: 12px 0; font-size: 15px; color: var(--sub); }

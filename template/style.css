@@ -735,11 +735,14 @@ html.show-prices .price-wrap { max-height: 18px; }
 .hours-line-wrap {
   display: inline-block;
   overflow: hidden;
-  vertical-align: bottom;
+  /* Flex item (inside .mensa-title): baseline-align the hours text
+     with the title text — "ETH Archimedes 11:00 - 14:00" reads as one
+     line. (vertical-align is meaningless for flex items.) */
+  align-self: baseline;
   max-height: 0;
   transition: max-height .45s var(--ease-sym);
 }
-html.show-opening .hours-line-wrap { max-height: 22px; }
+html.show-opening .hours-line-wrap { max-height: 16px; }
 .hours-line {
   display: inline-block;
   padding: 0 0 0 10px;

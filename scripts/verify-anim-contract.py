@@ -290,6 +290,12 @@ check("settings rows bound (opening-row / price-row)",
       "opening-row" in JS and "price-row" in JS and
       "function updateHoursLines" in JS and
       "updateHoursLines();" in JS[JS.index("function renderAll"):JS.index("function flipPlay")])
+check("closed slots: no caret/body, always 'No meals available'",
+      "no-meal-slot" in JS and
+      "No meals available" in JS and
+      "No meals available" in JS[JS.index("function updateHoursLines"):JS.index("function dishKey")] and
+      "slotClosed ? '' : body" in JS and
+      "if (section.classList.contains('no-meal-slot')) return;" in JS)
 
 print("== D2. decoupling (no duplicate sync helpers, no stray DOM surgery) ==")
 check("no positionThumb duplicate (updateSegmented is the only sync)",

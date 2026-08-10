@@ -896,6 +896,11 @@ function nutritionTableHTML(nutrition) {
 function mensaSectionHTML(m) {
   const dishes = m.meals[prefs.meal];
   const collapsed = prefs.collapsedMensas.has(m.id);
+  // Closed slot (no meals this meal): NO expand/collapse at all — no
+  // caret, no content body, title not interactive; the hours strip
+  // ALWAYS shows "No meals available" (independent of the Show opening
+  // times setting).
+  const slotClosed = !dishes.length;
 
   // .mensa-dishes is the collapsible body. The collapsed state is a
   // CLASS (.mensa-section.collapsed -> max-height:0) and the transition
@@ -908,29 +913,52 @@ function mensaSectionHTML(m) {
       : '<div class="no-meals">' + EMPTY_MEALS_TEXT + '</div>') +
     '</div>';
 
-  return '<section class="mensa-section' + (collapsed ? ' collapsed' : '') + '" data-mensa="' + esc(m.id) + '">' +
-    '<h2 class="mensa-title" role="button" tabindex="0" aria-expanded="' + !collapsed + '">' +
-    '<span class="mensa-caret" aria-hidden="true"></span>' +
+  return '<section class="mensa-section' +
+    (slotClosed ? ' no-meal-slot' : collapsed ? ' collapsed' : '') +
+    '" data-mensa="' + esc(m.id) + '">' +
+    '<h2 class="mensa-title"' +
+    (slotClosed ? '' : ' role="button" tabindex="0" aria-expanded="' + !collapsed + '"') +
+    '>' +
+    (slotClosed
+      ? ''
+      : '<span class="mensa-caret" aria-hidden="true"></span>') +
     esc(m.name) +
-    // Opening hours for the CURRENT meal slot, as a slide-open/closed
-    // strip (max-height transition driven by the html.show-opening
-    // class — the "Show opening times" setting).
-    '<span class="hours-line-wrap" aria-hidden="true">' +
-    '<span class="hours-line"></span>' +
+    // Opening hours strip: "No meals available" when the slot is
+    // closed (always visible, setting-independent); the current meal
+    // slot's hours otherwise (slid by the Show opening times setting).
+    '<span class="hours-line-wrap" aria-hidden="' + slotClosed + '">' +
+    '<span class="hours-line">' + (slotClosed ? 'No meals available' : '') + '</span>' +
     '</span>' +
-    '</h2>' + body +
+    '</h2>' +
+    (slotClosed ? '' : body) +
     '</section>';
 }
 
-/** Fill every .hours-line with the current meal slot's hours (or
-    "Not open today"). Called from renderAll — the sections survive
-    meal switches, so the text must be refreshed there, not only at
-    section creation. */
+/** Sync every section's closed-slot shape + hours text.
+    Sections are keyed-reused across meal switches — a section that
+    OPENS when the meal changes (and vice versa) must rebuild its
+    header/body (no caret, no body, "No meals available" strip) or the
+    stale open shape lingers. Shape change rebuilds via
+    mensaSectionHTML (no animation: no entering/exiting nodes);
+    unchanged shape only refreshes the hours text. */
 function updateHoursLines() {
   for (const section of document.querySelectorAll('.mensa-section')) {
     const m = mensaById(section.dataset.mensa);
+    if (!m) continue;
+    const slotClosed = !(m.meals[prefs.meal] || []).length;
+    const shaped = section.classList.contains('no-meal-slot');
+    if (slotClosed !== shaped) {
+      // Full replace (mensaSectionHTML returns a complete <section>);
+      // no animation — no entering/exiting nodes are involved.
+      section.outerHTML = mensaSectionHTML(m);
+      continue;
+    }
     const line = section.querySelector('.hours-line');
-    if (!m || !line) continue;
+    if (!line) continue;
+    if (slotClosed) {
+      line.textContent = 'No meals available';
+      continue;
+    }
     const hours = (m.opening || {})[prefs.meal];
     line.textContent = hours || 'Not open today';
   }
@@ -978,6 +1006,7 @@ function renderContent() {
     const m = mensaById(section.dataset.mensa);
     if (!m) continue;
     const body = section.querySelector('.mensa-dishes');
+    if (!body) continue; // closed slots render no body at all
     const dishes = m.meals[prefs.meal];
 
     if (!dishes.length) {
@@ -1594,8 +1623,11 @@ function onContentKeydown(e) {
   toggleSection(title.closest('.mensa-section'));
 }
 
-/** Collapse/expand one mensa section; state persists in prefs. */
+/** Collapse/expand one mensa section; state persists in prefs.
+    Closed slots (no meals this meal) are NOT collapsible — their
+    section carries .no-meal-slot and renders no body. */
 function toggleSection(section) {
+  if (section.classList.contains('no-meal-slot')) return;
   const id = section.dataset.mensa;
   const collapsed = prefs.collapsedMensas.has(id);
   const body = section.querySelector('.mensa-dishes');

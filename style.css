@@ -20,6 +20,16 @@
           "Helvetica Neue", Helvetica, Arial, sans-serif;
   --content-w: 980px;
   --ease: cubic-bezier(.32, .72, 0, 1);
+  /* Symmetric ease for DISCLOSURES (expand/collapse) ONLY: the Apple
+     ease-out opens too fast (11% of time covers 76% of travel — the
+     "opens with a snap" complaint) and drags on close. Disclosures
+     must feel the same in both directions, so they use a symmetric
+     ease-in-out (framer-motion's easeInOut / Material expand curve,
+     cubic-bezier(.42, 0, .58, 1)) — even acceleration, even landing.
+     Content enter/exit/glide/FLIP keep --ease (Apple). Enforced by
+     scripts/verify-anim-contract.py: every max-height transition must
+     use var(--ease-sym). */
+  --ease-sym: cubic-bezier(.42, 0, .58, 1);
   /* Corner tokens — Apple's continuous-curvature language. Four levels
      only (enforced by scripts/verify-anim-contract.py):
        --r-sm  8px   = tight controls (mensa rows, chips)
@@ -166,7 +176,7 @@ input:focus-visible { outline: none; }
   width: 292px;
   max-width: calc(100vw - 40px);
   margin: 0 auto;               /* constant — NO margin animation */
-  transition: max-height .45s var(--ease);
+  transition: max-height .45s var(--ease-sym);
 }
 /* Vertical rhythm rides the max-height animation via the ::before
    spacer row (24px): it is CONTENT of the clipped box, so scrollHeight
@@ -673,7 +683,7 @@ body.menu-open #menu-btn {
    second curve — the mensa collapse once shipped bare `ease`). */
 .mensa-dishes {
   overflow: hidden;
-  transition: max-height .45s var(--ease);
+  transition: max-height .45s var(--ease-sym);
 }
 .mensa-section.collapsed .mensa-dishes { max-height: 0; }
 .no-meals { padding: 12px 0; font-size: 15px; color: var(--sub); }
@@ -693,6 +703,43 @@ body.menu-open #menu-btn {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--sub);
+}
+/* Price suffix on the label/name: "(STUD 7.90 | INT 10.90 | EXT 13.90)".
+   Same grey family, one step smaller, no uppercase (the label itself
+   is already caps; the prices stay numeric). */
+.dish-price {
+  margin-left: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--sub);
+  white-space: nowrap;
+}
+/* Opening-hours dot after the mensa title: small grey bullet; clicking
+   toggles the .hours-pop text next to it ("11:00 - 14:00" or
+   "Not open today"). The popover is plain text — no animation, it is a
+   status hint (micro-interaction), not content motion. */
+.hours-dot {
+  margin-left: 2px;
+  padding: 4px 6px;
+  border: none;
+  background: none;
+  font-size: 8px;
+  line-height: 1;
+  color: var(--sub);
+  cursor: pointer;
+  border-radius: var(--r-pill);
+  transition: color .2s var(--ease);
+}
+.hours-dot:hover { color: var(--text); }
+.hours-pop {
+  margin-left: -4px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--sub);
+  white-space: nowrap;
 }
 .dish-name {
   margin-bottom: 8px;
@@ -788,7 +835,7 @@ body.menu-open #menu-btn {
   margin-top: 20px;
   /* Same duration/easing as the .mensa-dishes disclosure (the site's
      reference appear/exit animation) — one shared choreography. */
-  transition: max-height .45s var(--ease);
+  transition: max-height .45s var(--ease-sym);
 }
 .raw-inner {
   padding: 20px;

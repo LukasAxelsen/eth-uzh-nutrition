@@ -370,7 +370,7 @@ function renderAll() {
    the full innerHTML swap that used to snap, and the View-Transition
    snapshot approach that caused jank on height changes. */
 
-const ANIM_MS = 350;
+const ANIM_MS = 450;
 // Apple's standard easing (HIG "ease"): strong ease-out — instant
 // response, long graceful settle. This is the single curve for ALL
 // content animation (FLIP, disclosures); keep in sync with --ease in
@@ -457,7 +457,7 @@ function animateEnter(node) {
   // animation. Only append to a real transition (e.g. 'all').
   node.style.transition = (cur && cur !== 'all 0s ease 0s' && cur !== 'none'
                            ? cur + ', ' : '') +
-                          'height .35s ' + ANIM_EASE;
+                          'height .45s ' + ANIM_EASE;
   node.style.height = '0';
   node.style.overflow = 'hidden';
   requestAnimationFrame(() => {
@@ -489,7 +489,7 @@ function animateEnter(node) {
         node.style.overflow = '';
         delete node.dataset.entering;
       }
-    }, 500); // 350ms transition + margin; transitionend is the normal path
+    }, 600); // 450ms transition + margin; transitionend is the normal path
   });
 }
 
@@ -516,7 +516,7 @@ function animateExit(node) {
   const cur = getComputedStyle(node).transition;
   node.style.transition = (cur && cur !== 'all 0s ease 0s' && cur !== 'none'
                            ? cur + ', ' : '') +
-                          'height .35s ' + ANIM_EASE;
+                          'height .45s ' + ANIM_EASE;
   const h = node.offsetHeight; // natural height (before shrinking)
   node.style.height = h + 'px';
   node.style.overflow = 'hidden';
@@ -534,7 +534,7 @@ function animateExit(node) {
   // is not generated when a transition is removed before completion).
   node._exitTimer = setTimeout(() => {
     if (node.isConnected) node.remove();
-  }, 500); // 350ms transition + margin; transitionend is the normal path
+  }, 600); // 450ms transition + margin; transitionend is the normal path
 }
 
 /** Cancel an in-flight exit when the node's key reappears in the same
@@ -1015,7 +1015,7 @@ function applyPhotos() {
         img.addEventListener('transitionend', onEnd, { once: true });
         img._photoTimer = setTimeout(() => {
           if (img.dataset.photoClosing) img.remove();
-        }, 500); // 350ms transition + margin; transitionend is the normal path
+        }, 600); // 450ms transition + margin; transitionend is the normal path
       } else {
         img.remove();
       }
@@ -1056,7 +1056,7 @@ function updateRawText() {
 function settleContentHeight(node) {
   // '' (not 'none') — 'none' stays as an inline declaration and poisons
   // the NEXT glide: animateContentHeight would build the invalid
-  // "none, height .35s ..." transition and the animation silently dies
+  // "none, height .45s ..." transition and the animation silently dies
   // (the "content appears without animation" regression). '' removes
   // the inline rule, so the computed value goes back to the default.
   node.style.transition = '';
@@ -1090,7 +1090,7 @@ function animateContentHeight(node, oldH, newH) {
   // animation. Only append to a real transition (e.g. 'all').
   node.style.transition = (cur && cur !== 'all 0s ease 0s' && cur !== 'none'
                            ? cur + ', ' : '') +
-                          'height .35s ' + ANIM_EASE;
+                          'height .45s ' + ANIM_EASE;
   node.style.height = oldH + 'px';
   node.style.overflow = 'hidden';
   void node.offsetHeight; // reflow: lock at oldH, then glide
@@ -1109,7 +1109,7 @@ function animateContentHeight(node, oldH, newH) {
   node.addEventListener('transitionend', onEnd);
   node._glideTimer = setTimeout(() => {
     if (node._heightGlideEnd) settleContentHeight(node);
-  }, 500); // 350ms glide + margin; transitionend is the normal path
+  }, 600); // 450ms glide + margin; transitionend is the normal path
 }
 
 function expandBody(body) {
@@ -1134,7 +1134,7 @@ function expandBody(body) {
       body._onExpandEnd = null;
     }
     body.style.maxHeight = 'none';
-  }, 500); // 350ms transition + margin; transitionend is the normal path
+  }, 600); // 450ms transition + margin; transitionend is the normal path
 }
 
 function collapseBody(body) {

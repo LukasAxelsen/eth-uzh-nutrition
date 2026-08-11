@@ -498,11 +498,6 @@ function animateEnter(node) {
   node.style.transition = (cur && cur !== 'all 0s ease 0s' && cur !== 'none'
                            ? cur + ', ' : '') +
                           'height .45s ' + ANIM_EASE;
-  // Promote to a compositor layer during the enter so the browser can
-  // GPU-accelerate the height transition (the section otherwise shares
-  // a layer with the #content flow and every frame forces a full-tree
-  // layout — the checkbox stutter when many sections are visible).
-  node.style.willChange = 'height';
   node.style.height = '0';
   node.style.overflow = 'hidden';
   requestAnimationFrame(() => {
@@ -518,7 +513,6 @@ function animateEnter(node) {
       if (e.propertyName === 'height') {
         node.style.height = '';
         node.style.transition = '';
-        node.style.willChange = '';
         delete node.dataset.entering;
         node.removeEventListener('transitionend', onEnd);
         if (node._enterTimer) { clearTimeout(node._enterTimer); node._enterTimer = null; }
@@ -533,7 +527,6 @@ function animateEnter(node) {
         node.style.height = '';
         node.style.transition = '';
         node.style.overflow = '';
-        node.style.willChange = '';
         delete node.dataset.entering;
       }
     }, 600); // 450ms transition + margin; transitionend is the normal path
@@ -564,7 +557,6 @@ function animateExit(node) {
   node.style.transition = (cur && cur !== 'all 0s ease 0s' && cur !== 'none'
                            ? cur + ', ' : '') +
                           'height .45s ' + ANIM_EASE;
-  node.style.willChange = 'height'; // compositor layer for smooth shrink
   const h = node.offsetHeight; // natural height (before shrinking)
   node.style.height = h + 'px';
   node.style.overflow = 'hidden';

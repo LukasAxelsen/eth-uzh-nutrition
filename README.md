@@ -1,6 +1,6 @@
 # ETH & UZH Mensa Menus
 
-Today's menus for every ETH and UZH Mensa — with calories, nutrition facts, and photos for most dishes. Updated automatically every morning, free, no account, no app.
+Today's menus for every ETH and UZH Mensa — calories, nutrition facts, and photos for many dishes, plus opening hours and prices. Updated automatically every morning, free, no account, no app.
 
 Live: <https://lukasaxelsen.github.io/eth-uzh-nutrition/>
 
@@ -8,17 +8,18 @@ Live: <https://lukasaxelsen.github.io/eth-uzh-nutrition/>
 
 - Separate lunch and dinner menus with a one-tap switch
 - Nutrition per dish — kcal, protein, fat, saturated fat, carbs, sugar, salt — per 100 g and per serving where available
-- Dish photos — switch them on in Settings
-- Filter by Mensa or campus area (Central, Höngg, Irchel), or save your own group of favorites
-- Dark mode, and a layout that works on phones
+- Dish photos, opening hours, and dish prices — all toggleable in the Setting panel
+- A calendar to browse menus for today and the next two weeks
+- Filter by Mensa or campus area (Central, Hoengg, Irchel, Oerlikon, Other), or save your own group of favorites
+- Light, dark, and auto theme, and a layout that works on phones
 
-Static site: no accounts, no tracking.
+Static site: no tracking.
 
 ## For developers
 
 - `index.txt` — one line per dish, for scripts and LLMs
 - A "raw data" panel on the site with a copy button
-- [CONTRACT.md](CONTRACT.md) — exact `data.json` schema, DOM class contract, and the animation contract
+- [CONTRACT.md](CONTRACT.md) — `data.json` schema, DOM class contract, and the animation contract
 - [AGENTS.md](AGENTS.md) — mandatory rules for any agent/human editing this repo (animation architecture, prohibitions, workflow)
 - `scripts/verify-anim-contract.py` — machine-checkable animation contract; run after any frontend change
 
@@ -26,8 +27,8 @@ Static site: no accounts, no tracking.
 
 | Source | What we use |
 | --- | --- |
-| [ETH Cookpit API](https://idapps.ethz.ch/cookpit-pub-services/v1/meals) | Public JSON API for all ETH facilities. Energy comes in kJ and is converted to kcal; dish photos via the image endpoint. |
-| [UZH Food2050](https://app.food2050.ch) | Public GraphQL API for the outlet list; per-dish nutrition and photos are scraped from the weekly menu pages. |
+| [ETH Cookpit API](https://idapps.ethz.ch/cookpit-pub-services/v1/meals) | Public JSON API for all ETH facilities. Energy comes in kJ and is converted to kcal; dish photo URLs come from the API's `image-url` field. |
+| [UZH Food2050](https://app.food2050.ch) | Public GraphQL API (today's offer, fallback when the weekly pages are empty); per-dish nutrition and photos are scraped from each dish's detail page (reached via the weekly menu). |
 
 Both are public, no API key required. The script waits between requests to stay under Food2050's rate limits.
 
@@ -44,22 +45,25 @@ The frontend in `template/` is plain HTML/CSS/JS (no framework, no build).
 ## Project layout
 
 ```
-menu.py                 Fetches everything, writes output/
+menu.py                     Fetches everything, writes output/
 template/
-  index.html            Page shell (placeholders get filled in by menu.py)
-  style.css             Apple-flat styling, dark mode, responsive
-  app.js                Selection state, favorite groups, rendering
+  index.html                Page shell (placeholders get filled in by menu.py)
+  style.css                 Apple-flat styling, light/dark/auto themes, responsive
+  app.js                    Selection state, date picker, groups, settings, rendering
+scripts/
+  verify-anim-contract.py   Machine-checkable animation contract; run after frontend changes
 .github/workflows/
-  menu.yml              Daily cron + manual dispatch, deploys to gh-pages
-CONTRACT.md             Exact data.json schema + DOM class contract
+  menu.yml                  Daily cron + manual dispatch, deploys to gh-pages
+AGENTS.md                   Rules for any agent or human editing this repo
+CONTRACT.md                 data.json schema, DOM class contract, animation contract
 ```
 
 ## Running it locally
 
-Requirements: Python 3.10+ and `curl` (used for HTTP requests). No dependencies to install.
+Requirements: Python 3.9+ and `curl` (used for HTTP requests). No dependencies to install.
 
 ```sh
-python3 menu.py
+python3 menu.py   # on Windows: py menu.py
 ```
 
 Then serve the `output/` directory:

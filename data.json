@@ -43,7 +43,7 @@
         "line": "WOK STREET",
         "dish": "Fiji Kari",
         "desc": "Schwein oder Lachs | Fidschi-Indische Currysauce | Karotten | Pfälzer | Kefen | Basmatireis",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74163?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 100.4,
@@ -76,7 +76,7 @@
         "line": "WOK GREEN",
         "dish": "Shaka Kari",
         "desc": "Tofu | Fidschi-Indische Currysauce | Karotten | Pfälzer | Kefen | Jasminreis",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74164?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 96.1,
@@ -108,8 +108,8 @@
        {
         "line": "DELIGHT",
         "dish": "Ikan Bakar",
-        "desc": "Dorsch in GewürzmanteL | Indonesische Currysauce | Wai Wai Nudeln | Broccoli | Blumenkohl | Zwiebeln",
-        "photo": "",
+        "desc": "Dorsch in GewürzmanteL | Indonesische Currysauce | Reis Nudeln | Broccoli | Blumenkohl | Zwiebeln",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74165?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 124.0,
@@ -142,7 +142,7 @@
         "line": "GARDEN",
         "dish": "Oi Bokkeum Bap",
         "desc": "Koreanisches Reis Gericht | Sesamöl | Sojasauce | Kohl | Karotten | Peperoni | Chilli | Frühlingsrollen",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74166?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 110.4,
@@ -202,7 +202,7 @@
         "line": "Chefs World",
         "dish": "Goldbutt Müllerin Art",
         "desc": "Butter | Mandeln | Tomaten Concasse | Mandeln | Petersillie Kartoffeln | Spinat",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74041?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 102.1,
@@ -227,7 +227,7 @@
         "line": "Favorite",
         "dish": "Chicken à la Coco",
         "desc": "Poulet | Paneer | Sesamreis | Sprossen | Chilli | pro 100 gr.",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74042?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 148.2,
@@ -252,7 +252,7 @@
         "line": "Vitality",
         "dish": "Persisches Shakshuka",
         "desc": "Eier | Tomaten | Peperonistreifen | Pita-Brot | Shirazi Salat",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74043?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 94.2,
@@ -317,7 +317,7 @@
         "line": "The Gardener",
         "dish": "Vegetarische Hackbällchen",
         "desc": "Rahmsauce | Spätzli | Blumenkohl | Karotten | Bohnen",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73661?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 147.9,
@@ -350,7 +350,7 @@
         "line": "The Chef",
         "dish": "Griechische Moussaka",
         "desc": "Rindfleisch | Kartoffeln | Auberginen | Zucchetti | Béchamel | Gurkensalat",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73662?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 69.6,
@@ -383,7 +383,7 @@
         "line": "The Expert",
         "dish": "Rind Cannelloni",
         "desc": "Tomatensauce | Käse | Menusalat",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73663?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 142.0,
@@ -1536,7 +1536,7 @@
         "line": "Eins",
         "dish": "Octavo Schnitzel \"Wiener Art\"",
         "desc": "Kartoffelsalat | Beilagensalat | Zitrone | Preiselbeeren",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74015?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 157.5,
@@ -1565,7 +1565,7 @@
         "line": "Zwei",
         "dish": "Rinds Meatballs",
         "desc": "Tomaten Minz Salsa | Couscoussalat | Spinat | Beilagensalat",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74016?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 142.0,
@@ -1594,7 +1594,7 @@
         "line": "Drei",
         "dish": "Rotes Thai Curry",
         "desc": "Bio CH Knospe Tofu | Basmati Quinoa Linsen Mix | Beilagensalat",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74017?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 128.3,
@@ -1623,7 +1623,7 @@
         "line": "Vier",
         "dish": "Bowl4You",
         "desc": "„Gestalten Sie Ihre Bowl ganz nach Ihrem Geschmack.“",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74018?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 75.8,
@@ -1650,9 +1650,9 @@
        },
        {
         "line": "5uppe",
-        "dish": "Tagessuppe",
+        "dish": "Kartoffelsuppe",
         "desc": "Tagessuppe lt. Chef",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74019?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 15.5,
@@ -1680,7 +1680,7 @@
         "line": "Kaffeebar",
         "dish": "TINYFISH @ Octavo",
         "desc": "Sushi ab 10.50 CHF an der Kaffeebar",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74020?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -1826,7 +1826,7 @@
         "line": "Garden",
         "dish": "Wir bedienen dich gerne in der Oberen Mensa.",
         "desc": "",
-        "photo": "",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F0dec1cd1-96df-4a92-9dc1-51ae5ee7744a%2F2026-08-11-mittagsverpflegung-garden%2F1786436240703-edeap64nu45",
         "price": [
          {
           "label": "STUD",
@@ -1874,7 +1874,7 @@
         "line": "Butcher",
         "dish": "Wir bedienen dich gerne in der Oberen Mensa.",
         "desc": "",
-        "photo": "",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F285772ee-e3df-4d52-ad2d-5e32fafe1376%2F2026-08-11-mittagsverpflegung-butcher%2F1786436196244-lguxormruxp",
         "price": [
          {
           "label": "STUD",
@@ -1912,7 +1912,7 @@
         "line": "Farm",
         "dish": "Planted Balls",
         "desc": "Kartoffelstock | Bratenjus | Preiselbeer | Karotten",
-        "photo": "",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F264c54e2-dc36-433a-ac41-77bba56e771a%2F2026-08-11-mittagsverpflegung-farm%2F1786436217212-5ngmqbr6xh",
         "price": [
          {
           "label": "STUD",
@@ -1953,7 +1953,7 @@
         "line": "Butcher",
         "dish": "Frikassee",
         "desc": "Pouletragout | Erbsen | Rahm | Kurkuma Reis | Grilltomate",
-        "photo": "",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F0080ed58-4d09-4a9f-b2c8-ddd71e81a60e%2F2026-08-11-mittagsverpflegung-butcher%2F1786436176766-40q5xk5ql9k",
         "price": [
          {
           "label": "STUD",
@@ -2062,7 +2062,7 @@
         "line": "Garden",
         "dish": "Planted Balls",
         "desc": "Kartoffelstock | Bratenjus | Preiselbeer | Karotten",
-        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F24a6bf0d-4c5c-4410-abd9-acfaed35eb46%2F2026-08-11-mittagsverpflegung-garden%2F1783301106210-i8lydzv1rz",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2Fd9a259e2-4936-415f-947b-3e4bd2f4ff5c%2F2026-08-11-mittagsverpflegung-garden%2F1786437076709-d5pvfn5b8hc",
         "price": [
          {
           "label": "STUD",
@@ -2103,7 +2103,7 @@
         "line": "Butcher",
         "dish": "Frikassee",
         "desc": "Pouletragout | Erbsen | Rahm | Kurkuma Reis | Grilltomate",
-        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2Fd07541e9-2953-45e3-a41d-0b57854fd5a9%2F2026-08-11-mittagsverpflegung-butcher%2F1783301106998-k5qqbfg5nx",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F6c1b29db-326f-4171-9b6d-aa5129e76ef0%2F2026-08-11-mittagsverpflegung-butcher%2F1786437112628-evdld042z5",
         "price": [
          {
           "label": "STUD",

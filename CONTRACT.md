@@ -16,8 +16,9 @@
           "id": "eth-9",
           "name": "ETH Mensa Polyterrasse",
           "group": "Central",
+          "opening": {"Lunch": "11:00 - 14:00", "Dinner": null},
           "meals": {
-            "Lunch":  [{"line": "STREET", "dish": "Lomo Saltado", "desc": "ingredients...", "photo": "https://…", "nutrition": {"p100": {"kcal": 152.0, "protein": 5.3, "fat": 9.9, "saturated": 1.1, "carbs": 12.0, "sugar": 1.3, "salt": 0.53}, "total": {}}}],
+            "Lunch":  [{"line": "STREET", "dish": "Lomo Saltado", "desc": "ingredients...", "photo": "https://…", "price": [{"label": "STUD", "value": 13.2}, {"label": "INT", "value": 14.2}, {"label": "EXT", "value": 16.5}], "priceUnit": "Portion", "nutrition": {"p100": {"kcal": 152.0, "protein": 5.3, "fat": 9.9, "saturated": 1.1, "carbs": 12.0, "sugar": 1.3, "salt": 0.53}, "total": {}}}],
             "Dinner": []
           }
         }
@@ -32,6 +33,8 @@
 - Values are NUMBERS (no units). kcal unit=kcal, all others = g. weight only in total.
 - p100 = per-100g values; total = per-serving values. Empty object {} means no data.
 - `photo`: absolute image URL or "" (ETH URLs carry `?client-id=ethz-wcms`; UZH photos are dish.imageUrl on the detail page). Empty string = no photo.
+- `price`: array of `{label, value}` (labels STUD, INT, INT&STUD, EXT, ALL); empty array = no price data. `priceUnit`: "Portion" | "100 g"; absent on UZH dishes.
+- mensa `opening`: `{slot: "HH:MM - HH:MM" or null}` — per meal slot; null = no service that slot.
 - group values: Central, Hoengg, Irchel, Oerlikon, Other
 - meal slots: "Lunch" | "Dinner"
 - availableDates = sorted ISO dates with ANY data (weekends absent or
@@ -70,6 +73,8 @@ header .header
       .group-add (input + button to add custom group)
     .selector-pane-title "Setting" (bottom-most pane)
     .photo-row (.mensa-row style; .selected = photos on; label "Show menu photos")
+    #opening-row (.mensa-row .photo-row style; label "Show opening times")
+    #price-row (.mensa-row .photo-row style; label "Show prices")
     #appearance-seg (light/dark/auto segmented switch)
 main#content
   section.mensa-section (collapsible: click .mensa-title toggles)
@@ -104,7 +109,10 @@ Every content change runs through the ONE pipeline:
 ```json
 {"meal":"Lunch","selected":["eth-9","uzh-obere-mensa",...],"photos":true,"theme":"light","customGroups":{"My Group":["eth-3",...]},"collapsedMensas":[]}
 ```
-- photos: bool, DEFAULT true (photos on — product owner); selection
+- photos: bool, DEFAULT true (photos on — product owner); openingTimes/prices:
+  bool, DEFAULT true, NOT persisted — savePrefs omits them, so the toggles
+  reset to on after a reload (loadPrefs supports them; savePrefs doesn't write
+  them yet); selection
   DEFAULT: all of the Central group when nothing is stored (see
   validatePrefsAgainstData); theme DEFAULT "light" (first visit shows the
   light switch active, matching the light default palette — "auto"

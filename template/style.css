@@ -378,11 +378,9 @@ body.menu-open #menu-btn {
 .seg-option:hover { color: var(--text); }
 .seg-option.active { color: var(--thumb-text); }  /* on the thumb */
 
-/* Meal switch: index 1 = Dinner. */
-.segmented[data-meal="Dinner"],
-.segmented.dinner { --seg-index: 1; }
-.segmented[data-meal="Lunch"],
-.segmented.lunch { --seg-index: 0; }
+/* Meal switch: index 1 = Dinner, index 0 = Lunch. */
+.segmented[data-meal="Dinner"] { --seg-index: 1; }
+.segmented[data-meal="Lunch"]  { --seg-index: 0; }
 
 /* Appearance switch: light/dark/auto (index 0/1/2). */
 .segmented.appearance { --seg-count: 3; }
@@ -935,7 +933,7 @@ html .mensa-section.no-meal-slot .hours-line-wrap { max-height: 16px; }
 /* 7. Footer */
 .footer       { padding: 48px 24px 40px; text-align: center; font-size: 12px; color: var(--sub); line-height: 1.8; }
 .footer a     { color: var(--sub); text-decoration: none; }
-.footer a:hover { color: var(--tx); }
+.footer a:hover { color: var(--text); }
 .footer-row   { margin-bottom: 4px; }
 .footer-sources { margin-bottom: 4px; }
 .footer-dot   { margin: 0 4px; }

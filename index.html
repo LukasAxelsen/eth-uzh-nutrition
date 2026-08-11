@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>University Menus — 2026-08-11</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" href="style.css?v=0a14760">
+  <link rel="stylesheet" href="style.css?v=8ccb58d">
 </head>
 <body>
   <!-- Hamburger: lives at BODY level (sibling of .app and #selector),
@@ -15,11 +15,7 @@
        is translated off-screen. -->
   <button class="menu-btn" id="menu-btn" type="button"
           aria-label="Toggle mensa selector"
-          aria-controls="selector" aria-expanded="false">
-    <span class="menu-bar"></span>
-    <span class="menu-bar"></span>
-    <span class="menu-bar"></span>
-  </button>
+          aria-controls="selector" aria-expanded="false"></button>
 
   <div class="app" id="app">
 
@@ -67,7 +63,7 @@
     </header>
 
     <!-- ======================= Content ======================= -->
-    <main class="main" id="content" aria-live="polite">
+    <main id="content" aria-live="polite">
       <!-- iOS-style activity indicator (UIActivityIndicator look):
            12 fading blades rotating — pure CSS, compositor-friendly. -->
       <div class="loading">
@@ -77,9 +73,9 @@
 
     <!-- ====================== Raw data ======================= -->
     <div class="raw-section">
-      <button class="raw-btn" id="raw-toggle" type="button"
+      <button id="raw-toggle" type="button"
               aria-expanded="false" aria-controls="raw-panel">Show Raw Data</button>
-      <div class="raw-panel" id="raw-panel">
+      <div id="raw-panel">
         <div class="raw-inner">
           <div class="raw-head">
             <span class="raw-title">Raw Data</span>
@@ -106,7 +102,7 @@
   </div>
 
   <!-- ============ Mensa selector (drawer, sibling of .app) ============ -->
-  <div id="selector" class="selector" aria-label="Mensa selector" aria-hidden="true">
+  <div id="selector" aria-label="Mensa selector" aria-hidden="true">
     <div class="selector-columns">
       <!-- Top pane: scrollable list of all mensas -->
       <section class="selector-pane">
@@ -123,7 +119,7 @@
             <input id="group-input" type="text" placeholder="New group name"
                    aria-label="New group name" autocomplete="off">
             <button id="group-add-btn" type="button">Add</button>
-            <span class="group-add-msg" id="group-add-msg" role="status" aria-live="polite"></span>
+            <span id="group-add-msg" role="status" aria-live="polite"></span>
           </div>
         </div>
       </section>
@@ -159,6 +155,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=0a14760"></script>
+  <script src="app.js?v=8ccb58d"></script>
 </body>
 </html>

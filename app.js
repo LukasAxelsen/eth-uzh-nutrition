@@ -66,6 +66,12 @@ let data = null;
 // product; a remembered past date would confuse the next visit.
 let selectedDate = '';
 
+// Precomputed once when data.json loads: every ISO date that carries at
+// least one dish. data.days is immutable after load, so the Set never
+// goes stale — the calendar's per-cell hasData() scans become O(1)
+// lookups (renderCalendar builds ~40 cells, each scanning every mensa).
+let dataDates = new Set();
+
 // User preferences. Sets for membership (fast lookup), plain object
 // for custom groups. Mirrors the localStorage schema exactly:
 //   { meal, selected: [ids], photos: bool, theme: 'light'|'dark'|'auto',
@@ -144,6 +150,13 @@ async function fetchData() {
   for (const [iso, day] of Object.entries(json.days)) {
     days[iso] = normalizeMensas(day.mensas || []);
   }
+  // One pass over the normalized days: precompute which dates actually
+  // carry dishes (the same logic the old hasData ran per calendar cell).
+  dataDates = new Set(
+    Object.entries(days)
+      .filter(([, mensas]) => mensas.some((m) => m.meals.Lunch.length || m.meals.Dinner.length))
+      .map(([iso]) => iso)
+  );
   return { date: json.date, days, availableDates: json.availableDates || [] };
 }
 
@@ -384,7 +397,6 @@ function renderAll() {
   } else {
     settleContentHeight(content); // also clears any stale timer/listener
   }
-  applyPhotos(); // idempotent <img> sync — part of the same diff pass
   updateRawText();
   for (const [c, first] of snapshots) flipPlay(c, first);
 }
@@ -1068,6 +1080,14 @@ function applyPhotos() {
     const url = dishEl.dataset.photo;
     const main = dishEl.querySelector('.dish-main');
     const img = dishEl.querySelector('.dish-photo');
+    // The fresh flag is ONE render's property: renderContent sets it on
+    // newly created dishes, and it must be consumed (deleted) in this
+    // same pass even when photos are OFF — a stale flag would let a
+    // LATER photos-on toggle insert the photo at natural height and
+    // skip the 0->natural grow the reused-dish choreography promises
+    // (the animation-consistency bug).
+    const fresh = dishEl.dataset.fresh === '1';
+    if (fresh) delete dishEl.dataset.fresh;
     if (show && url && img && img.dataset.photoClosing) {
       // A closing photo is being reopened (rapid toggle): cancel the
       // shrink and restore it — don't wait for the next render.
@@ -1082,40 +1102,51 @@ function applyPhotos() {
       el.src = url;
       el.alt = (dishEl.querySelector('.dish-name') || {}).textContent || '';
       el.loading = 'lazy';
-      const fresh = dishEl.dataset.fresh === '1';
       // FRESH dish (wholesale swap): insert at NATURAL height — the
       // #content height glide animates the swap, a per-photo grow on
       // top would double-animate and the glide target would miss the
       // photo stack (jump on cleanup). REUSED dish (photo toggle):
-      // keep the 0->natural grow choreography.
+      // keep the 0->natural grow choreography. (The fresh flag itself
+      // was already read + consumed at the top of this loop.)
       if (fresh) {
         el.style.height = 'auto';
         el.style.marginTop = '16px';
         el.style.display = 'block';
         main.appendChild(el);
-        delete dishEl.dataset.fresh; // one-shot: next toggle reuses the dish normally
       } else if (animationsAllowed()) {
-      el.style.height = '0';
-      el.style.marginTop = '0';
-      main.appendChild(el);
-      requestAnimationFrame(() => {
-        el.style.height = 'auto';
-        const h = el.offsetHeight; // natural height (aspect-ratio)
-        el.style.height = '0px';
-        void el.offsetHeight; // reflow: transition starts from 0
-        el.style.height = h + 'px';
-        el.style.marginTop = '16px';
-        // After the grow finishes, drop the inline height so the
-        // layout returns to the natural aspect-ratio height (keeps
-        // it responsive on resize).
-        const onEnd = (e) => {
-          if (e.propertyName === 'height') {
+        el.style.height = '0';
+        el.style.marginTop = '0';
+        main.appendChild(el);
+        requestAnimationFrame(() => {
+          el.style.height = 'auto';
+          const h = el.offsetHeight; // natural height (aspect-ratio)
+          el.style.height = '0px';
+          void el.offsetHeight; // reflow: transition starts from 0
+          el.style.height = h + 'px';
+          el.style.marginTop = '16px';
+          // After the grow finishes, drop the inline height so the
+          // layout returns to the natural aspect-ratio height (keeps
+          // it responsive on resize).
+          const onEnd = (e) => {
+            if (e.propertyName === 'height') {
+              el.style.height = '';
+              el.removeEventListener('transitionend', onEnd);
+              if (el._photoTimer) { clearTimeout(el._photoTimer); el._photoTimer = null; }
+            }
+          };
+          el.addEventListener('transitionend', onEnd);
+          // Fallback: transitionend may never fire (interrupted
+          // transition, background tab) — drop the inline height
+          // anyway (same pattern as every other animation path).
+          // Shares the _photoTimer slot with the close path: the
+          // close's clearTimeout also hands over a still-growing
+          // photo, so no timer can fire mid-shrink.
+          el._photoTimer = setTimeout(() => {
+            if (el._photoTimer) { clearTimeout(el._photoTimer); el._photoTimer = null; }
             el.style.height = '';
             el.removeEventListener('transitionend', onEnd);
-          }
-        };
-        el.addEventListener('transitionend', onEnd);
-      });
+          }, 600); // 450ms transition + margin; transitionend is the normal path
+        });
       } else {
         el.style.height = 'auto';
         el.style.marginTop = '16px';
@@ -1124,11 +1155,11 @@ function applyPhotos() {
       }
     } else if (!show && img) {
       if (img.dataset.photoClosing) {
-        // Already shrinking (applyPhotos runs twice per renderAll —
-        // before and after the height measurement). Idempotence: one
-        // shrink per img, do not re-bind listeners or restart the
-        // transition, or the first transitionend would remove the img
-        // out from under the second listener.
+        // Already shrinking (a previous render started the close; the
+        // node is removed on transitionend). Idempotence: one shrink
+        // per img — do not re-bind listeners or restart the transition,
+        // or the first transitionend would remove the img out from
+        // under the second listener.
         continue;
       }
       if (animationsAllowed()) {
@@ -1136,7 +1167,12 @@ function applyPhotos() {
         // transitionend removes the node once the collapse finished.
         // Fallback timer: transitionend may never fire (interrupted
         // transition, target already 0 on rapid toggles) — remove
-        // anyway so no hidden <img> accumulates.
+        // anyway so no hidden <img> accumulates. The clearTimeout
+        // below also hands over a still-pending GROW timer: a photo
+        // mid-grow that gets closed must not have its grow fallback
+        // fire mid-shrink (it would reset the inline height and pop
+        // the image back open — same hand-over as animateExit taking
+        // over an entering node).
         if (img._photoTimer) { clearTimeout(img._photoTimer); img._photoTimer = null; }
         img.dataset.photoClosing = '1';
         img.style.height = img.clientHeight + 'px';
@@ -1441,13 +1477,12 @@ function availableDates() {
   return (data && data.availableDates) || [];
 }
 
-/** True when the date carries any dish (calendar cell enabled).
-    days[iso] always has the full mensa list (empty meals included), so
-    we must count DISHES, not mensas. */
+/** True when the date carries any dish (calendar cell enabled). O(1)
+    lookup into the precomputed dataDates set (built once at load by
+    scanning each day's DISHES — days[iso] always has the full mensa
+    list, empty meals included). */
 function hasData(iso) {
-  const mensas = data && data.days && data.days[iso];
-  if (!mensas || !mensas.length) return false;
-  return mensas.some((m) => m.meals.Lunch.length || m.meals.Dinner.length);
+  return dataDates.has(iso);
 }
 
 /** Toggle the calendar disclosure (WAI-ARIA date-picker dialog pattern).
@@ -1467,7 +1502,11 @@ function toggleCalendar() {
 
   if (open) {
     if (!calMonth) {
-      calMonth = selectedDate.slice(0, 7) + '-01'; // first of selected month
+      // First of the selected month. With no data loaded (fetch
+      // failed) selectedDate is '' — leave calMonth empty too and let
+      // renderCalendar show the graceful empty state instead of
+      // garbage dates.
+      calMonth = selectedDate ? selectedDate.slice(0, 7) + '-01' : '';
     }
     renderCalendar();
     header.classList.add('calendar-open');
@@ -1489,10 +1528,21 @@ function onCalendarKeydown(e) {
 /** Render the calendar grid for calMonth: weekday-aligned cells with
     enabled/disabled states; today, selected and data-bearing markers. */
 function renderCalendar() {
-  const [y, m] = calMonth.split('-').map(Number);
   const grid = document.getElementById('cal-grid');
   const title = document.getElementById('cal-title');
   const note = document.getElementById('cal-note');
+
+  // No data loaded (data.json fetch failed): render a graceful empty
+  // state — an empty calMonth/selectedDate would otherwise produce
+  // garbage cells ("January 0", year-0 date labels).
+  if (!data) {
+    title.textContent = 'No menu data';
+    grid.innerHTML = '';
+    note.textContent = 'No menu data available.';
+    return;
+  }
+
+  const [y, m] = calMonth.split('-').map(Number);
 
   const months = ['January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'];
@@ -1540,6 +1590,7 @@ function selectDate(iso) {
 }
 
 function onCalendarNav(dir) {
+  if (!data) return; // no data loaded — nothing to navigate
   const [y, m] = calMonth.split('-').map(Number);
   const dt = new Date(y, m - 1 + dir, 1);
   calMonth = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-01`;

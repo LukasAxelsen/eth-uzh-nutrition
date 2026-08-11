@@ -1303,7 +1303,7 @@
        {
         "line": "Pasta Classica",
         "dish": "Cajun Chicken Pasta",
-        "desc": "Makkaroni | Cajun | Pouletstreifen | Käserahmsauce | Peperoni | Petersilie | Reibkäse | Salat oder Lemonade",
+        "desc": "Cajun | Pouletstreifen | Käserahmsauce | Peperoni | Petersilie | Reibkäse | Salat oder Lemonade",
         "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73987?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
@@ -11676,11 +11676,111 @@
      "name": "ETH Polysnack",
      "group": "Central",
      "opening": {
-      "Lunch": null,
+      "Lunch": "11:30 - 14:00",
       "Dinner": null
      },
      "meals": {
-      "Lunch": [],
+      "Lunch": [
+       {
+        "line": "PASTA",
+        "dish": "Pasta con ratatouille",
+        "desc": "Tomaten Tagliatelle | Tomatensauce | Ratatouille-Gemüse | Petersilie | Reibkäse",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 143.4,
+          "protein": 7.5,
+          "fat": 3.8,
+          "saturated": 1.8,
+          "carbs": 19.0,
+          "sugar": 1.1,
+          "salt": 0.57
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 9.9
+         },
+         {
+          "label": "INT",
+          "value": 11.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "AL FORNO",
+        "dish": "Pizza Favolosa",
+        "desc": "Tomatensauce | Mozzarella | Mortadella | Stracciatella di Burrata | Pistazien",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 236.4,
+          "protein": 12.0,
+          "fat": 9.9,
+          "saturated": 5.4,
+          "carbs": 24.0,
+          "sugar": 0.8,
+          "salt": 1.47
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 11.9
+         },
+         {
+          "label": "INT",
+          "value": 13.9
+         },
+         {
+          "label": "EXT",
+          "value": 16.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "VERDE",
+        "dish": "Insalata Cesare",
+        "desc": "Lattich | Champignons | Parmesanhobel | Croutons | Kresse | Cherry Tomaten | Add on: Pouletstreifen (+ 2.00)",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 138.9,
+          "protein": 7.6,
+          "fat": 10.0,
+          "saturated": 1.7,
+          "carbs": 3.8,
+          "sugar": 0.7,
+          "salt": 1.02
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 10.5
+         },
+         {
+          "label": "INT",
+          "value": 12.5
+         },
+         {
+          "label": "EXT",
+          "value": 15.5
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
       "Dinner": []
      }
     },
@@ -13916,11 +14016,111 @@
      "name": "ETH Polysnack",
      "group": "Central",
      "opening": {
-      "Lunch": null,
+      "Lunch": "11:30 - 14:00",
       "Dinner": null
      },
      "meals": {
-      "Lunch": [],
+      "Lunch": [
+       {
+        "line": "PASTA",
+        "dish": "Cajun Chicken Pasta",
+        "desc": "Hörnli | Pouletsreifen | Cajunrahmsauce | Peperoniwürfel | Petersilie | Reibkäse",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 163.0,
+          "protein": 9.9,
+          "fat": 5.2,
+          "saturated": 1.9,
+          "carbs": 18.0,
+          "sugar": 1.7,
+          "salt": 0.84
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 10.9
+         },
+         {
+          "label": "INT",
+          "value": 12.9
+         },
+         {
+          "label": "EXT",
+          "value": 15.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "AL FORNO",
+        "dish": "Pizza bianca con zucchine e peperoni",
+        "desc": "Crème Fraiche | Mozzarella | Zucchetti | Peperoni | Rucola",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 186.7,
+          "protein": 8.3,
+          "fat": 8.1,
+          "saturated": 3.7,
+          "carbs": 20.0,
+          "sugar": 1.2,
+          "salt": 0.87
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 9.9
+         },
+         {
+          "label": "INT",
+          "value": 11.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "VERDE",
+        "dish": "Insalata Cesare",
+        "desc": "Lattich | Champignons | Parmesanhobel | Croutons | Kresse | Cherry Tomaten | Add on: Pouletstreifen (+ 2.00)",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 138.9,
+          "protein": 7.6,
+          "fat": 10.0,
+          "saturated": 1.7,
+          "carbs": 3.8,
+          "sugar": 0.7,
+          "salt": 1.02
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 10.5
+         },
+         {
+          "label": "INT",
+          "value": 12.5
+         },
+         {
+          "label": "EXT",
+          "value": 15.5
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
       "Dinner": []
      }
     },
@@ -16114,11 +16314,111 @@
      "name": "ETH Polysnack",
      "group": "Central",
      "opening": {
-      "Lunch": null,
+      "Lunch": "11:30 - 14:00",
       "Dinner": null
      },
      "meals": {
-      "Lunch": [],
+      "Lunch": [
+       {
+        "line": "PASTA",
+        "dish": "Pasta bufala e pomodoro",
+        "desc": "Casarecce Siciliane | Tomatensauce | Büffelmozzarella | bunte Sprossen",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 48.3,
+          "protein": 2.3,
+          "fat": 2.6,
+          "saturated": 1.5,
+          "carbs": 3.7,
+          "sugar": 1.1,
+          "salt": 0.34
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 10.9
+         },
+         {
+          "label": "INT",
+          "value": 12.9
+         },
+         {
+          "label": "EXT",
+          "value": 15.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "AL FORNO",
+        "dish": "Pizza Prosciutto Crudo e Pesto",
+        "desc": "Tomatensauce | Mozzarella | Rohschinken | Pesto Genovese",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 223.2,
+          "protein": 12.0,
+          "fat": 6.2,
+          "saturated": 3.7,
+          "carbs": 28.0,
+          "sugar": 0.9,
+          "salt": 1.37
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 10.9
+         },
+         {
+          "label": "INT",
+          "value": 12.9
+         },
+         {
+          "label": "EXT",
+          "value": 15.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "VERDE",
+        "dish": "Pink Couscous Bowl",
+        "desc": "Randen-Couscous | Pfälzerkarotten | Spinat | Fetakäse | Falafel",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 178.5,
+          "protein": 4.9,
+          "fat": 8.9,
+          "saturated": 1.1,
+          "carbs": 18.0,
+          "sugar": 4.4,
+          "salt": 0.64
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 9.9
+         },
+         {
+          "label": "INT",
+          "value": 11.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.9
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
       "Dinner": []
      }
     },
@@ -18377,11 +18677,111 @@
      "name": "ETH Polysnack",
      "group": "Central",
      "opening": {
-      "Lunch": null,
+      "Lunch": "11:30 - 14:00",
       "Dinner": null
      },
      "meals": {
-      "Lunch": [],
+      "Lunch": [
+       {
+        "line": "PASTA",
+        "dish": "Pasta al fume",
+        "desc": "Penne | Tomatenrahmsauce | Smoked Tofu | Petersilie | Reibkäse",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 55.9,
+          "protein": 2.9,
+          "fat": 3.2,
+          "saturated": 1.4,
+          "carbs": 3.8,
+          "sugar": 1.1,
+          "salt": 0.49
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 10.9
+         },
+         {
+          "label": "INT",
+          "value": 12.9
+         },
+         {
+          "label": "EXT",
+          "value": 15.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "AL FORNO",
+        "dish": "Pizza Braccio di Ferro",
+        "desc": "Tomatensauce | Mozzarella | Spinat | Ei",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 173.8,
+          "protein": 10.0,
+          "fat": 6.1,
+          "saturated": 2.8,
+          "carbs": 19.0,
+          "sugar": 0.8,
+          "salt": 1.03
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 9.9
+         },
+         {
+          "label": "INT",
+          "value": 11.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "VERDE",
+        "dish": "Pink Couscous Bowl",
+        "desc": "Randen-Couscous | Pfälzerkarotten | Spinat | Fetakäse | Falafel",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 178.5,
+          "protein": 4.9,
+          "fat": 8.9,
+          "saturated": 1.1,
+          "carbs": 18.0,
+          "sugar": 4.4,
+          "salt": 0.64
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 9.9
+         },
+         {
+          "label": "INT",
+          "value": 11.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.9
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
       "Dinner": []
      }
     },

@@ -36,7 +36,7 @@ ETH food market/Lunch: Grill — Senthil`s Best | Beef Satay | Erdnusssauce | Ja
 ETH food market/Lunch: Green Daily — Älpler Rösti mit Spiegelei | Rösti | Hörnli | Röstzwiebeln | Emmentaler | Spiegelei | Apfelmus | Schnittlauch | per100g: kcal=119.7, protein=4.6g, fat=4.2g, saturated=1g, carbs=15g, sugar=2.2g, salt=0.55g
 ETH food market/Lunch: Green Delight — Choose 5 | Wähle 5 Komponenten heiss oder kalt | nutrition=N/A
 ETH food market/Lunch: Pizza Classica — Pizza Margherita | Salat oder Lemonade Topping: Burrata und Basilikum Pesto+ CHF 3.00 | per100g: kcal=205.1, protein=9.6g, fat=5.3g, saturated=2.5g, carbs=29g, sugar=1.2g, salt=1.28g
-ETH food market/Lunch: Pasta Classica — Cajun Chicken Pasta | Makkaroni | Cajun | Pouletstreifen | Käserahmsauce | Peperoni | Petersilie | Reibkäse | Salat oder Lemonade | per100g: kcal=142.2, protein=7.8g, fat=4.4g, saturated=1g, carbs=17g, sugar=1.5g, salt=0.42g
+ETH food market/Lunch: Pasta Classica — Cajun Chicken Pasta | Cajun | Pouletstreifen | Käserahmsauce | Peperoni | Petersilie | Reibkäse | Salat oder Lemonade | per100g: kcal=142.2, protein=7.8g, fat=4.4g, saturated=1g, carbs=17g, sugar=1.5g, salt=0.42g
 ETH food market/Lunch: Pasta della Nonna — Fregola Sarda | Mandel Frischkäse | Tomaten | Oliven | Rucola | Salat oder Lemonade | per100g: kcal=168.7, protein=4.3g, fat=5.9g, saturated=2.3g, carbs=24g, sugar=2.3g, salt=0.52g
 ETH Rice Up!/Lunch: Rice Up! Bowl | Jasmine Rice | Poulet-Bällchen | Broccoli | Grünes Curry | Asia Krautsalat | Kräutersalat | Saison Topping | nutrition=N/A
 ETH Rice Up!/Lunch: Tofu Cashew Bowl | Roter Reis | Marinierter Tofu | Saison Gemüse | Satay Sauce | Asia Krautsalat | Kräutersalat | Saison Topping | nutrition=N/A

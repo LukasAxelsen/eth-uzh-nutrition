@@ -1720,6 +1720,10 @@ function toggleSection(section) {
     if (body) expandBody(body);
   } else {
     prefs.collapsedMensas.add(id);
+    // Lock the body's inline max-height BEFORE adding 'collapsed' class,
+    // so the CSS rule max-height:0 cannot flash-clip the content.
+    // collapseBody then animates from the locked concrete value.
+    if (body) body.style.maxHeight = body.scrollHeight + 'px';
     section.classList.add('collapsed');
     if (body) collapseBody(body);
   }

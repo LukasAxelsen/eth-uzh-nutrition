@@ -650,12 +650,17 @@ function reconcileChildren(container, keys, makeEl, doFlip, enter = true) {
   // e.g. an outerHTML-replaced section that lost its data-key would
   // otherwise linger as a duplicate while animating out and be
   // re-triggered on every render (the duplicate-section bug).
+  // Nodes whose ANCESTOR is already exiting (e.g. dishes inside a
+  // section being removed) are silently dropped — the ancestor's
+  // shrink with overflow:hidden clips them, so per-dish exits are
+  // wasted transitions that fight the section-level exit and cause
+  // layout thrash (the checkbox-remove stutter).
   for (const child of Array.from(container.children)) {
     if (child.dataset.exiting) continue;
     if (!child.dataset.key) {
       child.remove();
     } else if (!seen.has(child.dataset.key)) {
-      if (enter) animateExit(child);
+      if (enter && !child.closest('[data-exiting]')) animateExit(child);
       else child.remove();
     }
   }
@@ -1102,13 +1107,18 @@ function applyPhotos() {
       el.src = url;
       el.alt = (dishEl.querySelector('.dish-name') || {}).textContent || '';
       el.loading = 'lazy';
-      // FRESH dish (wholesale swap): insert at NATURAL height — the
-      // #content height glide animates the swap, a per-photo grow on
-      // top would double-animate and the glide target would miss the
-      // photo stack (jump on cleanup). REUSED dish (photo toggle):
-      // keep the 0->natural grow choreography. (The fresh flag itself
-      // was already read + consumed at the top of this loop.)
-      if (fresh) {
+      // FRESH dish (wholesale swap) OR dish inside an ENTERING section
+      // (checkbox add): insert at NATURAL height — the section's own
+      // animateEnter measures its natural height on the next frame, and
+      // that measurement MUST include the full photo height. A 0→natural
+      // photo grow (the reused-dish path) runs in a later RAF than the
+      // section's measurement RAF, so the section's enter target would
+      // miss the photo stack and snap on transitionend (the checkbox-add
+      // stutter). REUSED dish (photo toggle): keep the 0→natural grow
+      // choreography. (The fresh flag itself was already read + consumed
+      // at the top of this loop.)
+      const sectionEntering = dishEl.closest('[data-entering]');
+      if (fresh || sectionEntering) {
         el.style.height = 'auto';
         el.style.marginTop = '16px';
         el.style.display = 'block';

@@ -1817,6 +1817,7 @@ async function init() {
     validatePrefsAgainstData();
     renderAll(); // silent first paint — animations stay disabled
     animEnabled = true; // from here on, user interactions animate
+    document.documentElement.classList.add('anim-ready'); // CSS transitions live
     updateSegmented();
   } catch (err) {
     console.error(err);

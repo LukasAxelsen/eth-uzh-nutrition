@@ -1,8 +1,8 @@
-# ETH & UZH Mensa Menus
+# Zmittag
 
 Today's menus for every ETH and UZH Mensa — calories, nutrition facts, and photos for many dishes, plus opening hours and prices. Updated automatically every morning, free, no account, no app.
 
-Live: <https://lukasaxelsen.github.io/eth-uzh-nutrition/>
+Live: <https://lukasaxelsen.github.io/eth-uzh-zmittag/>
 
 ## Features
 

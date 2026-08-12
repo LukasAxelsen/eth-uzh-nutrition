@@ -46,7 +46,7 @@ ETH Octavo/Lunch: Eins — Chicken Tonkatsu | Pouletsteak in Pankopanade | Tonka
 ETH Octavo/Lunch: Zwei — Moussaka | Hackfleisch (Rind | CH) | Auberginen | Zucchetti | Feta | Beilagensalat | per100g: kcal=71, protein=3.3g, fat=3.8g, saturated=1.2g, carbs=5.4g, sugar=2.4g, salt=0.72g
 ETH Octavo/Lunch: Drei — Knusper Gemüse Nuggets | Pommes Frites Wellenschnitt | Gurkensalat | Ketchup | Beilagensalat | per100g: kcal=148.7, protein=2.3g, fat=8.1g, saturated=1g, carbs=16g, sugar=3.6g, salt=1.26g
 ETH Octavo/Lunch: Vier — Bowl4You | „Gestalten Sie Ihre Bowl ganz nach Ihrem Geschmack.“ | per100g: kcal=75.8, protein=1g, fat=7.3g, saturated=0.8g, carbs=1.6g, sugar=1.4g, salt=0.6g
-ETH Octavo/Lunch: 5uppe — Tagessuppe | Tagessuppe lt. Chef | per100g: kcal=15.5, protein=0.5g, fat=0.1g, carbs=2.6g, sugar=1.8g, salt=0.62g
+ETH Octavo/Lunch: 5uppe — Gemüsesuppe | Tagessuppe lt. Chef | per100g: kcal=15.5, protein=0.5g, fat=0.1g, carbs=2.6g, sugar=1.8g, salt=0.62g
 ETH Octavo/Lunch: Kaffeebar — TINYFISH @ Octavo | Sushi ab 10.50 CHF an der Kaffeebar | nutrition=N/A
 ETH Flavour Kitchen/Lunch: PASTA OF THE DAY — Pasta Jackfruit | Tomatensauce | Jackfruit Smoky Pulled | gepickelte Zwiebeln | nutrition=N/A
 ETH Flavour Kitchen/Lunch: PLANTS & MORE — Grill Bbq | Tofu | Süsskartoffel | Salat Buffet | Grillsaucen | nutrition=N/A

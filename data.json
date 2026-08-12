@@ -43,7 +43,7 @@
         "line": "WOK STREET",
         "dish": "Crispy Sesam Chicken",
         "desc": "Poulet | Koreanischer Gurkensalat | Sticky Sojasauce | Jasminreis",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74167?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 115.7,
@@ -75,7 +75,7 @@
         "line": "WOK GREEN",
         "dish": "Crispy Sesam Planted Pops",
         "desc": "Vegi Planted Pops | Koreanischer Gurkensalat | Sticky Sojasauce | Jasminreis",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74168?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 157.0,
@@ -108,7 +108,7 @@
         "line": "DELIGHT",
         "dish": "Ji Wah",
         "desc": "Rindsragout | Massaman Thaicurrysauce | Jasminreis | Peperoni | Kartoffeln | Curry",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74169?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 118.1,
@@ -141,7 +141,7 @@
         "line": "GARDEN",
         "dish": "Gobi Sweet Sour",
         "desc": "Blumenkohl | Koriander | Jeera Daal | Basmatireis",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74170?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 102.1,
@@ -201,7 +201,7 @@
         "line": "Chefs World",
         "dish": "Marengo di Vitello",
         "desc": "Kalbsvoressen | Tomaten | Champignon | Perlzwiebeln | Croûtons | Peterli | Papardelle",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74044?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 117.1,
@@ -226,7 +226,7 @@
         "line": "Favorite",
         "dish": "Schweinssteak \"Strindberg\"",
         "desc": "Zwiebel-Senfkruste | Kräuter-Jus | Bratkartoffeln | Broccoli | Mandeln | pro 100 gr.",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74045?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 108.7,
@@ -251,7 +251,7 @@
         "line": "Vitality",
         "dish": "Baked Sweet Potatoes",
         "desc": "gefüllt mit Roggenkörner | Spinat | Feta | Gartenkresse Sauce | Granatapfelkerne",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74046?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 103.7,
@@ -316,7 +316,7 @@
         "line": "The Gardener",
         "dish": "Penne ticolore pomodori e olive",
         "desc": "Tomatensauce | Röstzwiebeln | Knoblauch | Oliven | Reibkäse | Salat",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73664?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 127.2,
@@ -349,7 +349,7 @@
         "line": "The Chef",
         "dish": "Indisches Linsen Dal",
         "desc": "Schweinefleisch | Gemüse | Basmatireis | Erbsen | Koriander | Röstzwiebeln | Naan Brot",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73665?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 147.9,
@@ -382,7 +382,7 @@
         "line": "The Expert",
         "dish": "Bifteki im Pitabrot",
         "desc": "Rindfleisch | Tzatziki | Tomaten | Lattichsalat | Pommes Frites",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73666?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 169.0,
@@ -1510,7 +1510,7 @@
         "line": "Eins",
         "dish": "Chicken Tonkatsu",
         "desc": "Pouletsteak in Pankopanade | Tonkatsu Sauce | Karotten Krautsalat | Reis | Schwarzer Sesam | Frühlingszwiebe..",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74021?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 136.0,
@@ -1539,7 +1539,7 @@
         "line": "Zwei",
         "dish": "Moussaka",
         "desc": "Hackfleisch (Rind | CH) | Auberginen | Zucchetti | Feta | Beilagensalat",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74022?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 71.0,
@@ -1568,7 +1568,7 @@
         "line": "Drei",
         "dish": "Knusper Gemüse Nuggets",
         "desc": "Pommes Frites Wellenschnitt | Gurkensalat | Ketchup | Beilagensalat",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74023?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 148.7,
@@ -1597,7 +1597,7 @@
         "line": "Vier",
         "dish": "Bowl4You",
         "desc": "„Gestalten Sie Ihre Bowl ganz nach Ihrem Geschmack.“",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74024?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 75.8,
@@ -1624,9 +1624,9 @@
        },
        {
         "line": "5uppe",
-        "dish": "Tagessuppe",
+        "dish": "Gemüsesuppe",
         "desc": "Tagessuppe lt. Chef",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74025?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 15.5,
@@ -1654,7 +1654,7 @@
         "line": "Kaffeebar",
         "dish": "TINYFISH @ Octavo",
         "desc": "Sushi ab 10.50 CHF an der Kaffeebar",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74026?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -1702,7 +1702,7 @@
         "line": "PASTA OF THE DAY",
         "dish": "Pasta Jackfruit",
         "desc": "Tomatensauce | Jackfruit Smoky Pulled | gepickelte Zwiebeln",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73100?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -1723,7 +1723,7 @@
         "line": "PLANTS & MORE",
         "dish": "Grill Bbq",
         "desc": "Tofu | Süsskartoffel | Salat Buffet | Grillsaucen",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73101?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -1744,7 +1744,7 @@
         "line": "CLASSIC FLAVOUR",
         "dish": "Grill Bbq",
         "desc": "Kalbsbratwurst | Süsskartoffel | Salat Buffet | Grillsaucen",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73102?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -1765,7 +1765,7 @@
         "line": "WEEKLY BOWL",
         "dish": "Caesar Salad",
         "desc": "Lattich | Apfelwürfel | gepickelte Radisli | Backerbsen | Speck | Sprinz | Sprossen | Rusticobrotscheibe",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73103?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -1800,7 +1800,7 @@
         "line": "Garden",
         "dish": "Wir bedienen dich gerne in der Oberen Mensa.",
         "desc": "",
-        "photo": "",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2Fcdd55551-f42d-475b-83b8-a73e0710563a%2F2026-08-12-mittagsverpflegung-garden%2F1786522988949-zyijbjk342",
         "price": [
          {
           "label": "STUD",
@@ -1848,7 +1848,7 @@
         "line": "Butcher",
         "dish": "Wir bedienen dich gerne in der Oberen Mensa.",
         "desc": "",
-        "photo": "",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2Fa08fb613-c23f-48ca-b6ce-c82a4297b950%2F2026-08-12-mittagsverpflegung-butcher%2F1786522966494-m4aghq2xwd",
         "price": [
          {
           "label": "STUD",
@@ -1886,7 +1886,7 @@
         "line": "Farm",
         "dish": "Gemüsebolognaise",
         "desc": "Penne | Nussmesan | Rucola | Menüsalat | Apfelmus",
-        "photo": "",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F60b49ac8-7ed1-48b8-805d-f06fb4d5e00c%2F2026-08-12-mittagsverpflegung-farm%2F1786523010611-sno1xrpzvs",
         "price": [
          {
           "label": "STUD",
@@ -1927,7 +1927,7 @@
         "line": "Butcher",
         "dish": "Bratwurst",
         "desc": "Zwiebelsauce | Rösti | Erbsen",
-        "photo": "",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F8c1f092f-7f7c-464d-998f-06e846864fed%2F2026-08-12-mittagsverpflegung-butcher%2F1786522944524-t5kavwnp4l",
         "price": [
          {
           "label": "STUD",
@@ -2036,7 +2036,7 @@
         "line": "Garden",
         "dish": "Gemüsebolognaise",
         "desc": "Penne | Nussmesan | Rucola | Menüsalat oder Apfelmus",
-        "photo": "",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F8dda74af-94a8-48f1-ac07-fe90a3a68ade%2F2026-08-12-mittagsverpflegung-garden%2F1786523464436-wajtlkemys",
         "price": [
          {
           "label": "STUD",
@@ -2077,7 +2077,7 @@
         "line": "Butcher",
         "dish": "Bratwurst",
         "desc": "Zwiebelsauce | Rösti | Erbsen",
-        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F24eaa23a-336b-4b77-ad48-77d6d7ad8cff%2F2026-08-12-mittagsverpflegung-butcher%2F1783301110564-1ctr526smn7",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2Ffaf1af03-3ffd-4f17-a916-72b601da39b8%2F2026-08-12-mittagsverpflegung-butcher%2F1786523555001-sujwskbfgvb",
         "price": [
          {
           "label": "STUD",
@@ -4302,7 +4302,7 @@
         "line": "PASTA OF THE DAY",
         "dish": "Pasta Jackfruit",
         "desc": "Tomatensauce | Jackfruit Smoky Pulled | gepickelte Zwiebeln",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74392?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -4323,7 +4323,7 @@
         "line": "PLANTS & MORE",
         "dish": "Grill Bbq",
         "desc": "Tofu | Süsskartoffel | Salat Buffet | Grillsaucen",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74393?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -4344,7 +4344,7 @@
         "line": "CLASSIC FLAVOUR",
         "dish": "Grill Bbq",
         "desc": "Kalbsbratwurst | Süsskartoffel | Salat Buffet | Grillsaucen",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74394?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -4365,7 +4365,7 @@
         "line": "WEEKLY BOWL",
         "dish": "Caesar Salad",
         "desc": "Lattich | Apfelwürfel | gepickelte Radisli | Backerbsen | Speck | Sprinz | Sprossen | Rusticobrotscheibe",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74395?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -5063,7 +5063,7 @@
         "line": "Garden",
         "dish": "Gemüsebolognaise",
         "desc": "Penne | Nussmesan | Rucola | Menüsalat",
-        "photo": "",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F96b8cbab-7bad-4948-8974-4dc32ccaf473%2F2026-08-13-mittagsverpflegung-garden%2F1786527378942-3nntwrrlbx8",
         "price": [
          {
           "label": "STUD",
@@ -5104,7 +5104,7 @@
         "line": "Butcher",
         "dish": "Bratwurst",
         "desc": "Zwiebelsauce | Rösti | Erbsen",
-        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2Ffa5a078a-2d1b-441e-ad95-3e8421fe3377%2F2026-08-13-mittagsverpflegung-butcher%2F1784683725923-i2z9bdqnay",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2Ffa5a078a-2d1b-441e-ad95-3e8421fe3377%2F2026-08-13-mittagsverpflegung-butcher%2F1786527380698-r101efrlh4",
         "price": [
          {
           "label": "STUD",
@@ -6854,7 +6854,7 @@
         "line": "WEEKLY BOWL",
         "dish": "Caesar Salad",
         "desc": "Lattich | Apfelwürfel | gepickelte Radisli | Backerbsen | Speck | Sprinz | Sprossen | Rusticobrotscheibe",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73111?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -10144,7 +10144,7 @@
         "line": "WEEKLY BOWL",
         "dish": "Caesar Salad",
         "desc": "Lattich | Apfelwürfel | gepickelte Radisli | Backerbsen | Speck | Sprinz | Sprossen | Rusticobrotscheibe",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74399?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -12713,7 +12713,7 @@
         "line": "WEEKLY BOWL",
         "dish": "Caesar Salad",
         "desc": "Lattich | Apfelwürfel | gepickelte Radisli | Backerbsen | Speck | Sprinz | Sprossen | Rusticobrotscheibe",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74403?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -15307,7 +15307,7 @@
        {
         "line": "Farm",
         "dish": "Planted Cevapcici",
-        "desc": "Djuvec Reis | Erbsen | Peperoni | Ajvar | Grilltomate",
+        "desc": "Bulgur | Ajvar | Grilltomate",
         "photo": "",
         "price": [
          {
@@ -15325,23 +15325,23 @@
         ],
         "nutrition": {
          "p100": {
-          "kcal": 122.4,
-          "protein": 5.7,
-          "fat": 4.6,
-          "carbs": 12.8,
-          "sugar": 2.2,
-          "salt": 0.8,
-          "fiber": 2.5
+          "kcal": 101.6,
+          "protein": 5.9,
+          "fat": 3.9,
+          "carbs": 9.3,
+          "sugar": 2.0,
+          "salt": 0.5,
+          "fiber": 2.4
          },
          "total": {
-          "kcal": 726,
-          "protein": 34,
-          "fat": 27,
-          "carbs": 76,
-          "sugar": 13,
-          "salt": 5,
+          "kcal": 623,
+          "protein": 36,
+          "fat": 24,
+          "carbs": 57,
+          "sugar": 12,
+          "salt": 3,
           "fiber": 15,
-          "weight": 593
+          "weight": 613
          }
         }
        },

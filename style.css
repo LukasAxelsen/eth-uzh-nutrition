@@ -77,6 +77,19 @@
 }
 
 /* 2. Reset & base */
+
+/* Prevent CSS transitions from firing on initial page load (the
+   "first-paint flash"). All transitions are zero-duration until
+   init() finishes renderAll() and adds the anim-ready class.
+   This MUST come before any transition declaration so the
+   !important overrides them regardless of specificity. */
+html:not(.anim-ready) *,
+html:not(.anim-ready) *::before,
+html:not(.anim-ready) *::after {
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {

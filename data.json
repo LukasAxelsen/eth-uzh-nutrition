@@ -460,7 +460,7 @@
        },
        {
         "line": "GARDEN",
-        "dish": "Gnocchi pomodori e olive",
+        "dish": "Casarecce pomodori e olive",
         "desc": "Tomatensauce | Röstzwiebeln | Knoblauch | Oliven | Reibkäse | Salat",
         "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/72136?client-id=ethz-wcms",
         "nutrition": {
@@ -1153,7 +1153,7 @@
        {
         "line": "Grill",
         "dish": "The Smoky Bacon Burger",
-        "desc": "Rindfleisch | Sesam Bun | Cheddar | Bacon | Smoky Relish | Lattich | Texas Pommes",
+        "desc": "Rindfleisch | Sesam Bun | Cheddar | Bacon | Smoky Relish | Lattich | Pommes Frites",
         "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73990?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
@@ -1277,7 +1277,7 @@
        {
         "line": "Pasta Classica Vegi",
         "dish": "Morchelpasta",
-        "desc": "Pappardelle | Morchelsauce | Reibkäse | Salat oder Lemonade",
+        "desc": "Pasta | Morchelsauce | Reibkäse | Salat oder Lemonade",
         "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73994?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
@@ -21817,11 +21817,87 @@
      "name": "ETH Dozentenfoyer",
      "group": "Central",
      "opening": {
-      "Lunch": null,
+      "Lunch": "11:30 - 13:30",
       "Dinner": null
      },
      "meals": {
-      "Lunch": [],
+      "Lunch": [
+       {
+        "line": "Chefs World",
+        "dish": "Beef Brisket",
+        "desc": "Chimichurri | Truffled BBQ- Kartoffeln | Coleslaw",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 153.4,
+          "protein": 5.8,
+          "fat": 10.0,
+          "saturated": 1.5,
+          "carbs": 8.6,
+          "sugar": 2.0,
+          "salt": 1.15
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "ALL",
+          "value": 21.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Favorite",
+        "dish": "Johor",
+        "desc": "Dorsch Knusperli | sweet Chilisauce | gebratener Reis | Broccoli | Blumenkohl | rote Zwiebel",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 153.2,
+          "protein": 4.6,
+          "fat": 4.6,
+          "saturated": 0.4,
+          "carbs": 23.0,
+          "sugar": 6.4,
+          "salt": 1.28
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "ALL",
+          "value": 3.2
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Vitality",
+        "dish": "Cappellacci Funghi",
+        "desc": "Salbeibutter | Karamellisierte Feige | Rucola | Grana Padano",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 215.8,
+          "protein": 8.2,
+          "fat": 9.1,
+          "saturated": 3.8,
+          "carbs": 25.0,
+          "sugar": 0.6,
+          "salt": 1.32
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "ALL",
+          "value": 14.9
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
       "Dinner": []
      }
     },
@@ -23926,11 +24002,87 @@
      "name": "ETH Dozentenfoyer",
      "group": "Central",
      "opening": {
-      "Lunch": null,
+      "Lunch": "11:30 - 13:30",
       "Dinner": null
      },
      "meals": {
-      "Lunch": [],
+      "Lunch": [
+       {
+        "line": "Chefs World",
+        "dish": "Loup de mer",
+        "desc": "Wolfsbarsch | Safransauce | Tomaten Tagliatelle | Blattspinat",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 117.1,
+          "protein": 9.6,
+          "fat": 3.5,
+          "saturated": 1.0,
+          "carbs": 11.0,
+          "sugar": 1.1,
+          "salt": 0.55
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "ALL",
+          "value": 21.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Favorite",
+        "dish": "Wiener Rahmgulasch",
+        "desc": "Trutenragout | Karotten | Sellerie | Zwiebeln | Spätzli | Peperoni | pro 100 g",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 140.8,
+          "protein": 6.2,
+          "fat": 6.2,
+          "saturated": 1.2,
+          "carbs": 14.0,
+          "sugar": 1.5,
+          "salt": 0.74
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "ALL",
+          "value": 3.2
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Vitality",
+        "dish": "Yumame Yellow Curry",
+        "desc": "Yumame | Broccoli | Karotten | Mungbohnen | Koriander | Jasminreis",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 115.2,
+          "protein": 3.7,
+          "fat": 3.3,
+          "saturated": 2.0,
+          "carbs": 17.0,
+          "sugar": 1.5,
+          "salt": 0.75
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "ALL",
+          "value": 14.9
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
       "Dinner": []
      }
     },
@@ -26058,11 +26210,87 @@
      "name": "ETH Dozentenfoyer",
      "group": "Central",
      "opening": {
-      "Lunch": null,
+      "Lunch": "11:30 - 13:30",
       "Dinner": null
      },
      "meals": {
-      "Lunch": [],
+      "Lunch": [
+       {
+        "line": "Chefs World",
+        "dish": "Entrecôte - BBQ auf der Terrasse",
+        "desc": "mit Beilagen und Salat nach Wahl",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 126.2,
+          "protein": 11.0,
+          "fat": 6.1,
+          "saturated": 1.9,
+          "carbs": 8.9,
+          "sugar": 2.5,
+          "salt": 1.08
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "ALL",
+          "value": 24.0
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Favorite",
+        "dish": "Olma Bratwurst vom Grill",
+        "desc": "mit Beilagen und Salat nach Wahl | pro 100 g",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 148.9,
+          "protein": 5.8,
+          "fat": 9.5,
+          "saturated": 3.2,
+          "carbs": 9.5,
+          "sugar": 2.3,
+          "salt": 1.23
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "ALL",
+          "value": 3.2
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Vitality",
+        "dish": "Halloumi - BBQ auf der Terrasse",
+        "desc": "mit Beilagen und Salat nach Wahl",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 145.8,
+          "protein": 6.8,
+          "fat": 8.6,
+          "saturated": 4.2,
+          "carbs": 9.8,
+          "sugar": 3.1,
+          "salt": 1.42
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "ALL",
+          "value": 14.9
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
       "Dinner": []
      }
     },

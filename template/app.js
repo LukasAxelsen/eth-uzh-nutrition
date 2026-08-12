@@ -1731,6 +1731,12 @@ function toggleSection(section) {
 
   if (collapsed) {
     prefs.collapsedMensas.delete(id);
+    // Lock the body's inline max-height at 0 BEFORE removing the
+    // 'collapsed' class, so dropping the CSS max-height:0 rule can't
+    // jump the body to 'none' (instant full open). expandBody then
+    // animates from the locked 0 to scrollHeight — symmetric with the
+    // collapse-side lock (first-expand flash regression).
+    if (body) body.style.maxHeight = '0px';
     section.classList.remove('collapsed');
     if (body) expandBody(body);
   } else {

@@ -1,4 +1,4 @@
-# AGENTS.md — eth-uzh-nutrition
+# AGENTS.md — eth-uzh-zmittag
 
 Rules for any agent (or human) modifying this repository. Read this file
 BEFORE changing code. These constraints are the product owner's explicit

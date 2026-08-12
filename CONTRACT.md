@@ -1,4 +1,4 @@
-# Contract — eth-uzh-nutrition site
+# Contract — eth-uzh-zmittag site
 
 > **Agents: also read AGENTS.md (animation architecture, prohibitions,
 > workflow) before changing code. The animation contract below is the

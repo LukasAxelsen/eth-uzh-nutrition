@@ -21,7 +21,7 @@ from datetime import timezone, timedelta, datetime
 # whole UZH scrape: list-API POSTs, weekly pages and per-dish detail pages.
 SCRAPE_DELAY = 0.4  # seconds
 
-USER_AGENT = "Mozilla/5.0 (compatible; eth-uzh-nutrition/1.0)"
+USER_AGENT = "Mozilla/5.0 (compatible; eth-uzh-zmittag/1.0)"
 
 # --------------------------------------------------------------------------
 # Config

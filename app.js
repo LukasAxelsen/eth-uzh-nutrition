@@ -1,5 +1,5 @@
 /* ============================================================
-   ETH/UZH University Menus — frontend logic (vanilla JS)
+   ETH/UZH Zmittag — frontend logic (vanilla JS)
 
    - Fetches data.json (same directory as the page) and renders
      mensa sections grouped/ordered by the data file.

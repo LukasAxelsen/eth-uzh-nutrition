@@ -112,6 +112,11 @@ Every content change runs through the ONE pipeline:
   JS) — a fixed .45s Apple grow/shrink slammed tall sections open/shut
   on checkbox toggles ("content rushes up from below"). FLIP and the
   content-height glide keep --ease (Apple).
+- Both sides zero the vertical padding (border-box height:0 alone
+  leaves the padding as a strip): at grow start it flashes the title's
+  top half and stalls the animation while the first frames climb past
+  the padding floor; at shrink end it pops on removal. animateEnter
+  restores the padding for the measure so the grow target includes it.
 - NO opacity/fade/view-transitions anywhere in content animation.
 - First paint silent (animEnabled); prefers-reduced-motion respected.
 

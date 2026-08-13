@@ -494,20 +494,36 @@ function flipPlay(container, first) {
 function animateEnter(node) {
   if (!animationsAllowed() || !node.isConnected) return;
   node.dataset.entering = '1';
+  // Zero the vertical padding NOW, before the first paint: border-box
+  // height:0 alone leaves the padding as a visible strip (prohibition
+  // #4, enter form) — the fresh section would flash the title's top
+  // half and stall there while the grow's first frames climb past the
+  // padding floor (the checkbox-add stall; worst on short sections
+  // where the strip is most of the height). The RAF restores the
+  // padding for the measure, then height AND padding grow in together.
   node.style.height = '0';
+  node.style.paddingTop = '0px';
+  node.style.paddingBottom = '0px';
   node.style.overflow = 'hidden';
   requestAnimationFrame(() => {
     if (!node.isConnected) return;
     node.style.height = 'auto';
-    const h = node.offsetHeight; // natural height
-    // The transition list is built HERE (not in the sync block): the
-    // duration scales with the node's height (the disclosure rule), so
-    // it is only known after the measure. Inline the height transition
-    // (the node's own CSS may not transition height — e.g. .mensa-
-    // section doesn't), APPENDED to any existing transition so state
-    // feedback (hover etc.) keeps working during the grow. Cleaned up
-    // with the height afterwards.
+    node.style.paddingTop = '';
+    node.style.paddingBottom = '';
+    const h = node.offsetHeight; // natural height, padding included
     const dur = expandDuration(node, h);
+    // Commit the 0 start state BEFORE declaring the transition: with
+    // the CSS default (all 0s) the zeroing is instant and no transition
+    // exists yet — declaring first would start a height/padding
+    // transition into 0 that the growth change then has to cancel, and
+    // a cancel+restore of the same value does NOT restart (the padding
+    // snaps back and the 60px padding-floor stall returns). Commit
+    // zeroes, THEN declare, THEN change each property exactly once:
+    // both transitions start cleanly from a committed 0.
+    node.style.height = '0px';
+    node.style.paddingTop = '0px';
+    node.style.paddingBottom = '0px';
+    void node.offsetHeight; // reflow: commit true 0, no transition yet
     const cur = getComputedStyle(node).transition;
     // Defensive: 'none' or the DEFAULT must not be prepended — "none,
     // height ..." is an invalid transition list that silently kills the
@@ -516,10 +532,11 @@ function animateEnter(node) {
     // to a real transition (e.g. a hover color transition).
     node.style.transition = (cur && cur !== 'all 0s ease 0s' && cur !== 'all' && cur !== 'none'
                              ? cur + ', ' : '') +
-                            'height ' + dur + 'ms ' + ENTER_EXIT_EASE;
-    node.style.height = '0px';
-    void node.offsetHeight; // reflow: transition starts from 0
+                            'height ' + dur + 'ms ' + ENTER_EXIT_EASE +
+                            ', padding ' + dur + 'ms ' + ENTER_EXIT_EASE;
     node.style.height = h + 'px';
+    node.style.paddingTop = '';
+    node.style.paddingBottom = '';
     node.style.overflow = '';
     // Drop the inline height once grown so layout stays responsive.
     const onEnd = (e) => {

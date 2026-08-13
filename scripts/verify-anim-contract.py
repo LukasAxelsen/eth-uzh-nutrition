@@ -264,6 +264,16 @@ check("animateEnter scales duration + symmetric curve (no fixed .45s)",
       "'height ' + dur + 'ms ' + ENTER_EXIT_EASE" in enter_sec and
       ".45s" not in enter_sec and
       ".45s" not in exit_sec)
+# The enter side zeroes the vertical padding too (symmetric with
+# animateExit): border-box height:0 alone leaves the padding as a
+# visible strip that flashes the title's top half and stalls the grow
+# while the first frames climb past the padding floor (the checkbox-add
+# stall). The measure restores the padding first so h includes it.
+check("animateEnter zeroes vertical padding (no strip flash at grow start)",
+      "node.style.paddingTop = '0px'" in enter_sec and
+      "node.style.paddingBottom = '0px'" in enter_sec and
+      "padding ' + dur + 'ms" in enter_sec and
+      "node.style.paddingTop = ''" in enter_sec)
 check("reviveExit restores the padding (rapid re-add keeps the air)",
       "node.style.paddingTop = ''" in exit_sec and
       "node.style.paddingBottom = ''" in exit_sec)

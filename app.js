@@ -412,10 +412,17 @@ function renderAll() {
 
 const ANIM_MS = 450;
 // Apple's standard easing (HIG "ease"): strong ease-out — instant
-// response, long graceful settle. This is the single curve for ALL
-// content animation (FLIP, disclosures); keep in sync with --ease in
-// style.css.
+// response, long graceful settle. Used for transform-only FLIP and the
+// content-height glide; keep in sync with --ease in style.css.
 const ANIM_EASE = 'cubic-bezier(.32, .72, 0, 1)';
+// Enter/exit height transitions share the DISCLOSURE curve (--ease-sym
+// in style.css): the Apple ease-out front-loads 76% of the travel into
+// the first 11% of the time, which on a tall section reads as a slam
+// ("content rushes up from below" on checkbox toggles) instead of a
+// glide. Symmetric ease-in-out = even acceleration, even landing — the
+// same feel as the mensa collapse that enter/exit replaces when
+// sections are added/removed. Keep in sync with --ease-sym in style.css.
+const ENTER_EXIT_EASE = 'cubic-bezier(.42, 0, .58, 1)';
 
 // Animations are enabled ONLY after the initial render completes — the
 // first paint must be silent (content just appears), per FLIP practice
@@ -487,23 +494,29 @@ function flipPlay(container, first) {
 function animateEnter(node) {
   if (!animationsAllowed() || !node.isConnected) return;
   node.dataset.entering = '1';
-  // Inline the height transition for the grow (the node's own CSS may
-  // not transition height — e.g. .mensa-section doesn't), APPENDED to
-  // any existing transition so state feedback (hover etc.) keeps
-  // working during the grow. Cleaned up with the height afterwards.
-  const cur = getComputedStyle(node).transition;
-  // Defensive: 'none' or the default must not be prepended — "none,
-  // height ..." is an invalid transition list that silently kills the
-  // animation. Only append to a real transition (e.g. 'all').
-  node.style.transition = (cur && cur !== 'all 0s ease 0s' && cur !== 'none'
-                           ? cur + ', ' : '') +
-                          'height .45s ' + ANIM_EASE;
   node.style.height = '0';
   node.style.overflow = 'hidden';
   requestAnimationFrame(() => {
     if (!node.isConnected) return;
     node.style.height = 'auto';
     const h = node.offsetHeight; // natural height
+    // The transition list is built HERE (not in the sync block): the
+    // duration scales with the node's height (the disclosure rule), so
+    // it is only known after the measure. Inline the height transition
+    // (the node's own CSS may not transition height — e.g. .mensa-
+    // section doesn't), APPENDED to any existing transition so state
+    // feedback (hover etc.) keeps working during the grow. Cleaned up
+    // with the height afterwards.
+    const dur = expandDuration(node, h);
+    const cur = getComputedStyle(node).transition;
+    // Defensive: 'none' or the DEFAULT must not be prepended — "none,
+    // height ..." is an invalid transition list that silently kills the
+    // animation. Browsers compute the default transition as 'all' (not
+    // 'all 0s ease 0s' — the guard checks both spellings). Only append
+    // to a real transition (e.g. a hover color transition).
+    node.style.transition = (cur && cur !== 'all 0s ease 0s' && cur !== 'all' && cur !== 'none'
+                             ? cur + ', ' : '') +
+                            'height ' + dur + 'ms ' + ENTER_EXIT_EASE;
     node.style.height = '0px';
     void node.offsetHeight; // reflow: transition starts from 0
     node.style.height = h + 'px';
@@ -521,7 +534,8 @@ function animateEnter(node) {
     node.addEventListener('transitionend', onEnd);
     // Fallback: transitionend may never fire (interrupted transition,
     // background tab) — clear the enter state anyway (same pattern as
-    // animateExit / glide / expandBody).
+    // animateExit / glide / expandBody). The timeout scales with the
+    // transition duration so it can never fire mid-grow.
     node._enterTimer = setTimeout(() => {
       if (node.dataset.entering) {
         node.style.height = '';
@@ -529,7 +543,7 @@ function animateEnter(node) {
         node.style.overflow = '';
         delete node.dataset.entering;
       }
-    }, 600); // 450ms transition + margin; transitionend is the normal path
+    }, dur + 150); // transitionend is the normal path
   });
 }
 
@@ -554,27 +568,61 @@ function animateExit(node) {
   if (!animationsAllowed()) { node.remove(); return; }
   node.dataset.exiting = '1';
   const cur = getComputedStyle(node).transition;
-  node.style.transition = (cur && cur !== 'all 0s ease 0s' && cur !== 'none'
-                           ? cur + ', ' : '') +
-                          'height .45s ' + ANIM_EASE;
   const h = node.offsetHeight; // natural height (before shrinking)
+  // Duration scales with the node's height (the disclosure rule) and
+  // the curve matches the grow side — exit feels like enter reversed:
+  // a tall section glides shut instead of slamming through a fixed
+  // duration. The measured h (not scrollHeight) is the exact travel.
+  const dur = expandDuration(node, h);
+  // Padding shrinks WITH the height: the boxes are border-box, so
+  // height:0 alone leaves the vertical padding as a visible strip
+  // that pops when the node is removed (prohibition #4's clipped-box
+  // padding trap, in exit form). Zeroing it makes the exit a clean
+  // collapse to nothing, siblings sliding up the whole way.
+  node.style.transition = (cur && cur !== 'all 0s ease 0s' && cur !== 'all' && cur !== 'none'
+                           ? cur + ', ' : '') +
+                          'height ' + dur + 'ms ' + ENTER_EXIT_EASE +
+                          ', padding ' + dur + 'ms ' + ENTER_EXIT_EASE;
   node.style.height = h + 'px';
   node.style.overflow = 'hidden';
+  node.style.paddingTop = '0px';
+  node.style.paddingBottom = '0px';
   void node.offsetHeight; // reflow: lock current height, then shrink
   node.style.height = '0px';
   const onEnd = (e) => {
     if (e.propertyName === 'height') {
+      // Detach BEFORE removeExited so a revived node (rapid re-add)
+      // never carries a stale handler into its next exit cycle.
+      node.removeEventListener('transitionend', onEnd);
+      node._exitOnEnd = null;
       if (node._exitTimer) { clearTimeout(node._exitTimer); node._exitTimer = null; }
-      node.remove();
+      removeExited(node);
     }
   };
+  node._exitOnEnd = onEnd;
   node.addEventListener('transitionend', onEnd);
   // Fallback: transitionend may never fire (interrupted transition,
   // background tab, sub-pixel target) — remove anyway (MDN: the event
   // is not generated when a transition is removed before completion).
   node._exitTimer = setTimeout(() => {
-    if (node.isConnected) node.remove();
-  }, 600); // 450ms transition + margin; transitionend is the normal path
+    if (node.isConnected) removeExited(node);
+  }, dur + 150); // scales with the transition; transitionend is the normal path
+}
+
+/** Physically drop an exited node and FLIP its container so the
+    surviving siblings glide into the freed space (the sibling FLIP of
+    the enter/exit contract). The snapshot is taken BEFORE the removal
+    and the reflow lands in the same frame, so flipPlay inverts it
+    cleanly. During the shrink the siblings already slid up with the
+    layout — their deltas are ~0 and this pass stays out of the way;
+    only reflows the shrink could not carry (e.g. chips re-wrapping)
+    get animated. */
+function removeExited(node) {
+  const parent = node.parentNode;
+  if (!parent) { node.remove(); return; }
+  const first = flipFirst(parent);
+  node.remove();
+  flipPlay(parent, first);
 }
 
 /** Cancel an in-flight exit when the node's key reappears in the same
@@ -583,18 +631,34 @@ function animateExit(node) {
 function reviveExit(node) {
   if (!node.dataset.exiting) return;
   if (node._exitTimer) { clearTimeout(node._exitTimer); node._exitTimer = null; }
+  // Drop the exit transitionend handler too: a stale one would fire on
+  // the NEXT exit cycle's height transition and removeExited the node
+  // mid-shrink (the revive -> re-exit listener leak).
+  if (node._exitOnEnd) {
+    node.removeEventListener('transitionend', node._exitOnEnd);
+    node._exitOnEnd = null;
+  }
   node.style.transition = '';
   node.style.height = '';
   node.style.overflow = '';
+  node.style.paddingTop = '';
+  node.style.paddingBottom = '';
   delete node.dataset.exiting;
 }
 
-/** The idx-th child that is NOT exiting (exiting nodes are shrinking
-    away and must not be used as insertion anchors). */
-function nextLiveChild(container, idx) {
+/** The idx-th child that is neither exiting nor stale. Exiting nodes
+    are shrinking away; STALE nodes (key not in the target list) are
+    about to exit — using either as an insertion anchor walks every
+    survivor in front of the doomed node, so the list reorders it to
+    the end and the content jumps instead of sliding (the checkbox-
+    remove no-animation regression). The doomed node must stay IN
+    PLACE and shrink there; its siblings slide up continuously with
+    the shrink. */
+function nextLiveChild(container, idx, keep) {
   let i = 0;
   for (const child of container.children) {
     if (child.dataset.exiting) continue;
+    if (!keep.has(child.dataset.key)) continue;
     if (i === idx) return child;
     i++;
   }
@@ -616,6 +680,9 @@ function reconcileChildren(container, keys, makeEl, doFlip, enter = true) {
     if (child.dataset.key) existing.set(child.dataset.key, child);
   }
   const seen = new Set();
+  // Target key set: stale nodes (keys NOT in this set) are about to
+  // exit and must never serve as insertion anchors (nextLiveChild).
+  const keep = new Set(keys);
   const added = [];
 
   // Walk the desired order with an index into the live children: a node
@@ -632,10 +699,10 @@ function reconcileChildren(container, keys, makeEl, doFlip, enter = true) {
     if (!node) {
       node = makeEl(key);
       node.dataset.key = key;
-      container.insertBefore(node, nextLiveChild(container, targetIdx) || null);
+      container.insertBefore(node, nextLiveChild(container, targetIdx, keep) || null);
       added.push(node);
-    } else if (nextLiveChild(container, targetIdx) !== node) {
-      container.insertBefore(node, nextLiveChild(container, targetIdx) || null);
+    } else if (nextLiveChild(container, targetIdx, keep) !== node) {
+      container.insertBefore(node, nextLiveChild(container, targetIdx, keep) || null);
     }
     seen.add(key);
     targetIdx++;
@@ -1271,7 +1338,7 @@ function animateContentHeight(node, oldH, newH) {
   // Defensive: 'none' or the default must not be prepended — "none,
   // height ..." is an invalid transition list that silently kills the
   // animation. Only append to a real transition (e.g. 'all').
-  node.style.transition = (cur && cur !== 'all 0s ease 0s' && cur !== 'none'
+  node.style.transition = (cur && cur !== 'all 0s ease 0s' && cur !== 'all' && cur !== 'none'
                            ? cur + ', ' : '') +
                           'height .45s ' + ANIM_EASE;
   node.style.height = oldH + 'px';
@@ -1295,15 +1362,21 @@ function animateContentHeight(node, oldH, newH) {
   }, 600); // 450ms glide + margin; transitionend is the normal path
 }
 
-/** Duration for one disclosure toggle: scales with content height so
-    the perceived slide speed matches a small (empty) slot — a 3000px
-    menu gets ~900ms instead of snapping through at 6.9px/ms while a
-    40px slot crawls at 0.1px/ms ("opens too fast" report). Clamped to
-    [450, 900]ms: 450 is the NN/g large-motion floor, 900 the ceiling
-    before a disclosure feels draggy ("sometimes normal but too slow"). */
-function expandDuration(body) {
-  const h = body.scrollHeight || 0;
-  return Math.min(900, Math.max(450, Math.round(h * 0.35)));
+/** Duration for one disclosure toggle AND content enter/exit: scales
+    with content height so the perceived slide speed stays even — a
+    3000px menu gets ~900ms instead of snapping through at 6.9px/ms
+    while a 40px slot crawls at 0.1px/ms ("opens too fast" report). A
+    fixed .45s slammed tall sections open/shut on checkbox toggles
+    ("content rushes up from below"). Clamped to [450, 900]ms: 450 is
+    the NN/g large-motion floor, 900 the ceiling before a disclosure
+    feels draggy ("sometimes normal but too slow").
+    Enter/exit pass the measured offsetHeight as `h` (the exact
+    animated travel distance) so the duration tracks the motion even
+    if scrollHeight and offsetHeight ever diverge (borders, overflow);
+    disclosures default to scrollHeight (the max-height clip amount). */
+function expandDuration(body, h) {
+  const hh = h !== undefined ? h : (body.scrollHeight || 0);
+  return Math.min(900, Math.max(450, Math.round(hh * 0.35)));
 }
 
 function expandBody(body) {

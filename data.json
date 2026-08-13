@@ -201,7 +201,7 @@
         "line": "Chefs World",
         "dish": "Rindsbrasato",
         "desc": "Sauce Madère | Pommes Duchesse | Grill Tomate mit Pesto",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74047?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 130.5,
@@ -226,7 +226,7 @@
         "line": "Favorite",
         "dish": "Pouletschenkel mit Chili & Honig",
         "desc": "Scharfe Honigsauce | Purpur Weizen | Lattich | Gemüse Brunoise | Kohlrabi | Salbei | pro 100 gr.",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74048?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 124.3,
@@ -251,7 +251,7 @@
         "line": "Vitality",
         "dish": "Age Gyoza",
         "desc": "Sushi Reis | Edamame | Nori Algen | Sesam Gurken | Frühlingszwiebeln | Furrikake",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74049?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 163.0,
@@ -316,7 +316,7 @@
         "line": "The Gardener",
         "dish": "Marokkanischer Eintopf",
         "desc": "Linsen | Auberginen | Zucchetti | Datteln | Mandeln | Sultaninen | Couscous | Erbsen | Röstzwiebeln",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73667?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 176.4,
@@ -349,7 +349,7 @@
         "line": "The Chef",
         "dish": "Poulet Cordon bleu",
         "desc": "Cocktailsauce | Pommes Rissolées | Blattsalat | Mais | Karotten Julienne",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73668?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 169.5,
@@ -382,7 +382,7 @@
         "line": "The Expert",
         "dish": "Tomaten- Mozzarella Ravioli",
         "desc": "Zucchetti | konfierte Cherrytomaten | Feta | Rucola",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73669?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 158.5,
@@ -1218,25 +1218,33 @@
        },
        {
         "line": "Green Delight",
-        "dish": "Choose 5",
-        "desc": "Wähle 5 Komponenten heiss oder kalt",
+        "dish": "Grill im Steinergarten",
+        "desc": "Olma Bratwurst | Chlöpfer (Cervelat) oder Planted-Bratwurst + Bürli und Senf",
         "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/73999?client-id=ethz-wcms",
         "nutrition": {
-         "p100": {},
+         "p100": {
+          "kcal": 63.8,
+          "protein": 11.0,
+          "fat": 24.0,
+          "saturated": 9.0,
+          "carbs": 1.4,
+          "sugar": 0.5,
+          "salt": 2.1
+         },
          "total": {}
         },
         "price": [
          {
           "label": "STUD",
-          "value": 9.9
+          "value": 7.5
          },
          {
           "label": "INT",
-          "value": 13.9
+          "value": 7.5
          },
          {
           "label": "EXT",
-          "value": 16.9
+          "value": 7.5
          }
         ],
         "priceUnit": "Portion"
@@ -1309,7 +1317,7 @@
        },
        {
         "line": "Pasta della Nonna",
-        "dish": "Pad Thai",
+        "dish": "Gebratener Reis Pad Thai Style",
         "desc": "Poulet | Erdnüssen | Ei | Mungosprossen | Koriander | Limette",
         "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74002?client-id=ethz-wcms",
         "nutrition": {
@@ -1510,7 +1518,7 @@
         "line": "Eins",
         "dish": "Ultimative \"Kotteri Ramen Hack\" @ Octavo",
         "desc": "Schweinehack | Miso | Shiitake | Mu-Err | Ei | Nori | Sesam | Beilagensalat",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74027?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 111.1,
@@ -1539,7 +1547,7 @@
         "line": "Zwei",
         "dish": "Poulet Tätschli (CH)",
         "desc": "Peperonisauce | Gebratene Roller | Ofenkarotten | Ingwer | Beilagensalat",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74028?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 108.5,
@@ -1568,7 +1576,7 @@
         "line": "Drei",
         "dish": "Gnocchi al Gorgonzola",
         "desc": "Tomaten | Spinat | Reibkäse | Beilagensalat",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74029?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 143.4,
@@ -1597,7 +1605,7 @@
         "line": "Vier",
         "dish": "Bowl4You",
         "desc": "„Gestalten Sie Ihre Bowl ganz nach Ihrem Geschmack.“",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74030?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 75.8,
@@ -1624,9 +1632,9 @@
        },
        {
         "line": "5uppe",
-        "dish": "Tagessuppe",
+        "dish": "Gemüsepilz Suppe",
         "desc": "Tagessuppe lt. Chef",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74031?client-id=ethz-wcms",
         "nutrition": {
          "p100": {
           "kcal": 15.5,
@@ -1654,7 +1662,7 @@
         "line": "Kaffeebar",
         "dish": "TINYFISH @ Octavo",
         "desc": "Sushi ab 10.50 CHF an der Kaffeebar",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74032?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -1800,7 +1808,7 @@
         "line": "Garden",
         "dish": "Wir bedienen dich gerne in der Oberen Mensa.",
         "desc": "",
-        "photo": "",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2Fb6c63893-d76f-489c-bd33-9394713641c2%2F2026-08-13-mittagsverpflegung-garden%2F1786608612816-3hi5jnnur6f",
         "price": [
          {
           "label": "STUD",
@@ -1848,7 +1856,7 @@
         "line": "Butcher",
         "dish": "Wir bedienen dich gerne in der Oberen Mensa.",
         "desc": "",
-        "photo": "",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F5bdb37a1-4d92-47bc-8611-8a1155f9cf9d%2F2026-08-13-mittagsverpflegung-butcher%2F1786608588624-zby6bas854",
         "price": [
          {
           "label": "STUD",
@@ -1886,7 +1894,7 @@
         "line": "Farm",
         "dish": "Tofu Satay",
         "desc": "Langkornreis | Kokos & Sesam | Wok Gemüse",
-        "photo": "",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F0a230e9d-292c-43e6-93d0-d535d4554a06%2F2026-08-13-mittagsverpflegung-farm%2F1786608639046-gsw4ei59ayb",
         "price": [
          {
           "label": "STUD",
@@ -1927,7 +1935,7 @@
         "line": "Butcher",
         "dish": "Rindfleisch Lasagne",
         "desc": "Tomaten | Wurzelgemüse | Béchamel | Menüsalat | Apfelmus",
-        "photo": "",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2Fde1ae774-b60c-42ff-9bcc-e81779f754c8%2F2026-08-13-mittagsverpflegung-butcher%2F1786608563768-1jzuo5vast2",
         "price": [
          {
           "label": "STUD",
@@ -2036,7 +2044,7 @@
         "line": "Garden",
         "dish": "Tofu Satay",
         "desc": "Langkornreis | Kokos & Sesam | Wok Gemüse",
-        "photo": "",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2F602c9b05-94e3-4728-a6fa-6b994daa8d9a%2F2026-08-13-mittagsverpflegung-garden%2F1786609789802-oykpj8841x",
         "price": [
          {
           "label": "STUD",
@@ -2077,7 +2085,7 @@
         "line": "Butcher",
         "dish": "Rindfleisch Lasagne",
         "desc": "Tomaten | Wurzelgemüse | Béchamel | Menüsalat oder Apfelmus",
-        "photo": "",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2Fd4a61919-05a3-4dcf-89bc-e127a369410d%2F2026-08-13-mittagsverpflegung-butcher%2F1786609839631-0mon3ok9vcac",
         "price": [
          {
           "label": "STUD",
@@ -4997,7 +5005,7 @@
         "line": "Garden",
         "dish": "Tofu Satay",
         "desc": "Langkornreis | Kokos & Sesam | Wok Gemüse",
-        "photo": "",
+        "photo": "https://storage.googleapis.com/dish-images-prod/dish-media%2Fzfv%2Fa5870bed-0186-4a80-84a7-9420ed75a9bf%2F2026-08-14-mittagsverpflegung-garden%2F1786613816509-fgii0v42676",
         "price": [
          {
           "label": "STUD",

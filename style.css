@@ -20,15 +20,18 @@
           "Helvetica Neue", Helvetica, Arial, sans-serif;
   --content-w: 980px;
   --ease: cubic-bezier(.32, .72, 0, 1);
-  /* Symmetric ease for DISCLOSURES (expand/collapse) ONLY: the Apple
-     ease-out opens too fast (11% of time covers 76% of travel — the
-     "opens with a snap" complaint) and drags on close. Disclosures
-     must feel the same in both directions, so they use a symmetric
-     ease-in-out (framer-motion's easeInOut / Material expand curve,
+  /* Symmetric ease for HEIGHT GROW/SHRINK (disclosures AND content
+     enter/exit): the Apple ease-out opens too fast (11% of time covers
+     76% of travel — the "opens with a snap" complaint; on a tall mensa
+     section it reads as the content slamming up/down on checkbox
+     toggles) and drags on close. Grow and shrink must feel the same in
+     both directions, so they use a symmetric ease-in-out
+     (framer-motion's easeInOut / Material expand curve,
      cubic-bezier(.42, 0, .58, 1)) — even acceleration, even landing.
-     Content enter/exit/glide/FLIP keep --ease (Apple). Enforced by
-     scripts/verify-anim-contract.py: every max-height transition must
-     use var(--ease-sym). */
+     JS enter/exit height transitions use the matching ENTER_EXIT_EASE
+     constant. The content-height GLIDE and transform-only FLIP keep
+     --ease (Apple). Enforced by scripts/verify-anim-contract.py: every
+     max-height transition must use var(--ease-sym). */
   --ease-sym: cubic-bezier(.42, 0, .58, 1);
   /* Corner tokens — Apple's continuous-curvature language. Four levels
      only (enforced by scripts/verify-anim-contract.py):
@@ -711,8 +714,9 @@ body.menu-open #menu-btn {
    expandBody) — NO display:none here: that would pop the content out
    instantly instead of letting it slide closed under overflow:hidden.
    The transition and the collapsed state are CSS-owned so the curve is
-   the single --ease token (an inline transition here would hardcode a
-   second curve — the mensa collapse once shipped bare `ease`). */
+   the symmetric --ease-sym token, the single disclosure curve (an
+   inline transition here would hardcode a second curve — the mensa
+   collapse once shipped bare `ease`). */
 .mensa-dishes {
   overflow: hidden;
   /* Base duration .45s; expandBody/collapseBody override the DURATION

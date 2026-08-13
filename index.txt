@@ -33,10 +33,10 @@ ETH Mendokoro/Lunch: Roku — Tori Ramen | Pouletbrust | Edamame | Karotten | No
 ETH food market/Lunch: Fire — Emmentaler Brätschnitzel | Demi Glace | Rösti | Mischgemüse | per100g: kcal=140.3, protein=6.1g, fat=7.4g, saturated=1.8g, carbs=12g, sugar=1.6g, salt=0.86g
 ETH food market/Lunch: Grill — Fitnessteller ETH | Pouletbrust vom Grill | Kräuterbutter | Blattsalat | Karotten | Gurken | Hüttenkäse | Randen | Croutons | per100g: kcal=95.6, protein=11g, fat=4g, saturated=1.4g, carbs=7.2g, sugar=2.5g, salt=0.66g
 ETH food market/Lunch: Green Daily — Gemüse Kötbullar | Preiselbeeren | Rahmsauce | Kartoffelpüree | Erbsen | per100g: kcal=94.6, protein=2.7g, fat=2.3g, saturated=0.7g, carbs=15g, sugar=4.6g, salt=0.75g
-ETH food market/Lunch: Green Delight — Choose 5 | Wähle 5 Komponenten heiss oder kalt | nutrition=N/A
+ETH food market/Lunch: Green Delight — Grill im Steinergarten | Olma Bratwurst | Chlöpfer (Cervelat) oder Planted-Bratwurst + Bürli und Senf | per100g: kcal=63.8, protein=11g, fat=24g, saturated=9g, carbs=1.4g, sugar=0.5g, salt=2.1g
 ETH food market/Lunch: Pizza Classica — Pizza Margherita | Salat oder Lemonade Topping: Scharfer Salami & Rote Zwiebeln + CHF 3.00 | per100g: kcal=205.1, protein=9.6g, fat=5.3g, saturated=2.5g, carbs=29g, sugar=1.2g, salt=1.28g
 ETH food market/Lunch: Pasta Classica — G`hacktes mit Hörnli | Reibkäse | Apfelmus | Salat oder Lemonade | per100g: kcal=115.4, protein=5g, fat=2.5g, saturated=0.8g, carbs=17g, sugar=2.2g, salt=0.36g
-ETH food market/Lunch: Pasta della Nonna — Pad Thai | Poulet | Erdnüssen | Ei | Mungosprossen | Koriander | Limette | per100g: kcal=144.6, protein=6.1g, fat=4g, saturated=0.6g, carbs=23g, sugar=2.6g, salt=0.8g
+ETH food market/Lunch: Pasta della Nonna — Gebratener Reis Pad Thai Style | Poulet | Erdnüssen | Ei | Mungosprossen | Koriander | Limette | per100g: kcal=144.6, protein=6.1g, fat=4g, saturated=0.6g, carbs=23g, sugar=2.6g, salt=0.8g
 ETH Rice Up!/Lunch: Rice Up! Bowl | Jasmine Rice | Poulet-Bällchen | Broccoli | Grünes Curry | Asia Krautsalat | Kräutersalat | Saison Topping | nutrition=N/A
 ETH Rice Up!/Lunch: Tofu Cashew Bowl | Roter Reis | Marinierter Tofu | Saison Gemüse | Satay Sauce | Asia Krautsalat | Kräutersalat | Saison Topping | nutrition=N/A
 ETH Rice Up!/Lunch: Chicken Satay Bowl | Reisnudeln | Gegrilltes Poulet Satay | Grüne Bohnen | Rotes Curry | Asia Krautsalat | Kräutersalat | Thai Chilli | nutrition=N/A
@@ -46,7 +46,7 @@ ETH Octavo/Lunch: Eins — Ultimative "Kotteri Ramen Hack" @ Octavo | Schweineha
 ETH Octavo/Lunch: Zwei — Poulet Tätschli (CH) | Peperonisauce | Gebratene Roller | Ofenkarotten | Ingwer | Beilagensalat | per100g: kcal=108.5, protein=4.9g, fat=6.2g, saturated=1.2g, carbs=7.6g, sugar=2.4g, salt=0.85g
 ETH Octavo/Lunch: Drei — Gnocchi al Gorgonzola | Tomaten | Spinat | Reibkäse | Beilagensalat | per100g: kcal=143.4, protein=4.7g, fat=5.6g, saturated=1.9g, carbs=17g, sugar=1.7g, salt=0.57g
 ETH Octavo/Lunch: Vier — Bowl4You | „Gestalten Sie Ihre Bowl ganz nach Ihrem Geschmack.“ | per100g: kcal=75.8, protein=1g, fat=7.3g, saturated=0.8g, carbs=1.6g, sugar=1.4g, salt=0.6g
-ETH Octavo/Lunch: 5uppe — Tagessuppe | Tagessuppe lt. Chef | per100g: kcal=15.5, protein=0.5g, fat=0.1g, carbs=2.6g, sugar=1.8g, salt=0.62g
+ETH Octavo/Lunch: 5uppe — Gemüsepilz Suppe | Tagessuppe lt. Chef | per100g: kcal=15.5, protein=0.5g, fat=0.1g, carbs=2.6g, sugar=1.8g, salt=0.62g
 ETH Octavo/Lunch: Kaffeebar — TINYFISH @ Octavo | Sushi ab 10.50 CHF an der Kaffeebar | nutrition=N/A
 ETH Flavour Kitchen/Lunch: PASTA OF THE DAY — Pasta Jackfruit | Tomatensauce | Jackfruit Smoky Pulled | gepickelte Zwiebeln | nutrition=N/A
 ETH Flavour Kitchen/Lunch: PLANTS & MORE — Grill Bbq | Tofu | Süsskartoffel | Salat Buffet | Grillsaucen | nutrition=N/A

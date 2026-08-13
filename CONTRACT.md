@@ -102,6 +102,16 @@ Every content change runs through the ONE pipeline:
   scrollHeight (expandBody/collapseBody), never grid-fr, never height:auto.
 - Photos = idempotent <img> insert/remove in REUSED dish nodes; open/close
   = height transition (0 -> natural px, then clear inline height).
+- Removed nodes shrink IN PLACE (animateExit: height + vertical padding
+  -> 0, deferred removal), then the parent FLIPs so siblings glide into
+  the freed space (removeExited). Stale nodes (key not in the target
+  list) are NEVER insertion anchors — nextLiveChild skips them, or the
+  list reorders and the content jumps instead of sliding.
+- Enter/exit durations scale with the node's height (expandDuration,
+  450-900ms) and use the symmetric --ease-sym curve (ENTER_EXIT_EASE in
+  JS) — a fixed .45s Apple grow/shrink slammed tall sections open/shut
+  on checkbox toggles ("content rushes up from below"). FLIP and the
+  content-height glide keep --ease (Apple).
 - NO opacity/fade/view-transitions anywhere in content animation.
 - First paint silent (animEnabled); prefers-reduced-motion respected.
 

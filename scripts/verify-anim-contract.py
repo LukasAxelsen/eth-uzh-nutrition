@@ -102,15 +102,19 @@ check("no hardcoded Material curve leftovers",
       "cubic-bezier(.4, 0, .2, 1)" not in CSS)
 check("JS ANIM_EASE matches --ease",
       "const ANIM_EASE = '" + APPLE_EASE + "'" in JS)
-# Disclosures (expand/collapse) use a SYMMETRIC curve --ease-sym —
-# the Apple ease-out opens with a snap (11% of time = 76% of travel)
-# and drags on close, so open/close felt different speeds. Content
-# enter/exit/glide/FLIP keep --ease; ONLY max-height disclosures use
-# --ease-sym. Both tokens are single sources of truth.
+# Height grow/shrink (disclosures AND content enter/exit) uses a
+# SYMMETRIC curve --ease-sym — the Apple ease-out opens with a snap
+# (11% of time = 76% of travel) and drags on close, so open/close felt
+# different speeds; on tall mensa sections the fixed-.45s Apple grow
+# slammed content up/down on checkbox toggles. FLIP and the content
+# glide keep --ease. Both tokens are single sources of truth, mirrored
+# in JS (ANIM_EASE / ENTER_EXIT_EASE).
 SYM_EASE = "cubic-bezier(.42, 0, .58, 1)"
 sym_decl = re.search(r"--ease-sym:\s*([^;]+);", CSS)
 check("--ease-sym token is the symmetric ease-in-out",
       bool(sym_decl) and SYM_EASE in sym_decl.group(1))
+check("JS ENTER_EXIT_EASE matches --ease-sym",
+      "const ENTER_EXIT_EASE = '" + SYM_EASE + "'" in JS)
 no_var2 = CSS.replace("var(--ease-sym)", "")
 check("every max-height transition uses var(--ease-sym)",
       not re.search(r"transition:[^;]*max-height[^;]*var\(--ease\)", no_var2))
@@ -238,12 +242,52 @@ check("animateExit shrinks then removes (deferred removal)",
       "clearTimeout(node._exitTimer)" in exit_sec)
 check("reconcile exits removed nodes (not instant remove)",
       "animateExit(child)" in JS[JS.index("function reconcileChildren"):JS.index("function updatePhotoToggle")])
+# The exit shrink must reach TRUE zero: the boxes are border-box, so
+# height:0 alone leaves the vertical padding as a visible strip that
+# pops when the node is removed (prohibition #4's clipped-box padding
+# trap in exit form). reviveExit must restore it for rapid re-adds.
+check("animateExit zeroes vertical padding (no strip pop on remove)",
+      "node.style.paddingTop = '0px'" in exit_sec and
+      "node.style.paddingBottom = '0px'" in exit_sec and
+      "padding ' + dur + 'ms" in exit_sec)
+# Enter/exit duration scales with the node's height (the disclosure
+# rule): a fixed .45s slammed tall sections open/shut — the checkbox
+# "content rushes up from below" complaint. The grow/shrink uses the
+# symmetric disclosure curve, not the front-loaded Apple ease.
+check("enter/exit duration scales with node height (expandDuration)",
+      "const dur = expandDuration(node, h)" in exit_sec and
+      "dur + 150" in exit_sec and
+      "dur + 150" in JS[JS.index("function animateEnter"):JS.index("function animateExit")])
+enter_sec = JS[JS.index("function animateEnter"):JS.index("function animateExit")]
+check("animateEnter scales duration + symmetric curve (no fixed .45s)",
+      "expandDuration(node, h)" in enter_sec and
+      "'height ' + dur + 'ms ' + ENTER_EXIT_EASE" in enter_sec and
+      ".45s" not in enter_sec and
+      ".45s" not in exit_sec)
+check("reviveExit restores the padding (rapid re-add keeps the air)",
+      "node.style.paddingTop = ''" in exit_sec and
+      "node.style.paddingBottom = ''" in exit_sec)
+# Sibling FLIP after exit: the container snapshots its children BEFORE
+# the removed node is dropped, then flipPlay glides the survivors into
+# the freed space (reflows the height shrink cannot carry — e.g. chips
+# re-wrapping). The exiting node must NOT be a FLIP anchor anywhere.
+check("sibling FLIP after exit (removeExited snapshots parent)",
+      "flipFirst(parent)" in exit_sec and
+      "flipPlay(parent, first)" in exit_sec)
 check("reappearing key revives exiting node (rapid toggles)",
       "reviveExit(node)" in JS and
       "delete node.dataset.exiting" in JS)
-check("exiting nodes skipped as insertion anchors (nextLiveChild)",
-      "function nextLiveChild(container, idx)" in JS and
-      "child.dataset.exiting) continue" in JS)
+# Insertion anchors: BOTH exiting nodes AND stale nodes (key not in the
+# target key list) must be skipped. A stale node used as an anchor
+# walks every survivor in front of the doomed node — the doomed node
+# lands at the END of the list, everything above jumps up instantly,
+# and the exit shrink runs off-screen (the checkbox-remove
+# no-animation regression).
+check("stale nodes skipped as anchors (nextLiveChild filters by key set)",
+      "function nextLiveChild(container, idx, keep)" in JS and
+      "child.dataset.exiting) continue" in JS and
+      "keep.has(child.dataset.key)) continue" in JS and
+      "const keep = new Set(keys)" in JS)
 check("FLIP skipped while entering OR exiting (no fight with height anims)",
       "container.querySelector('[data-exiting]')" in JS and
       "container.querySelector('[data-entering]')" in JS)

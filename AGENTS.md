@@ -39,20 +39,30 @@ event handler -> mutate state only -> renderAll()
 - ENTER/EXIT is symmetric by default, and it is a PIPELINE property,
   not a per-feature concern: `reconcileChildren` grows every newly
   added node from 0 height via `animateEnter()` (height transition,
-  same choreography as the photo open), and removed nodes collapse via
-  the sibling FLIP. Adding a feature = add a keyed reconcile call; the
-  animation comes for free. Never hand-write per-feature enter/exit
-  animations. Nodes inside an already-entering ancestor are skipped
-  (nested reconciles — a dish inside a fresh section doesn't animate
-  twice; the outer grow carries it).
+  same choreography as the photo open), and removed nodes shrink IN
+  PLACE via `animateExit()` — height AND vertical padding to 0 (the
+  border-box padding would otherwise linger as a strip that pops on
+  removal), then `removeExited` FLIPs the parent so surviving siblings
+  glide into the freed space. CRITICAL: the insert loop must never use
+  a STALE node (key not in the target list) as an insertion anchor —
+  `nextLiveChild` skips exiting AND stale children; otherwise every
+  survivor is reordered in front of the doomed node, it walks to the
+  END of the list, and the content jumps instead of sliding (the
+  checkbox-remove no-animation regression). Adding a feature = add a
+  keyed reconcile call; the animation comes for free. Never hand-write
+  per-feature enter/exit animations. Nodes inside an already-entering
+  ancestor are skipped (nested reconciles — a dish inside a fresh
+  section doesn't animate twice; the outer grow carries it).
 - WHOLESALE SWAPS (date/meal change — every dish key changes at once)
-  are animated by the #content HEIGHT GLIDE (`animateContentHeight`):
-  lock the old height, swap the DOM instantly, glide to the new height.
-  Per-dish enters on top of a glide double-animate (the flash
-  regression), and a swap without a glide jumps (the no-animation
-  regression). Dishes therefore reconcile with enter=false; fresh
-  sections keep their own grow. The glide is guarded: skipped while any
-  node is entering (a pure-add drives height continuously on its own).
+  are symmetric enter/exit: replaced dishes shrink out (animateExit)
+  while the new ones grow in (animateEnter), so even an equal-height
+  swap animates (the old same-height-content flash). The #content
+  HEIGHT GLIDE (`animateContentHeight`) covers the residual case of a
+  height change with NO entering/exiting nodes; it is skipped while
+  any node is entering OR exiting (those height transitions drive the
+  layout continuously on their own — per-dish enters on top of a glide
+  double-animate, the flash regression). Fresh sections keep their own
+  grow.
 - RAPID TOGGLES COALESCE (`settleContentHeight`): renderAll snaps a
   still-running glide to its natural height BEFORE measuring — the old
   glide's inline height must never leak into oldH/newH (it locked the

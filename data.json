@@ -1,426 +1,6 @@
 {
- "date": "2026-08-15",
+ "date": "2026-08-16",
  "days": {
-  "2026-08-15": {
-   "mensas": [
-    {
-     "id": "eth-1",
-     "name": "ETH bQm",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-2",
-     "name": "ETH CafeBar",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-3",
-     "name": "ETH Clausiusbar",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-4",
-     "name": "ETH Kiosk CLA",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-5",
-     "name": "ETH Dozentenfoyer",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-6",
-     "name": "ETH Einstein & Zweistein",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-7",
-     "name": "ETH food&lab",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-8",
-     "name": "ETH Archimedes",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-9",
-     "name": "ETH Mensa Polyterrasse",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-10",
-     "name": "ETH Polysnack",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-11",
-     "name": "ETH Tannenbar",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-12",
-     "name": "ETH Eureka Take Away",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-13",
-     "name": "ETH Zwei Grad Bistro",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-14",
-     "name": "ETH Alumni quattro Lounge",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-15",
-     "name": "ETH Bellavista",
-     "group": "Hoengg",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-16",
-     "name": "ETH Mendokoro",
-     "group": "Hoengg",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-19",
-     "name": "ETH food market",
-     "group": "Irchel",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-20",
-     "name": "ETH FUSION meal",
-     "group": "Hoengg",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-22",
-     "name": "ETH Rice Up!",
-     "group": "Hoengg",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-23",
-     "name": "ETH Octavo",
-     "group": "Oerlikon",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-27",
-     "name": "ETH Science Lounge",
-     "group": "Irchel",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-28",
-     "name": "ETH Flavour Kitchen",
-     "group": "Irchel",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-untere-mensa",
-     "name": "Untere Mensa",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-obere-mensa",
-     "name": "Obere Mensa",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-lichthof",
-     "name": "Lichthof",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-mensa",
-     "name": "Mensa Irchel",
-     "group": "Irchel",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-green-kitchen",
-     "name": "Green Kitchen Lab",
-     "group": "Irchel",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-seerose",
-     "name": "Seerose",
-     "group": "Irchel",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-binzmuehle",
-     "name": "Mensa Oerlikon",
-     "group": "Oerlikon",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-cityport",
-     "name": "Cityport Mensa",
-     "group": "Other",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-tierspital",
-     "name": "Tierspital Mensa",
-     "group": "Other",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-botanischergarten",
-     "name": "Botanischer Garten",
-     "group": "Other",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    }
-   ]
-  },
   "2026-08-16": {
    "mensas": [
     {
@@ -19587,10 +19167,429 @@
      }
     }
    ]
+  },
+  "2026-08-30": {
+   "mensas": [
+    {
+     "id": "eth-1",
+     "name": "ETH bQm",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-2",
+     "name": "ETH CafeBar",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-3",
+     "name": "ETH Clausiusbar",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-4",
+     "name": "ETH Kiosk CLA",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-5",
+     "name": "ETH Dozentenfoyer",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-6",
+     "name": "ETH Einstein & Zweistein",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-7",
+     "name": "ETH food&lab",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-8",
+     "name": "ETH Archimedes",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-9",
+     "name": "ETH Mensa Polyterrasse",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-10",
+     "name": "ETH Polysnack",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-11",
+     "name": "ETH Tannenbar",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-12",
+     "name": "ETH Eureka Take Away",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-13",
+     "name": "ETH Zwei Grad Bistro",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-14",
+     "name": "ETH Alumni quattro Lounge",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-15",
+     "name": "ETH Bellavista",
+     "group": "Hoengg",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-16",
+     "name": "ETH Mendokoro",
+     "group": "Hoengg",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-19",
+     "name": "ETH food market",
+     "group": "Irchel",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-20",
+     "name": "ETH FUSION meal",
+     "group": "Hoengg",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-22",
+     "name": "ETH Rice Up!",
+     "group": "Hoengg",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-23",
+     "name": "ETH Octavo",
+     "group": "Oerlikon",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-27",
+     "name": "ETH Science Lounge",
+     "group": "Irchel",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-28",
+     "name": "ETH Flavour Kitchen",
+     "group": "Irchel",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-untere-mensa",
+     "name": "Untere Mensa",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-obere-mensa",
+     "name": "Obere Mensa",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-lichthof",
+     "name": "Lichthof",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-mensa",
+     "name": "Mensa Irchel",
+     "group": "Irchel",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-green-kitchen",
+     "name": "Green Kitchen Lab",
+     "group": "Irchel",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-seerose",
+     "name": "Seerose",
+     "group": "Irchel",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-binzmuehle",
+     "name": "Mensa Oerlikon",
+     "group": "Oerlikon",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-cityport",
+     "name": "Cityport Mensa",
+     "group": "Other",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-tierspital",
+     "name": "Tierspital Mensa",
+     "group": "Other",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-botanischergarten",
+     "name": "Botanischer Garten",
+     "group": "Other",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    }
+   ]
   }
  },
  "availableDates": [
-  "2026-08-15",
   "2026-08-16",
   "2026-08-17",
   "2026-08-18",
@@ -19604,6 +19603,7 @@
   "2026-08-26",
   "2026-08-27",
   "2026-08-28",
-  "2026-08-29"
+  "2026-08-29",
+  "2026-08-30"
  ]
 }

@@ -1,2063 +1,6 @@
 {
- "date": "2026-08-18",
+ "date": "2026-08-19",
  "days": {
-  "2026-08-18": {
-   "mensas": [
-    {
-     "id": "eth-1",
-     "name": "ETH bQm",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-2",
-     "name": "ETH CafeBar",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-3",
-     "name": "ETH Clausiusbar",
-     "group": "Central",
-     "opening": {
-      "Lunch": "11:00 - 14:00",
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [
-       {
-        "line": "WOK STREET",
-        "dish": "Macau",
-        "desc": "Kalb | Macau Currysauce | Karotten | Kohlraben | Zucchetti | Jasminreis",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 86.8,
-          "protein": 5.3,
-          "fat": 1.1,
-          "saturated": 0.4,
-          "carbs": 14.0,
-          "sugar": 1.7,
-          "salt": 0.64
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 13.2
-         },
-         {
-          "label": "INT",
-          "value": 14.2
-         },
-         {
-          "label": "EXT",
-          "value": 16.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "WOK GREEN",
-        "dish": "Macau Jay",
-        "desc": "Schlangenbohnen | Macau Currysauce | Karotten | Kohlraben | Zucchetti | Jasminreis",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 86.3,
-          "protein": 2.0,
-          "fat": 0.5,
-          "saturated": 0.1,
-          "carbs": 18.0,
-          "sugar": 0.3,
-          "salt": 0.87
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 12.9
-         },
-         {
-          "label": "INT",
-          "value": 13.9
-         },
-         {
-          "label": "EXT",
-          "value": 15.9
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "DELIGHT",
-        "dish": "Kare Don",
-        "desc": "Rindsragout Japanische Art | Soja | Zitronengras | Basmatireis | Karotten-Kartoffel Gemüse",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 87.2,
-          "protein": 6.5,
-          "fat": 1.5,
-          "saturated": 0.3,
-          "carbs": 11.0,
-          "sugar": 2.6,
-          "salt": 1.39
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 9.2
-         },
-         {
-          "label": "INT",
-          "value": 12.2
-         },
-         {
-          "label": "EXT",
-          "value": 14.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "GARDEN",
-        "dish": "Son Mandu",
-        "desc": "Koreanische Teigtaschen | Gemüse & Tofu | Black Bean Sauce | Zucchetti | Stangensellerie | Karotten | Jasmi..",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 108.7,
-          "protein": 2.8,
-          "fat": 0.6,
-          "saturated": 0.1,
-          "carbs": 23.0,
-          "sugar": 1.5,
-          "salt": 1.32
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 8.9
-         },
-         {
-          "label": "INT",
-          "value": 11.9
-         },
-         {
-          "label": "EXT",
-          "value": 13.9
-         }
-        ],
-        "priceUnit": "Portion"
-       }
-      ],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-4",
-     "name": "ETH Kiosk CLA",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-5",
-     "name": "ETH Dozentenfoyer",
-     "group": "Central",
-     "opening": {
-      "Lunch": "11:30 - 13:30",
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [
-       {
-        "line": "Vitality",
-        "dish": "Pinsa Burrata e Datterini",
-        "desc": "Bunte Tomaten | Rucola | Kalamata Oliven",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 187.4,
-          "protein": 9.2,
-          "fat": 8.1,
-          "saturated": 3.6,
-          "carbs": 20.0,
-          "sugar": 1.4,
-          "salt": 1.6
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "ALL",
-          "value": 14.9
-         }
-        ],
-        "priceUnit": "Portion"
-       }
-      ],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-6",
-     "name": "ETH Einstein & Zweistein",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-7",
-     "name": "ETH food&lab",
-     "group": "Central",
-     "opening": {
-      "Lunch": "11:30 - 13:30",
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [
-       {
-        "line": "West",
-        "dish": "Foodlab Cheese Burger",
-        "desc": "Pita Brot | Beef Burger | Eisbergsalat | Röstzwiebel | Ceddar Käse | Tomaten | Cocktail Sauce | Pommes",
-        "photo": "",
-        "nutrition": {
-         "p100": {},
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 11.9
-         },
-         {
-          "label": "INT",
-          "value": 13.9
-         },
-         {
-          "label": "EXT",
-          "value": 15.9
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "East",
-        "dish": "Crispy Chicker Burger",
-        "desc": "Pita Brot | Coleslaw | Tomaten | Lollorosso | Cocktail Sauce | Pommes",
-        "photo": "",
-        "nutrition": {
-         "p100": {},
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 10.9
-         },
-         {
-          "label": "INT",
-          "value": 12.9
-         },
-         {
-          "label": "EXT",
-          "value": 14.9
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Pasta",
-        "dish": "Pasta Plausch",
-        "desc": "Tagiatelle | Rind Bolognese | Vegi Bolognese | Basilikum Pesto | Reibkäse",
-        "photo": "",
-        "nutrition": {
-         "p100": {},
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 7.9
-         },
-         {
-          "label": "INT",
-          "value": 9.9
-         },
-         {
-          "label": "EXT",
-          "value": 11.9
-         }
-        ],
-        "priceUnit": "Portion"
-       }
-      ],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-8",
-     "name": "ETH Archimedes",
-     "group": "Central",
-     "opening": {
-      "Lunch": "11:00 - 14:00",
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [
-       {
-        "line": "The Gardener",
-        "dish": "Plantbased Geschnetzeltes Zürcher Art",
-        "desc": "Pflanzen Geschnetzeltes | Champignonsauce | Rösti | Sommergemüse",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 104.2,
-          "protein": 5.8,
-          "fat": 3.6,
-          "saturated": 0.5,
-          "carbs": 11.0,
-          "sugar": 1.8,
-          "salt": 0.67
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 7.9
-         },
-         {
-          "label": "INT",
-          "value": 10.9
-         },
-         {
-          "label": "EXT",
-          "value": 13.9
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "The Chef",
-        "dish": "Casarecce con pollo e spugnole",
-        "desc": "Pasta | Poulet | Morcheln | Rahmsauce | Petersilie | Reibkäse | Tagessalat",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 143.6,
-          "protein": 6.0,
-          "fat": 3.8,
-          "saturated": 1.3,
-          "carbs": 21.0,
-          "sugar": 1.6,
-          "salt": 0.39
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 8.9
-         },
-         {
-          "label": "INT",
-          "value": 11.9
-         },
-         {
-          "label": "EXT",
-          "value": 14.9
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "The Expert",
-        "dish": "Wikinger Burger",
-        "desc": "Scharbenfilet | Gurken | Eichblatt | Rote Zwiebeln | Merrettich- Mayo | Pommes Frites",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 213.4,
-          "protein": 6.1,
-          "fat": 11.0,
-          "saturated": 1.2,
-          "carbs": 21.0,
-          "sugar": 1.5,
-          "salt": 0.95
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 12.5
-         },
-         {
-          "label": "INT",
-          "value": 14.5
-         },
-         {
-          "label": "EXT",
-          "value": 17.5
-         }
-        ],
-        "priceUnit": "Portion"
-       }
-      ],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-9",
-     "name": "ETH Mensa Polyterrasse",
-     "group": "Central",
-     "opening": {
-      "Lunch": "11:15 - 13:30",
-      "Dinner": "17:30 - 19:30"
-     },
-     "meals": {
-      "Lunch": [
-       {
-        "line": "STREET",
-        "dish": "Scaloppine al limone",
-        "desc": "Schweinsplätzli | Zitronenrahmsauce | Tagliatelle | Petersilie | Tagessalat",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/72443?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {
-          "kcal": 119.3,
-          "protein": 8.2,
-          "fat": 3.6,
-          "saturated": 1.2,
-          "carbs": 13.0,
-          "sugar": 0.9,
-          "salt": 0.61
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 10.5
-         },
-         {
-          "label": "INT",
-          "value": 12.5
-         },
-         {
-          "label": "EXT",
-          "value": 16.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "GARDEN",
-        "dish": "Plantbased Geschnetzeltes Zürcher Art",
-        "desc": "Pflanzen Geschnetzeltes | Champignonsauce | Rösti | Sommergemüse",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/72444?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {
-          "kcal": 110.7,
-          "protein": 6.2,
-          "fat": 3.7,
-          "saturated": 0.6,
-          "carbs": 12.0,
-          "sugar": 2.0,
-          "salt": 0.7
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 7.0
-         },
-         {
-          "label": "INT",
-          "value": 11.5
-         },
-         {
-          "label": "EXT",
-          "value": 14.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "HOME",
-        "dish": "Banger and Mash",
-        "desc": "Schweinsbratwurst | Zwiebelsauce | Kartoffelpüree | Erbsen",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/72445?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {
-          "kcal": 115.0,
-          "protein": 5.0,
-          "fat": 6.5,
-          "saturated": 2.2,
-          "carbs": 8.1,
-          "sugar": 1.5,
-          "salt": 0.77
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 8.5
-         },
-         {
-          "label": "INT",
-          "value": 12.5
-         },
-         {
-          "label": "EXT",
-          "value": 15.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Hot & Cold 100g",
-        "dish": "Hot & Cold Buffet",
-        "desc": "Reichhaltiges Salatbuffet und zusätzlich warme Komponenten - Gesund und Lecker!",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/72446?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {},
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 2.2
-         },
-         {
-          "label": "INT",
-          "value": 2.4
-         },
-         {
-          "label": "EXT",
-          "value": 3.2
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "TAGESDESSERT",
-        "dish": "Tagesdessert",
-        "desc": "Täglich süsse Köstlichkeiten",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74575?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {},
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 2.4
-         },
-         {
-          "label": "INT",
-          "value": 2.4
-         },
-         {
-          "label": "EXT",
-          "value": 2.4
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "SMOOTHIE",
-        "dish": "Smoothie - immer Dienstags",
-        "desc": "Frisch gemixte Smoothies – erfrischend und voller Vitamine",
-        "photo": "",
-        "nutrition": {
-         "p100": {},
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 3.5
-         },
-         {
-          "label": "INT",
-          "value": 3.5
-         },
-         {
-          "label": "EXT",
-          "value": 3.5
-         }
-        ],
-        "priceUnit": "Portion"
-       }
-      ],
-      "Dinner": [
-       {
-        "line": "STREET ABEND",
-        "dish": "Danish Hot Dog",
-        "desc": "Wienerli | Sesam Bun | Remoulade | Dillgurke | Radieschen | Röstzwiebeln | Country Cuts",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/72447?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {
-          "kcal": 233.0,
-          "protein": 6.2,
-          "fat": 15.0,
-          "saturated": 3.2,
-          "carbs": 18.0,
-          "sugar": 1.6,
-          "salt": 0.83
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 10.5
-         },
-         {
-          "label": "INT",
-          "value": 12.5
-         },
-         {
-          "label": "EXT",
-          "value": 16.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "GARDEN ABEND",
-        "dish": "Sweet & Spicy Meatballs Bowl",
-        "desc": "Vegane Hackbällchen | Sweet Chili Sauce | Soja | Sesam | Basmatireis | Gurken-Mangosalat | Edamame | Frühlin..",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/72448?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {
-          "kcal": 140.5,
-          "protein": 3.5,
-          "fat": 2.5,
-          "saturated": 0.4,
-          "carbs": 25.0,
-          "sugar": 6.5,
-          "salt": 1.07
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 7.0
-         },
-         {
-          "label": "INT",
-          "value": 11.5
-         },
-         {
-          "label": "EXT",
-          "value": 14.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "HOME ABEND",
-        "dish": "Sweet & Spicy Meatball Bowl",
-        "desc": "Rindshackbällchen | Sweet Chili Sauce | Soja | Sesam | Basmatireis | Gurken-Mangosalat | Edamame | Frühlings..",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/72449?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {
-          "kcal": 143.2,
-          "protein": 6.2,
-          "fat": 3.9,
-          "saturated": 1.4,
-          "carbs": 20.0,
-          "sugar": 6.4,
-          "salt": 1.22
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 8.5
-         },
-         {
-          "label": "INT",
-          "value": 12.5
-         },
-         {
-          "label": "EXT",
-          "value": 15.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "POLY-BOWLS",
-        "dish": "Poly-Bowls",
-        "desc": "Täglich frisch zubereitet – wahlweise mit Fleisch oder vegetarisch. Frisch | leicht | lecker!",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74577?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {},
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 9.5
-         },
-         {
-          "label": "INT",
-          "value": 11.5
-         },
-         {
-          "label": "EXT",
-          "value": 13.5
-         }
-        ],
-        "priceUnit": "Portion"
-       }
-      ]
-     }
-    },
-    {
-     "id": "eth-10",
-     "name": "ETH Polysnack",
-     "group": "Central",
-     "opening": {
-      "Lunch": "11:30 - 14:00",
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [
-       {
-        "line": "PASTA",
-        "dish": "Cajun Chicken Pasta",
-        "desc": "Hörnli | Pouletsreifen | Cajunrahmsauce | Peperoniwürfel | Petersilie | Reibkäse",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 163.0,
-          "protein": 9.9,
-          "fat": 5.2,
-          "saturated": 1.9,
-          "carbs": 18.0,
-          "sugar": 1.7,
-          "salt": 0.84
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 10.9
-         },
-         {
-          "label": "INT",
-          "value": 12.9
-         },
-         {
-          "label": "EXT",
-          "value": 15.9
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "AL FORNO",
-        "dish": "Pizza bianca con zucchine e peperoni",
-        "desc": "Crème Fraiche | Mozzarella | Zucchetti | Peperoni | Rucola",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 186.7,
-          "protein": 8.3,
-          "fat": 8.1,
-          "saturated": 3.7,
-          "carbs": 20.0,
-          "sugar": 1.2,
-          "salt": 0.87
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 9.9
-         },
-         {
-          "label": "INT",
-          "value": 11.9
-         },
-         {
-          "label": "EXT",
-          "value": 14.9
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "VERDE",
-        "dish": "Insalata Cesare",
-        "desc": "Lattich | Champignons | Parmesanhobel | Croutons | Kresse | Cherry Tomaten | Add on: Pouletstreifen (+ 2.00)",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 138.9,
-          "protein": 7.6,
-          "fat": 10.0,
-          "saturated": 1.7,
-          "carbs": 3.8,
-          "sugar": 0.7,
-          "salt": 1.02
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 10.5
-         },
-         {
-          "label": "INT",
-          "value": 12.5
-         },
-         {
-          "label": "EXT",
-          "value": 15.5
-         }
-        ],
-        "priceUnit": "Portion"
-       }
-      ],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-11",
-     "name": "ETH Tannenbar",
-     "group": "Central",
-     "opening": {
-      "Lunch": "11:30 - 13:30",
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [
-       {
-        "line": "World",
-        "dish": "Burrito Chili con carne",
-        "desc": "IP-SUISSE Rindfleisch | Cheddar | Mais | Rote Bohnen | Peperoni | Reis | Nachos | Sauerrahm | Salsa | Jalape..",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 140.1,
-          "protein": 7.1,
-          "fat": 5.2,
-          "saturated": 1.7,
-          "carbs": 15.0,
-          "sugar": 1.2,
-          "salt": 0.58
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 9.9
-         },
-         {
-          "label": "INT",
-          "value": 9.9
-         },
-         {
-          "label": "EXT",
-          "value": 14.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Green",
-        "dish": "Quesadilla Chili sin carne",
-        "desc": "Pflanzenhack | Cheddar | Mais | Rote Bohnen | Peperoni | Reis | Nachos | Sauerrahm | Salsa | Jalapenos",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 104.0,
-          "protein": 3.8,
-          "fat": 1.5,
-          "saturated": 0.4,
-          "carbs": 17.0,
-          "sugar": 1.8,
-          "salt": 0.58
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 9.9
-         },
-         {
-          "label": "INT",
-          "value": 9.9
-         },
-         {
-          "label": "EXT",
-          "value": 14.5
-         }
-        ],
-        "priceUnit": "Portion"
-       }
-      ],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-12",
-     "name": "ETH Eureka Take Away",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-13",
-     "name": "ETH Zwei Grad Bistro",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-14",
-     "name": "ETH Alumni quattro Lounge",
-     "group": "Central",
-     "opening": {
-      "Lunch": "11:00 - 14:00",
-      "Dinner": "14:00 - 19:00"
-     },
-     "meals": {
-      "Lunch": [
-       {
-        "line": "Classic Pot",
-        "dish": "G'hacktes mit Hörnli",
-        "desc": "Rindsgehacktes | Hörnli | Apfelmus | Extrahartkäse",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/72217?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {
-          "kcal": 141.5,
-          "protein": 6.1,
-          "fat": 3.2,
-          "saturated": 1.5,
-          "carbs": 21.0,
-          "sugar": 3.5,
-          "salt": 0.36
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 8.5
-         },
-         {
-          "label": "INT",
-          "value": 10.5
-         },
-         {
-          "label": "EXT",
-          "value": 14.5
-         }
-        ],
-        "priceUnit": "Portion"
-       }
-      ],
-      "Dinner": [
-       {
-        "line": "Classic Pot Abend",
-        "dish": "G'hacktes mit Hörnli Vegan",
-        "desc": "Sojagehacktes | Hörnli | Apfelmus | veganer Käse",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/72218?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {
-          "kcal": 125.7,
-          "protein": 4.6,
-          "fat": 1.4,
-          "saturated": 0.7,
-          "carbs": 23.0,
-          "sugar": 3.5,
-          "salt": 0.58
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 8.5
-         },
-         {
-          "label": "INT",
-          "value": 10.5
-         },
-         {
-          "label": "EXT",
-          "value": 14.5
-         }
-        ],
-        "priceUnit": "Portion"
-       }
-      ]
-     }
-    },
-    {
-     "id": "eth-15",
-     "name": "ETH Bellavista",
-     "group": "Hoengg",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-16",
-     "name": "ETH Mendokoro",
-     "group": "Hoengg",
-     "opening": {
-      "Lunch": "11:15 - 14:00",
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [
-       {
-        "line": "Ichi",
-        "dish": "Miso Ramen",
-        "desc": "Pak Choi | Nori | Mariniertes Ei | Gerösteter Sesam",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 70.0,
-          "protein": 2.8,
-          "fat": 3.6,
-          "saturated": 0.2,
-          "carbs": 10.0,
-          "sugar": 0.9,
-          "salt": 1.21
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 10.5
-         },
-         {
-          "label": "INT",
-          "value": 12.5
-         },
-         {
-          "label": "EXT",
-          "value": 15.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Ni",
-        "dish": "Shoyu Ramen",
-        "desc": "Austernpilze | Nori | Mariniertes Ei | Frühlingszwiebeln",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 73.6,
-          "protein": 2.9,
-          "fat": 3.7,
-          "saturated": 0.2,
-          "carbs": 11.0,
-          "sugar": 0.8,
-          "salt": 1.29
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 10.5
-         },
-         {
-          "label": "INT",
-          "value": 12.5
-         },
-         {
-          "label": "EXT",
-          "value": 15.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "San",
-        "dish": "Cold Moiroka Ramen",
-        "desc": "Wassermelonen | Gurken | Kimchi | Mariniertes Ei | Frühlingszwiebeln",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 64.3,
-          "protein": 2.3,
-          "fat": 3.0,
-          "saturated": 0.1,
-          "carbs": 10.0,
-          "sugar": 1.1,
-          "salt": 1.15
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 12.5
-         },
-         {
-          "label": "INT",
-          "value": 14.5
-         },
-         {
-          "label": "EXT",
-          "value": 17.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Shi",
-        "dish": "Chicken Tonkatsu Bowl",
-        "desc": "Crunchy Chicken | Tonkatsu Sauce | Sushireis | Japanischer Krautsalat | Sesam",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 174.0,
-          "protein": 5.8,
-          "fat": 3.7,
-          "saturated": 0.5,
-          "carbs": 29.0,
-          "sugar": 6.1,
-          "salt": 1.07
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 13.8
-         },
-         {
-          "label": "INT",
-          "value": 15.8
-         },
-         {
-          "label": "EXT",
-          "value": 18.8
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Roku",
-        "dish": "Tori Ramen",
-        "desc": "Pouletbrust | Edamame | Karotten | Nori | Mariniertes Ei | Gerösteter Sesam",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 75.8,
-          "protein": 5.0,
-          "fat": 3.5,
-          "saturated": 0.2,
-          "carbs": 9.5,
-          "sugar": 0.8,
-          "salt": 1.17
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 13.8
-         },
-         {
-          "label": "INT",
-          "value": 15.8
-         },
-         {
-          "label": "EXT",
-          "value": 18.8
-         }
-        ],
-        "priceUnit": "Portion"
-       }
-      ],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-19",
-     "name": "ETH food market",
-     "group": "Irchel",
-     "opening": {
-      "Lunch": "11:15 - 13:45",
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [
-       {
-        "line": "Fire",
-        "dish": "Pouletschenkel mit Chili & Honig",
-        "desc": "Scharfe Honigsauce | Purpur Weizen | Lattich | Gemüse Bruoise",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74718?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {
-          "kcal": 143.4,
-          "protein": 7.4,
-          "fat": 6.3,
-          "saturated": 2.0,
-          "carbs": 13.0,
-          "sugar": 2.1,
-          "salt": 0.67
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 8.5
-         },
-         {
-          "label": "INT",
-          "value": 12.5
-         },
-         {
-          "label": "EXT",
-          "value": 15.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Grill",
-        "dish": "Korean Mandu Dumplings",
-        "desc": "Sweet Chili Sauce | Kimchi Fried Rice | Frühlingszwiebeln | Sesam | Sojasprossen",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74719?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {
-          "kcal": 122.1,
-          "protein": 2.2,
-          "fat": 1.5,
-          "saturated": 0.3,
-          "carbs": 24.0,
-          "sugar": 2.9,
-          "salt": 0.88
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 9.5
-         },
-         {
-          "label": "INT",
-          "value": 12.5
-         },
-         {
-          "label": "EXT",
-          "value": 15.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Green Daily",
-        "dish": "Panierte Champignons",
-        "desc": "Safransauce | Pink Bulgur | Pfälzer Karotten | Fetakäse | Erbsenpüree",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74720?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {
-          "kcal": 138.6,
-          "protein": 4.9,
-          "fat": 5.2,
-          "saturated": 2.2,
-          "carbs": 17.0,
-          "sugar": 2.0,
-          "salt": 0.75
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 7.0
-         },
-         {
-          "label": "INT",
-          "value": 11.5
-         },
-         {
-          "label": "EXT",
-          "value": 14.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Green Delight",
-        "dish": "Choose 5",
-        "desc": "Wähle 5 Komponenten heiss oder kalt",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74721?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {},
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 9.9
-         },
-         {
-          "label": "INT",
-          "value": 13.9
-         },
-         {
-          "label": "EXT",
-          "value": 16.9
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Pizza Classica",
-        "dish": "Pizza Margherita",
-        "desc": "Salat oder Lemonade Topping: Pancetta und Ei + CHF 3.00",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74722?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {
-          "kcal": 205.1,
-          "protein": 9.6,
-          "fat": 5.3,
-          "saturated": 2.5,
-          "carbs": 29.0,
-          "sugar": 1.2,
-          "salt": 1.28
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 7.0
-         },
-         {
-          "label": "INT",
-          "value": 11.5
-         },
-         {
-          "label": "EXT",
-          "value": 14.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Pasta Classica Vegi",
-        "dish": "Pasta ai Broccoli",
-        "desc": "Broccoli | Rahmsauce | Dörrtomaten | Reibkäse | Salat oder Lemonade",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74723?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {
-          "kcal": 169.0,
-          "protein": 5.5,
-          "fat": 4.5,
-          "saturated": 2.0,
-          "carbs": 26.0,
-          "sugar": 2.5,
-          "salt": 0.33
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 7.0
-         },
-         {
-          "label": "INT",
-          "value": 11.5
-         },
-         {
-          "label": "EXT",
-          "value": 14.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Pasta della Nonna",
-        "dish": "Fancy Carbonara",
-        "desc": "Spaghetti | Carbonara Sauce | Spiegelei | Bacon Chips | Reibkäse | Salat oder Lemonade",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74724?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {
-          "kcal": 147.7,
-          "protein": 6.0,
-          "fat": 6.5,
-          "saturated": 2.1,
-          "carbs": 16.0,
-          "sugar": 1.9,
-          "salt": 0.65
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 9.5
-         },
-         {
-          "label": "INT",
-          "value": 13.5
-         },
-         {
-          "label": "EXT",
-          "value": 16.5
-         }
-        ],
-        "priceUnit": "Portion"
-       }
-      ],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-20",
-     "name": "ETH FUSION meal",
-     "group": "Hoengg",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-22",
-     "name": "ETH Rice Up!",
-     "group": "Hoengg",
-     "opening": {
-      "Lunch": "11:00 - 14:00",
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [
-       {
-        "line": "Rice Up! Bowl",
-        "dish": "Rice Up! Bowl",
-        "desc": "Jasmine Rice | Poulet-Bällchen | Broccoli | Grünes Curry | Asia Krautsalat | Kräutersalat | Saison Topping",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/71789?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {},
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 8.9
-         },
-         {
-          "label": "INT",
-          "value": 13.9
-         },
-         {
-          "label": "EXT",
-          "value": 14.9
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Tofu Cashew Bowl",
-        "dish": "Tofu Cashew Bowl",
-        "desc": "Roter Reis | Marinierter Tofu | Saison Gemüse | Satay Sauce | Asia Krautsalat | Kräutersalat | Saison Topping",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/71790?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {},
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 9.9
-         },
-         {
-          "label": "INT",
-          "value": 14.9
-         },
-         {
-          "label": "EXT",
-          "value": 15.9
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Chicken Satay Bowl",
-        "dish": "Chicken Satay Bowl",
-        "desc": "Reisnudeln | Gegrilltes Poulet Satay | Grüne Bohnen | Rotes Curry | Asia Krautsalat | Kräutersalat | Thai Chilli",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/71791?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {},
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 10.9
-         },
-         {
-          "label": "INT",
-          "value": 15.9
-         },
-         {
-          "label": "EXT",
-          "value": 16.9
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Planted Bowl",
-        "dish": "Planted Bowl",
-        "desc": "Salatmischung | Planted Chicken Teriyaki | Sweet Corn | Tamarinden Sauce | Asia Kräutersalat | Erdnüsse",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/71792?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {},
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 10.9
-         },
-         {
-          "label": "INT",
-          "value": 15.9
-         },
-         {
-          "label": "EXT",
-          "value": 16.9
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Grilled Shrimps",
-        "dish": "Grilled Shrimps Bowl",
-        "desc": "Jasmine Rice | Grilled Shrimps | Broccoli | rotes Curry | Asia Krautsalat | Kräutersalat | Puffed Rice",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/71793?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {},
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "STUD",
-          "value": 11.9
-         },
-         {
-          "label": "INT",
-          "value": 16.9
-         },
-         {
-          "label": "EXT",
-          "value": 17.9
-         }
-        ],
-        "priceUnit": "Portion"
-       }
-      ],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-23",
-     "name": "ETH Octavo",
-     "group": "Oerlikon",
-     "opening": {
-      "Lunch": "11:30 - 13:30",
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [
-       {
-        "line": "Eins",
-        "dish": "Eglifilet",
-        "desc": "Bierteig | WWF Score 2 | Kartoffeln | Rosmarin | Thymian | Gurken- Joghurtsalat | Remouladen Sauce | Beilagensalat",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 131.2,
-          "protein": 2.9,
-          "fat": 8.7,
-          "saturated": 0.9,
-          "carbs": 9.9,
-          "sugar": 1.4,
-          "salt": 1.04
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "INT&STUD",
-          "value": 17.5
-         },
-         {
-          "label": "EXT",
-          "value": 19.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Zwei",
-        "dish": "Chicken Tikka Masala",
-        "desc": "Jasmin Reis | Karotten | Pfälzer | Bohnen | Beilagensalat",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 107.1,
-          "protein": 4.8,
-          "fat": 3.9,
-          "saturated": 1.1,
-          "carbs": 13.0,
-          "sugar": 2.4,
-          "salt": 0.51
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "INT&STUD",
-          "value": 12.9
-         },
-         {
-          "label": "EXT",
-          "value": 14.9
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Drei",
-        "dish": "Burrata",
-        "desc": "Surgital Rigatoni | Tomaten Pesto | Grill Gemüse | Burrata Cremosa | Rucola | Beilagensalat",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 194.1,
-          "protein": 6.4,
-          "fat": 8.4,
-          "saturated": 1.5,
-          "carbs": 24.0,
-          "sugar": 1.6,
-          "salt": 1.79
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "INT&STUD",
-          "value": 12.9
-         },
-         {
-          "label": "EXT",
-          "value": 14.9
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Vier",
-        "dish": "Bowl4You",
-        "desc": "„Gestalten Sie Ihre Bowl ganz nach Ihrem Geschmack.“",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 75.8,
-          "protein": 1.0,
-          "fat": 7.3,
-          "saturated": 0.8,
-          "carbs": 1.6,
-          "sugar": 1.4,
-          "salt": 0.6
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "INT&STUD",
-          "value": 3.2
-         },
-         {
-          "label": "EXT",
-          "value": 3.8
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "5uppe",
-        "dish": "Tagessuppe",
-        "desc": "Tagessuppe lt. Chef",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 15.5,
-          "protein": 0.5,
-          "fat": 0.1,
-          "carbs": 2.6,
-          "sugar": 1.8,
-          "salt": 0.62
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "INT&STUD",
-          "value": 3.5
-         },
-         {
-          "label": "EXT",
-          "value": 4.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Kaffeebar",
-        "dish": "TINYFISH @ Octavo",
-        "desc": "Sushi ab 10.50 CHF an der Kaffeebar",
-        "photo": "",
-        "nutrition": {
-         "p100": {},
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "INT&STUD",
-          "value": 10.5
-         },
-         {
-          "label": "EXT",
-          "value": 10.5
-         }
-        ],
-        "priceUnit": "Portion"
-       }
-      ],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-27",
-     "name": "ETH Science Lounge",
-     "group": "Irchel",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "eth-28",
-     "name": "ETH Flavour Kitchen",
-     "group": "Irchel",
-     "opening": {
-      "Lunch": "11:30 - 13:30",
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [
-       {
-        "line": "PASTA OF THE DAY",
-        "dish": "Pasta Feta",
-        "desc": "Blattspinat | Fetakäse | geröstete Pinienkerne",
-        "photo": "",
-        "nutrition": {
-         "p100": {},
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "INT&STUD",
-          "value": 14.0
-         },
-         {
-          "label": "EXT",
-          "value": 17.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "PLANTS & MORE",
-        "dish": "Dal Makhani",
-        "desc": "schwarze Linsen | Lauch | Spinat | Zucchetti | Kichererbsen | Naanbrot",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74401?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {},
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "INT&STUD",
-          "value": 14.0
-         },
-         {
-          "label": "EXT",
-          "value": 17.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "CLASSIC FLAVOUR",
-        "dish": "Schweineschnitzel & Tagliatelle",
-        "desc": "Zitronen-Rahmsauce | Tagliatelle | Mischgemüse",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74402?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {},
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "INT&STUD",
-          "value": 14.0
-         },
-         {
-          "label": "EXT",
-          "value": 17.5
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "WEEKLY BOWL",
-        "dish": "Caesar Salad",
-        "desc": "Lattich | Apfelwürfel | gepickelte Radisli | Backerbsen | Speck | Sprinz | Sprossen | Rusticobrotscheibe",
-        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74403?client-id=ethz-wcms",
-        "nutrition": {
-         "p100": {},
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "INT&STUD",
-          "value": 10.8
-         },
-         {
-          "label": "EXT",
-          "value": 13.5
-         }
-        ],
-        "priceUnit": "Portion"
-       }
-      ],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-untere-mensa",
-     "name": "Untere Mensa",
-     "group": "Central",
-     "opening": {
-      "Lunch": "11:00 - 14:30",
-      "Dinner": "17:00 - 19:00"
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-obere-mensa",
-     "name": "Obere Mensa",
-     "group": "Central",
-     "opening": {
-      "Lunch": "11:00 - 14:30",
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-lichthof",
-     "name": "Lichthof",
-     "group": "Central",
-     "opening": {
-      "Lunch": null,
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-mensa",
-     "name": "Mensa Irchel",
-     "group": "Irchel",
-     "opening": {
-      "Lunch": "11:00 - 14:00",
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-green-kitchen",
-     "name": "Green Kitchen Lab",
-     "group": "Irchel",
-     "opening": {
-      "Lunch": "11:00 - 14:00",
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-seerose",
-     "name": "Seerose",
-     "group": "Irchel",
-     "opening": {
-      "Lunch": "07:30 - 19:30",
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-binzmuehle",
-     "name": "Mensa Oerlikon",
-     "group": "Oerlikon",
-     "opening": {
-      "Lunch": "11:15 - 14:15",
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-cityport",
-     "name": "Cityport Mensa",
-     "group": "Other",
-     "opening": {
-      "Lunch": "09:00 - 14:30",
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-tierspital",
-     "name": "Tierspital Mensa",
-     "group": "Other",
-     "opening": {
-      "Lunch": "06:30 - 16:30",
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    },
-    {
-     "id": "uzh-botanischergarten",
-     "name": "Botanischer Garten",
-     "group": "Other",
-     "opening": {
-      "Lunch": "08:00 - 17:00",
-      "Dinner": null
-     },
-     "meals": {
-      "Lunch": [],
-      "Dinner": []
-     }
-    }
-   ]
-  },
   "2026-08-19": {
    "mensas": [
     {
@@ -2250,11 +193,63 @@
      "name": "ETH Dozentenfoyer",
      "group": "Central",
      "opening": {
-      "Lunch": null,
+      "Lunch": "11:30 - 13:30",
       "Dinner": null
      },
      "meals": {
-      "Lunch": [],
+      "Lunch": [
+       {
+        "line": "Chef's World",
+        "dish": "Tuna Saku Bowl",
+        "desc": "Sesam | Teriyaki | Sushi Reis | Edamame | Gurken | Nori Algen | Frühlingszwiebeln | Furrikake | Miso Dip",
+        "photo": "",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "ALL",
+          "value": 21.0
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Vitality",
+        "dish": "Golden Chickpea Tajine",
+        "desc": "Zucchetti | Blumenkohl | Paprika | Ras el Hanout | Bulgur | Marokkanischer Minzjoghurt | Limette",
+        "photo": "",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "ALL",
+          "value": 14.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Favorite",
+        "dish": "Dorsch Loins à la Mer",
+        "desc": "Zitronenpfeffer Sauce | Gnocchi | Blattspinat | pro 100gr",
+        "photo": "",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "ALL",
+          "value": 3.2
+         }
+        ],
+        "priceUnit": "100 g"
+       }
+      ],
       "Dinner": []
      }
     },
@@ -3848,7 +1843,7 @@
         "line": "PASTA OF THE DAY",
         "dish": "Pasta Feta",
         "desc": "Blattspinat | Fetakäse | geröstete Pinienkerne",
-        "photo": "",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/74881?client-id=ethz-wcms",
         "nutrition": {
          "p100": {},
          "total": {}
@@ -9222,11 +7217,78 @@
      "name": "ETH Tannenbar",
      "group": "Central",
      "opening": {
-      "Lunch": null,
+      "Lunch": "11:30 - 13:30",
       "Dinner": null
      },
      "meals": {
-      "Lunch": [],
+      "Lunch": [
+       {
+        "line": "World",
+        "dish": "Chicken Katsu Bowl",
+        "desc": "Crispy Chicken | Tonkatsu Sauce | Edamame | Mango | Karotten | Kabis | Jasminreis | Sesam",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 83.7,
+          "protein": 2.9,
+          "fat": 1.2,
+          "saturated": 0.1,
+          "carbs": 14.0,
+          "sugar": 6.5,
+          "salt": 0.48
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 9.9
+         },
+         {
+          "label": "INT",
+          "value": 9.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Green",
+        "dish": "Katsu Bowl",
+        "desc": "Gemüse Nuggets | Tonkatsu Sauce | Edamame | Mango | Karotten | Kabis | Jasminreis | Sesam",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 85.8,
+          "protein": 2.1,
+          "fat": 1.4,
+          "saturated": 0.3,
+          "carbs": 15.0,
+          "sugar": 6.8,
+          "salt": 0.48
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 9.9
+         },
+         {
+          "label": "INT",
+          "value": 9.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.5
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
       "Dinner": []
      }
     },
@@ -10741,11 +8803,78 @@
      "name": "ETH Tannenbar",
      "group": "Central",
      "opening": {
-      "Lunch": null,
+      "Lunch": "11:30 - 13:30",
       "Dinner": null
      },
      "meals": {
-      "Lunch": [],
+      "Lunch": [
+       {
+        "line": "World",
+        "dish": "Chicken Katsu Bowl",
+        "desc": "Crispy Chicken | Tonkatsu Sauce | Edamame | Mango | Karotten | Kabis | Jasminreis | Sesam",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 84.4,
+          "protein": 3.0,
+          "fat": 1.2,
+          "saturated": 0.1,
+          "carbs": 14.0,
+          "sugar": 6.4,
+          "salt": 0.49
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 9.9
+         },
+         {
+          "label": "INT",
+          "value": 9.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Green",
+        "dish": "Katsu Bowl",
+        "desc": "Gemüse Nuggets | Tonkatsu Sauce | Edamame | Mango | Karotten | Kabis | Jasminreis | Sesam",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 77.9,
+          "protein": 1.9,
+          "fat": 1.2,
+          "saturated": 0.2,
+          "carbs": 14.0,
+          "sugar": 7.1,
+          "salt": 0.38
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 9.9
+         },
+         {
+          "label": "INT",
+          "value": 9.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.5
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
       "Dinner": []
      }
     },
@@ -12281,11 +10410,78 @@
      "name": "ETH Tannenbar",
      "group": "Central",
      "opening": {
-      "Lunch": null,
+      "Lunch": "11:30 - 13:30",
       "Dinner": null
      },
      "meals": {
-      "Lunch": [],
+      "Lunch": [
+       {
+        "line": "World",
+        "dish": "Pulled Pork Bowl",
+        "desc": "IP-SUISSE Pulled Pork | Wasabi-Sojasauce | Wok-Gemüse | Pak Choi | Kurkuma Blumenkohl | Koriander | Ingwer | ..",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 112.1,
+          "protein": 6.2,
+          "fat": 4.0,
+          "saturated": 1.1,
+          "carbs": 12.0,
+          "sugar": 2.6,
+          "salt": 2.01
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 9.9
+         },
+         {
+          "label": "INT",
+          "value": 9.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Green",
+        "dish": "Pulled Planted Bowl",
+        "desc": "Pulled Planted | Wasabi-Sojasauce | Wok-Gemüse | Pak Choi | Kurkuma Blumenkohl | Koriander | Ingwer | Chili ..",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 88.7,
+          "protein": 3.4,
+          "fat": 1.2,
+          "saturated": 0.1,
+          "carbs": 15.0,
+          "sugar": 3.2,
+          "salt": 2.08
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 9.9
+         },
+         {
+          "label": "INT",
+          "value": 9.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.5
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
       "Dinner": []
      }
     },
@@ -13414,8 +11610,8 @@
       "Lunch": [
        {
         "line": "The Gardener",
-        "dish": "Spätzlipfanne mit grünen Spargeln",
-        "desc": "Spätzli | Bechamel | Grüne Spargeln | Mischgemüse | Kartoffeln | Zwiebeln | Reibkäse | Frucht",
+        "dish": "Sommer Spätzlipfanne",
+        "desc": "Spätzli | Bechamel | Mischgemüse | Kartoffeln | Zwiebeln | Reibkäse | Frucht",
         "photo": "",
         "nutrition": {
          "p100": {
@@ -13821,11 +12017,78 @@
      "name": "ETH Tannenbar",
      "group": "Central",
      "opening": {
-      "Lunch": null,
+      "Lunch": "11:30 - 13:30",
       "Dinner": null
      },
      "meals": {
-      "Lunch": [],
+      "Lunch": [
+       {
+        "line": "World",
+        "dish": "Pulled Pork Bowl",
+        "desc": "IP-SUISSE Pulled Pork | Wasabi-Sojasauce | Wok-Gemüse | Pak Choi | Kurkuma Blumenkohl | Koriander | Ingwer | ..",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 112.1,
+          "protein": 6.2,
+          "fat": 4.0,
+          "saturated": 1.1,
+          "carbs": 12.0,
+          "sugar": 2.6,
+          "salt": 2.0
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 9.9
+         },
+         {
+          "label": "INT",
+          "value": 9.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Green",
+        "dish": "Pulled Planted Bowl",
+        "desc": "Pulled Planted | Wasabi-Sojasauce | Wok-Gemüse | Pak Choi | Kurkuma Blumenkohl | Koriander | Ingwer | Chili ..",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 88.7,
+          "protein": 3.4,
+          "fat": 1.2,
+          "saturated": 0.1,
+          "carbs": 15.0,
+          "sugar": 3.2,
+          "salt": 2.08
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 9.9
+         },
+         {
+          "label": "INT",
+          "value": 9.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.5
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
       "Dinner": []
      }
     },
@@ -15276,11 +13539,78 @@
      "name": "ETH Tannenbar",
      "group": "Central",
      "opening": {
-      "Lunch": null,
+      "Lunch": "11:30 - 13:30",
       "Dinner": null
      },
      "meals": {
-      "Lunch": [],
+      "Lunch": [
+       {
+        "line": "World",
+        "dish": "Köfte Bowl",
+        "desc": "IP-SUISSE Rindsköfte | Tzatziki | Fladenbrot | Eisberg | Kabis | Karotten | Gurken | Tomaten | Dill | Peterli",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 132.9,
+          "protein": 8.6,
+          "fat": 8.2,
+          "saturated": 3.3,
+          "carbs": 5.6,
+          "sugar": 1.8,
+          "salt": 1.39
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 9.9
+         },
+         {
+          "label": "INT",
+          "value": 9.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Green",
+        "dish": "Falafel Bowl",
+        "desc": "Mini Curry Falafel | Tzatziki | Fladenbrot | Eisberg | Kabis | Karotten | Gurken | Tomaten | Dill | Peterli",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 108.0,
+          "protein": 3.7,
+          "fat": 1.2,
+          "saturated": 0.2,
+          "carbs": 19.0,
+          "sugar": 1.8,
+          "salt": 0.69
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 9.9
+         },
+         {
+          "label": "INT",
+          "value": 9.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.5
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
       "Dinner": []
      }
     },
@@ -17145,11 +15475,111 @@
      "name": "ETH Archimedes",
      "group": "Central",
      "opening": {
-      "Lunch": null,
+      "Lunch": "11:00 - 14:00",
       "Dinner": null
      },
      "meals": {
-      "Lunch": [],
+      "Lunch": [
+       {
+        "line": "The Gardener",
+        "dish": "Quinoa Linsen Bällchen",
+        "desc": "Kichererbsen | Auberginen | Tomaten | Zimt | Couscous",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 160.6,
+          "protein": 4.3,
+          "fat": 3.5,
+          "saturated": 0.5,
+          "carbs": 26.0,
+          "sugar": 1.7,
+          "salt": 0.96
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 7.9
+         },
+         {
+          "label": "INT",
+          "value": 10.9
+         },
+         {
+          "label": "EXT",
+          "value": 13.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "The Chef",
+        "dish": "Basil Chicken Pasta",
+        "desc": "Poulet | Basilikumsauce | Reibkäse | Salat",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 126.9,
+          "protein": 5.4,
+          "fat": 3.3,
+          "saturated": 0.8,
+          "carbs": 18.0,
+          "sugar": 2.7,
+          "salt": 0.3
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 8.9
+         },
+         {
+          "label": "INT",
+          "value": 11.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "The Expert",
+        "dish": "Ämmitaler Käseschnitten",
+        "desc": "Ruchbrot | Emmentalerkäse | Rohschinken | Gemüsepickels | Salat",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 194.3,
+          "protein": 12.0,
+          "fat": 9.7,
+          "saturated": 2.9,
+          "carbs": 14.0,
+          "sugar": 2.5,
+          "salt": 1.26
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 11.5
+         },
+         {
+          "label": "INT",
+          "value": 13.5
+         },
+         {
+          "label": "EXT",
+          "value": 16.5
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
       "Dinner": []
      }
     },
@@ -17409,78 +15839,11 @@
      "name": "ETH Tannenbar",
      "group": "Central",
      "opening": {
-      "Lunch": "11:30 - 13:30",
+      "Lunch": null,
       "Dinner": null
      },
      "meals": {
-      "Lunch": [
-       {
-        "line": "World",
-        "dish": "Burrito Chili con carne",
-        "desc": "IP-SUISSE Rindfleisch | Cheddar | Mais | Rote Bohnen | Peperoni | Reis | Nachos | Sauerrahm | Salsa | Jalape..",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 139.3,
-          "protein": 7.1,
-          "fat": 5.2,
-          "saturated": 1.7,
-          "carbs": 15.0,
-          "sugar": 1.2,
-          "salt": 0.59
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "EXT",
-          "value": 14.5
-         },
-         {
-          "label": "INT",
-          "value": 9.9
-         },
-         {
-          "label": "STUD",
-          "value": 9.9
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Green",
-        "dish": "Quesadilla Chili sin carne",
-        "desc": "Pflanzenhack | Cheddar | Mais | Rote Bohnen | Peperoni | Reis | Nachos | Sauerrahm | Salsa | Jalapenos",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 104.0,
-          "protein": 3.8,
-          "fat": 1.5,
-          "saturated": 0.4,
-          "carbs": 17.0,
-          "sugar": 1.8,
-          "salt": 0.58
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "EXT",
-          "value": 14.5
-         },
-         {
-          "label": "INT",
-          "value": 9.9
-         },
-         {
-          "label": "STUD",
-          "value": 9.9
-         }
-        ],
-        "priceUnit": "Portion"
-       }
-      ],
+      "Lunch": [],
       "Dinner": []
      }
     },
@@ -18215,11 +16578,96 @@
      "name": "ETH Flavour Kitchen",
      "group": "Irchel",
      "opening": {
-      "Lunch": null,
+      "Lunch": "11:30 - 13:30",
       "Dinner": null
      },
      "meals": {
-      "Lunch": [],
+      "Lunch": [
+       {
+        "line": "PASTA OF THE DAY",
+        "dish": "Pasta Carbonara",
+        "desc": "Speck | Rahmsauce | Schnittlauch | Speckchip",
+        "photo": "",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "INT&STUD",
+          "value": 14.0
+         },
+         {
+          "label": "EXT",
+          "value": 17.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "PLANTS & MORE",
+        "dish": "Lasagne E Ricotta E Spinaci",
+        "desc": "Ricotta | Spinat | Tomatensauce | Basilikum | Menü Salat",
+        "photo": "",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "INT&STUD",
+          "value": 14.0
+         },
+         {
+          "label": "EXT",
+          "value": 17.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "CLASSIC FLAVOUR",
+        "dish": "Coq au Vin Blanc",
+        "desc": "Pouletschenkel-Ragout | Reis | Leinsamen | Ratatouille",
+        "photo": "",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "INT&STUD",
+          "value": 14.0
+         },
+         {
+          "label": "EXT",
+          "value": 17.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "WEEKLY BOWL",
+        "dish": "Bella Italia Bowl",
+        "desc": "Venere Reis | Caponata Siciliana | Croutons | Knoblauch | Kräuter | Spinat | Mozzarella",
+        "photo": "",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "INT&STUD",
+          "value": 10.8
+         },
+         {
+          "label": "EXT",
+          "value": 13.5
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
       "Dinner": []
      }
     },
@@ -18453,11 +16901,111 @@
      "name": "ETH Archimedes",
      "group": "Central",
      "opening": {
-      "Lunch": null,
+      "Lunch": "11:00 - 14:00",
       "Dinner": null
      },
      "meals": {
-      "Lunch": [],
+      "Lunch": [
+       {
+        "line": "The Gardener",
+        "dish": "Quorn Schlemmer",
+        "desc": "Rösti | Champignonsauce | Lauch | Glasierte Karotten",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 74.6,
+          "protein": 2.5,
+          "fat": 2.8,
+          "saturated": 0.4,
+          "carbs": 8.9,
+          "sugar": 2.3,
+          "salt": 0.65
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 7.9
+         },
+         {
+          "label": "INT",
+          "value": 10.9
+         },
+         {
+          "label": "EXT",
+          "value": 13.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "The Chef",
+        "dish": "Bifteki",
+        "desc": "Rindfleisch | Feta | Tomatenreis | Tzatziki | Stangensellerie | Peperoni | Knoblauch",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 129.1,
+          "protein": 6.2,
+          "fat": 6.0,
+          "saturated": 2.4,
+          "carbs": 12.0,
+          "sugar": 1.9,
+          "salt": 0.6
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 8.9
+         },
+         {
+          "label": "INT",
+          "value": 11.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "The Expert",
+        "dish": "Walliser Huftschnitzel",
+        "desc": "Schweinshuftschnitzel | Tomatem | Raclettekäse | Safranrisotto | Mangold",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 107.1,
+          "protein": 8.5,
+          "fat": 4.8,
+          "saturated": 1.8,
+          "carbs": 6.7,
+          "sugar": 1.0,
+          "salt": 0.94
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 12.5
+         },
+         {
+          "label": "INT",
+          "value": 14.5
+         },
+         {
+          "label": "EXT",
+          "value": 17.5
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
       "Dinner": []
      }
     },
@@ -18717,78 +17265,11 @@
      "name": "ETH Tannenbar",
      "group": "Central",
      "opening": {
-      "Lunch": "11:30 - 13:30",
+      "Lunch": null,
       "Dinner": null
      },
      "meals": {
-      "Lunch": [
-       {
-        "line": "World",
-        "dish": "Burrito Chili con carne",
-        "desc": "IP-SUISSE Rindfleisch | Cheddar | Mais | Rote Bohnen | Peperoni | Reis | Nachos | Sauerrahm | Salsa | Jalape..",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 140.1,
-          "protein": 7.1,
-          "fat": 5.2,
-          "saturated": 1.7,
-          "carbs": 15.0,
-          "sugar": 1.2,
-          "salt": 0.58
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "EXT",
-          "value": 14.5
-         },
-         {
-          "label": "INT",
-          "value": 9.9
-         },
-         {
-          "label": "STUD",
-          "value": 9.9
-         }
-        ],
-        "priceUnit": "Portion"
-       },
-       {
-        "line": "Green",
-        "dish": "Quesadilla Chili sin carne",
-        "desc": "Pflanzenhack | Cheddar | Mais | Rote Bohnen | Peperoni | Reis | Nachos | Sauerrahm | Salsa | Jalapenos",
-        "photo": "",
-        "nutrition": {
-         "p100": {
-          "kcal": 104.0,
-          "protein": 3.8,
-          "fat": 1.5,
-          "saturated": 0.4,
-          "carbs": 17.0,
-          "sugar": 1.8,
-          "salt": 0.58
-         },
-         "total": {}
-        },
-        "price": [
-         {
-          "label": "EXT",
-          "value": 14.5
-         },
-         {
-          "label": "INT",
-          "value": 9.9
-         },
-         {
-          "label": "STUD",
-          "value": 9.9
-         }
-        ],
-        "priceUnit": "Portion"
-       }
-      ],
+      "Lunch": [],
       "Dinner": []
      }
     },
@@ -19544,11 +18025,1543 @@
      "name": "ETH Flavour Kitchen",
      "group": "Irchel",
      "opening": {
+      "Lunch": "11:30 - 13:30",
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [
+       {
+        "line": "PASTA OF THE DAY",
+        "dish": "Pasta Carbonara",
+        "desc": "Speck | Rahmsauce | Schnittlauch | Speckchip",
+        "photo": "",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "INT&STUD",
+          "value": 14.0
+         },
+         {
+          "label": "EXT",
+          "value": 17.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "PLANTS & MORE",
+        "dish": "Lasagne E Ricotta E Spinaci",
+        "desc": "Ricotta | Spinat | Tomatensauce | Basilikum | Menü Salat",
+        "photo": "",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "INT&STUD",
+          "value": 14.0
+         },
+         {
+          "label": "EXT",
+          "value": 17.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "CLASSIC FLAVOUR",
+        "dish": "Coq au Vin Blanc",
+        "desc": "Pouletschenkel-Ragout | Reis | Leinsamen | Ratatouille",
+        "photo": "",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "INT&STUD",
+          "value": 14.0
+         },
+         {
+          "label": "EXT",
+          "value": 17.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "WEEKLY BOWL",
+        "dish": "Bella Italia Bowl",
+        "desc": "Venere Reis | Caponata Siciliana | Croutons | Knoblauch | Kräuter | Spinat | Mozzarella",
+        "photo": "",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "INT&STUD",
+          "value": 10.8
+         },
+         {
+          "label": "EXT",
+          "value": 13.5
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-untere-mensa",
+     "name": "Untere Mensa",
+     "group": "Central",
+     "opening": {
+      "Lunch": "11:00 - 14:30",
+      "Dinner": "17:00 - 19:00"
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-obere-mensa",
+     "name": "Obere Mensa",
+     "group": "Central",
+     "opening": {
+      "Lunch": "11:00 - 14:30",
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-lichthof",
+     "name": "Lichthof",
+     "group": "Central",
+     "opening": {
       "Lunch": null,
       "Dinner": null
      },
      "meals": {
       "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-mensa",
+     "name": "Mensa Irchel",
+     "group": "Irchel",
+     "opening": {
+      "Lunch": "11:00 - 14:00",
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-green-kitchen",
+     "name": "Green Kitchen Lab",
+     "group": "Irchel",
+     "opening": {
+      "Lunch": "11:00 - 14:00",
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-seerose",
+     "name": "Seerose",
+     "group": "Irchel",
+     "opening": {
+      "Lunch": "07:30 - 19:30",
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-binzmuehle",
+     "name": "Mensa Oerlikon",
+     "group": "Oerlikon",
+     "opening": {
+      "Lunch": "11:15 - 14:15",
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-cityport",
+     "name": "Cityport Mensa",
+     "group": "Other",
+     "opening": {
+      "Lunch": "09:00 - 14:30",
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-tierspital",
+     "name": "Tierspital Mensa",
+     "group": "Other",
+     "opening": {
+      "Lunch": "06:30 - 16:30",
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "uzh-botanischergarten",
+     "name": "Botanischer Garten",
+     "group": "Other",
+     "opening": {
+      "Lunch": "08:00 - 17:00",
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    }
+   ]
+  },
+  "2026-09-02": {
+   "mensas": [
+    {
+     "id": "eth-1",
+     "name": "ETH bQm",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-2",
+     "name": "ETH CafeBar",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-3",
+     "name": "ETH Clausiusbar",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-4",
+     "name": "ETH Kiosk CLA",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-5",
+     "name": "ETH Dozentenfoyer",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-6",
+     "name": "ETH Einstein & Zweistein",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-7",
+     "name": "ETH food&lab",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-8",
+     "name": "ETH Archimedes",
+     "group": "Central",
+     "opening": {
+      "Lunch": "11:00 - 14:00",
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [
+       {
+        "line": "The Gardener",
+        "dish": "Sona Dal",
+        "desc": "Spinat | Currysauce | Bulgur | Kokosranden | Naan Brot",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 134.3,
+          "protein": 4.4,
+          "fat": 3.8,
+          "saturated": 2.4,
+          "carbs": 19.0,
+          "sugar": 3.5,
+          "salt": 0.54
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 7.9
+         },
+         {
+          "label": "INT",
+          "value": 10.9
+         },
+         {
+          "label": "EXT",
+          "value": 13.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "The Chef",
+        "dish": "Poulet Sweet & Sour",
+        "desc": "Peperoni | Ananas | Basmatireis | Asia Gemüse",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 108.3,
+          "protein": 4.5,
+          "fat": 1.9,
+          "saturated": 0.1,
+          "carbs": 18.0,
+          "sugar": 2.4,
+          "salt": 1.04
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 8.9
+         },
+         {
+          "label": "INT",
+          "value": 11.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "The Expert",
+        "dish": "Appenzeller Chääshörnli",
+        "desc": "Appenzellerkäse | Zwiebelschweize | Apfelschnitze | Peterli | Salat",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 168.5,
+          "protein": 4.9,
+          "fat": 11.0,
+          "saturated": 4.8,
+          "carbs": 13.0,
+          "sugar": 1.8,
+          "salt": 0.33
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 11.5
+         },
+         {
+          "label": "INT",
+          "value": 13.5
+         },
+         {
+          "label": "EXT",
+          "value": 16.5
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-9",
+     "name": "ETH Mensa Polyterrasse",
+     "group": "Central",
+     "opening": {
+      "Lunch": "11:15 - 13:30",
+      "Dinner": "17:30 - 19:30"
+     },
+     "meals": {
+      "Lunch": [
+       {
+        "line": "STREET",
+        "dish": "The Smoky Bacon Burger",
+        "desc": "Rind oder Vegi-Grillburger | Cheddar | Bacon | Smoky Relish | Lattich | Sesam Bun | Texas Pommes",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 209.6,
+          "protein": 8.8,
+          "fat": 9.8,
+          "saturated": 3.0,
+          "carbs": 20.0,
+          "sugar": 2.4,
+          "salt": 1.37
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "EXT",
+          "value": 18.5
+         },
+         {
+          "label": "INT",
+          "value": 14.5
+         },
+         {
+          "label": "STUD",
+          "value": 12.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "GARDEN",
+        "dish": "Dal aus gelben Erbsen",
+        "desc": "Currysauce | Spinat | Bulgur | Kokosranden | Naan Brot",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 112.3,
+          "protein": 3.6,
+          "fat": 3.3,
+          "saturated": 2.2,
+          "carbs": 15.0,
+          "sugar": 3.8,
+          "salt": 0.34
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "EXT",
+          "value": 14.5
+         },
+         {
+          "label": "INT",
+          "value": 11.5
+         },
+         {
+          "label": "STUD",
+          "value": 7.0
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "HOME",
+        "dish": "Poulet Frühlingsrollen",
+        "desc": "Sweet-Chili Sauce | Gebratener Reis",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 152.7,
+          "protein": 4.5,
+          "fat": 4.2,
+          "saturated": 0.7,
+          "carbs": 23.0,
+          "sugar": 7.9,
+          "salt": 2.02
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "EXT",
+          "value": 15.5
+         },
+         {
+          "label": "INT",
+          "value": 12.5
+         },
+         {
+          "label": "STUD",
+          "value": 8.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Hot & Cold 100g",
+        "dish": "Hot & Cold Buffet",
+        "desc": "Reichhaltiges Salatbuffet und zusätzlich warme Komponenten - Gesund und Lecker!",
+        "photo": "",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "EXT",
+          "value": 3.2
+         },
+         {
+          "label": "INT",
+          "value": 2.4
+         },
+         {
+          "label": "STUD",
+          "value": 2.2
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
+      "Dinner": [
+       {
+        "line": "STREET ABEND",
+        "dish": "Lasagne Emiliana",
+        "desc": "Rindshackfleisch | Bechamel | Tomaten | Basilikumpesto",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 139.6,
+          "protein": 6.4,
+          "fat": 7.3,
+          "saturated": 2.2,
+          "carbs": 11.0,
+          "sugar": 3.1,
+          "salt": 0.64
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "EXT",
+          "value": 15.9
+         },
+         {
+          "label": "INT",
+          "value": 11.9
+         },
+         {
+          "label": "STUD",
+          "value": 9.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "GARDEN ABEND",
+        "dish": "Beyond Bratwurst",
+        "desc": "Zwiebelsauce | Ofen Kartoffeln | Karotten-Rotkabis Salat",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 109.2,
+          "protein": 4.9,
+          "fat": 5.8,
+          "saturated": 0.6,
+          "carbs": 10.0,
+          "sugar": 1.5,
+          "salt": 0.93
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "EXT",
+          "value": 14.5
+         },
+         {
+          "label": "INT",
+          "value": 11.5
+         },
+         {
+          "label": "STUD",
+          "value": 7.0
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "HOME ABEND",
+        "dish": "Festbratwurst",
+        "desc": "Schweinsbratwurst | Zwiebelsauce | Ofen Kartoffeln | Karotten-Rotkabis Salat",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 130.0,
+          "protein": 4.9,
+          "fat": 8.3,
+          "saturated": 2.3,
+          "carbs": 10.0,
+          "sugar": 1.5,
+          "salt": 0.97
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "EXT",
+          "value": 15.5
+         },
+         {
+          "label": "INT",
+          "value": 12.5
+         },
+         {
+          "label": "STUD",
+          "value": 8.5
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ]
+     }
+    },
+    {
+     "id": "eth-10",
+     "name": "ETH Polysnack",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-11",
+     "name": "ETH Tannenbar",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-12",
+     "name": "ETH Eureka Take Away",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-13",
+     "name": "ETH Zwei Grad Bistro",
+     "group": "Central",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-14",
+     "name": "ETH Alumni quattro Lounge",
+     "group": "Central",
+     "opening": {
+      "Lunch": "11:00 - 14:00",
+      "Dinner": "14:00 - 19:00"
+     },
+     "meals": {
+      "Lunch": [
+       {
+        "line": "Classic Pot",
+        "dish": "G'hacktes mit Hörnli",
+        "desc": "Rindsgehacktes | Hörnli | Apfelmus | Extrahartkäse",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/72219?client-id=ethz-wcms",
+        "nutrition": {
+         "p100": {
+          "kcal": 141.5,
+          "protein": 6.1,
+          "fat": 3.2,
+          "saturated": 1.5,
+          "carbs": 21.0,
+          "sugar": 3.5,
+          "salt": 0.36
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 8.5
+         },
+         {
+          "label": "INT",
+          "value": 10.5
+         },
+         {
+          "label": "EXT",
+          "value": 14.5
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
+      "Dinner": [
+       {
+        "line": "Classic Pot Abend",
+        "dish": "G'hacktes mit Hörnli Vegan",
+        "desc": "Sojagehacktes | Hörnli | Apfelmus | veganer Käse",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/72220?client-id=ethz-wcms",
+        "nutrition": {
+         "p100": {
+          "kcal": 125.7,
+          "protein": 4.6,
+          "fat": 1.4,
+          "saturated": 0.7,
+          "carbs": 23.0,
+          "sugar": 3.5,
+          "salt": 0.58
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 8.5
+         },
+         {
+          "label": "INT",
+          "value": 10.5
+         },
+         {
+          "label": "EXT",
+          "value": 14.5
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ]
+     }
+    },
+    {
+     "id": "eth-15",
+     "name": "ETH Bellavista",
+     "group": "Hoengg",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-16",
+     "name": "ETH Mendokoro",
+     "group": "Hoengg",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-19",
+     "name": "ETH food market",
+     "group": "Irchel",
+     "opening": {
+      "Lunch": "11:15 - 13:45",
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [
+       {
+        "line": "Fire",
+        "dish": "Buffalo Chicken Wings",
+        "desc": "Butter Chili Sauce | Western Reis - Zucchetti | Peperoni | Artischocken",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 186.2,
+          "protein": 11.0,
+          "fat": 11.0,
+          "saturated": 3.6,
+          "carbs": 9.9,
+          "sugar": 1.6,
+          "salt": 1.16
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "EXT",
+          "value": 15.5
+         },
+         {
+          "label": "INT",
+          "value": 12.5
+         },
+         {
+          "label": "STUD",
+          "value": 8.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Grill",
+        "dish": "Cowboy Burger",
+        "desc": "Rindfleisch | Speck | BBQ Sauce | Cheddar | Lattich | Jalapenos | Country Cuts",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 183.3,
+          "protein": 8.1,
+          "fat": 8.0,
+          "saturated": 3.0,
+          "carbs": 19.0,
+          "sugar": 4.2,
+          "salt": 1.17
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "EXT",
+          "value": 18.5
+         },
+         {
+          "label": "INT",
+          "value": 15.5
+         },
+         {
+          "label": "STUD",
+          "value": 12.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Green Daily",
+        "dish": "Thai Laab",
+        "desc": "Pflanzenhack | Gurken | Zwiebeln | Koriander | Thai Basilikum | Minze | Eisbergsalat | Jasminreis",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 111.1,
+          "protein": 6.3,
+          "fat": 1.3,
+          "saturated": 0.2,
+          "carbs": 17.0,
+          "sugar": 1.4,
+          "salt": 1.37
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "EXT",
+          "value": 14.5
+         },
+         {
+          "label": "INT",
+          "value": 11.5
+         },
+         {
+          "label": "STUD",
+          "value": 7.0
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Green Delight",
+        "dish": "Choose 5",
+        "desc": "Wähle 5 Komponenten heiss oder kalt",
+        "photo": "",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "EXT",
+          "value": 16.9
+         },
+         {
+          "label": "INT",
+          "value": 13.9
+         },
+         {
+          "label": "STUD",
+          "value": 9.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Pizza Classica",
+        "dish": "Pizza Margherita",
+        "desc": "Salat oder Lemonade",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 199.1,
+          "protein": 10.0,
+          "fat": 6.2,
+          "saturated": 3.1,
+          "carbs": 25.0,
+          "sugar": 1.2,
+          "salt": 1.16
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "EXT",
+          "value": 14.5
+         },
+         {
+          "label": "INT",
+          "value": 11.5
+         },
+         {
+          "label": "STUD",
+          "value": 7.0
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Pizza Mamma Mia",
+        "dish": "Pizza Greek Style",
+        "desc": "Schweinsgeschnetzeltes | Gyrosgewürz | Tzatziki | Petersilie | Salat oder Lemonade",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 191.4,
+          "protein": 11.0,
+          "fat": 7.3,
+          "saturated": 2.9,
+          "carbs": 20.0,
+          "sugar": 1.2,
+          "salt": 1.21
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "EXT",
+          "value": 17.5
+         },
+         {
+          "label": "INT",
+          "value": 14.5
+         },
+         {
+          "label": "STUD",
+          "value": 11.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Pasta Classica",
+        "dish": "Giouvetsi",
+        "desc": "Rindfleisch | Reisnudeln | Tomaten | Stangensellerie | Salat oder Lemonade",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 78.6,
+          "protein": 7.7,
+          "fat": 1.2,
+          "saturated": 0.3,
+          "carbs": 10.0,
+          "sugar": 1.9,
+          "salt": 0.42
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "EXT",
+          "value": 15.5
+         },
+         {
+          "label": "INT",
+          "value": 12.5
+         },
+         {
+          "label": "STUD",
+          "value": 8.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Pasta della Nonna",
+        "dish": "Pastizio",
+        "desc": "Makkaroni | Rindshackfleisch | Bechamel | Ei | Reibkäse | Salat oder Lemonade",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 132.6,
+          "protein": 6.7,
+          "fat": 4.9,
+          "saturated": 1.6,
+          "carbs": 14.0,
+          "sugar": 1.7,
+          "salt": 0.47
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "EXT",
+          "value": 16.5
+         },
+         {
+          "label": "INT",
+          "value": 13.5
+         },
+         {
+          "label": "STUD",
+          "value": 9.5
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-20",
+     "name": "ETH FUSION meal",
+     "group": "Hoengg",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-22",
+     "name": "ETH Rice Up!",
+     "group": "Hoengg",
+     "opening": {
+      "Lunch": "11:00 - 14:00",
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [
+       {
+        "line": "Rice Up! Bowl",
+        "dish": "Rice Up! Bowl",
+        "desc": "Jasmine Rice | Poulet-Bällchen | Broccoli | Grünes Curry | Asia Krautsalat | Kräutersalat | Saison Topping",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/71794?client-id=ethz-wcms",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 8.9
+         },
+         {
+          "label": "INT",
+          "value": 13.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Tofu Cashew Bowl",
+        "dish": "Tofu Cashew Bowl",
+        "desc": "Roter Reis | Marinierter Tofu | Saison Gemüse | Satay Sauce | Asia Krautsalat | Kräutersalat | Saison Topping",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/71795?client-id=ethz-wcms",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 9.9
+         },
+         {
+          "label": "INT",
+          "value": 14.9
+         },
+         {
+          "label": "EXT",
+          "value": 15.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Chicken Satay Bowl",
+        "dish": "Chicken Satay Bowl",
+        "desc": "Reisnudeln | Gegrilltes Poulet Satay | Grüne Bohnen | Rotes Curry | Asia Krautsalat | Kräutersalat | Thai Chilli",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/71796?client-id=ethz-wcms",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 10.9
+         },
+         {
+          "label": "INT",
+          "value": 15.9
+         },
+         {
+          "label": "EXT",
+          "value": 16.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Planted Bowl",
+        "dish": "Planted Bowl",
+        "desc": "Salatmischung | Planted Chicken Teriyaki | Sweet Corn | Tamarinden Sauce | Asia Kräutersalat | Erdnüsse",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/71797?client-id=ethz-wcms",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 10.9
+         },
+         {
+          "label": "INT",
+          "value": 15.9
+         },
+         {
+          "label": "EXT",
+          "value": 16.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Grilled Shrimps",
+        "dish": "Grilled Shrimps Bowl",
+        "desc": "Jasmine Rice | Grilled Shrimps | Broccoli | rotes Curry | Asia Krautsalat | Kräutersalat | Puffed Rice",
+        "photo": "https://idapps.ethz.ch/cookpit-pub-services/v1/images/71798?client-id=ethz-wcms",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "STUD",
+          "value": 11.9
+         },
+         {
+          "label": "INT",
+          "value": 16.9
+         },
+         {
+          "label": "EXT",
+          "value": 17.9
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-23",
+     "name": "ETH Octavo",
+     "group": "Oerlikon",
+     "opening": {
+      "Lunch": "11:30 - 13:30",
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [
+       {
+        "line": "Eins",
+        "dish": "Pulled Beef Black Angus",
+        "desc": "Tacos | Avocado | Mango | Chili | BBQ-Honig-Dip | Jasminreis | Pico de Gallo | Beilagensalat",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 139.3,
+          "protein": 4.0,
+          "fat": 6.1,
+          "saturated": 1.0,
+          "carbs": 22.0,
+          "sugar": 2.7,
+          "salt": 1.03
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "INT&STUD",
+          "value": 16.5
+         },
+         {
+          "label": "EXT",
+          "value": 18.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Zwei",
+        "dish": "Augustiner Schüblig",
+        "desc": "Vollkornsenfsauce | Polenta | Grüne Bohnen | Beilagensalat",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 115.0,
+          "protein": 5.7,
+          "fat": 7.2,
+          "saturated": 2.5,
+          "carbs": 6.8,
+          "sugar": 1.0,
+          "salt": 1.17
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "INT&STUD",
+          "value": 12.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Drei",
+        "dish": "Cappelletti",
+        "desc": "Funghi | Steinpilz Rahm Sauce | Pilze | Reibkäse | Rucola | Beilagensalat",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 148.9,
+          "protein": 6.4,
+          "fat": 5.8,
+          "saturated": 1.6,
+          "carbs": 17.0,
+          "sugar": 0.8,
+          "salt": 1.22
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "INT&STUD",
+          "value": 12.9
+         },
+         {
+          "label": "EXT",
+          "value": 14.9
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Vier",
+        "dish": "Bowl4You",
+        "desc": "„Gestalten Sie Ihre Bowl ganz nach Ihrem Geschmack.“",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 75.8,
+          "protein": 1.0,
+          "fat": 7.3,
+          "saturated": 0.8,
+          "carbs": 1.6,
+          "sugar": 1.4,
+          "salt": 0.6
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "INT&STUD",
+          "value": 3.2
+         },
+         {
+          "label": "EXT",
+          "value": 3.8
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "5uppe",
+        "dish": "Tagessuppe",
+        "desc": "Tagessuppe lt. Chef",
+        "photo": "",
+        "nutrition": {
+         "p100": {
+          "kcal": 15.5,
+          "protein": 0.5,
+          "fat": 0.1,
+          "carbs": 2.6,
+          "sugar": 1.8,
+          "salt": 0.62
+         },
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "INT&STUD",
+          "value": 3.5
+         },
+         {
+          "label": "EXT",
+          "value": 4.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "Kaffeebar",
+        "dish": "TINYFISH @ Octavo",
+        "desc": "Sushi ab 10.50 CHF an der Kaffeebar",
+        "photo": "",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "INT&STUD",
+          "value": 10.5
+         },
+         {
+          "label": "EXT",
+          "value": 10.5
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-27",
+     "name": "ETH Science Lounge",
+     "group": "Irchel",
+     "opening": {
+      "Lunch": null,
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [],
+      "Dinner": []
+     }
+    },
+    {
+     "id": "eth-28",
+     "name": "ETH Flavour Kitchen",
+     "group": "Irchel",
+     "opening": {
+      "Lunch": "11:30 - 13:30",
+      "Dinner": null
+     },
+     "meals": {
+      "Lunch": [
+       {
+        "line": "PASTA OF THE DAY",
+        "dish": "Pasta Edamame",
+        "desc": "Edamame Pesto | Shiitake | Kefen | Kresse",
+        "photo": "",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "INT&STUD",
+          "value": 14.0
+         },
+         {
+          "label": "EXT",
+          "value": 17.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "PLANTS & MORE",
+        "dish": "Stroganoff",
+        "desc": "Luyageschnetzeltes | Peperoni | Champignons | Spätzli | Rosenkohl | La Fraiche",
+        "photo": "",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "INT&STUD",
+          "value": 14.0
+         },
+         {
+          "label": "EXT",
+          "value": 17.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "CLASSIC FLAVOUR",
+        "dish": "Schweinsbratwurst",
+        "desc": "Zwiebelsauce | Rösti | Haselnuss-Schwarzwurzeln",
+        "photo": "",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "INT&STUD",
+          "value": 14.0
+         },
+         {
+          "label": "EXT",
+          "value": 17.5
+         }
+        ],
+        "priceUnit": "Portion"
+       },
+       {
+        "line": "WEEKLY BOWL",
+        "dish": "Udon-tantanmen",
+        "desc": "Erbsen-Hack | pikante Miso-Rahmsuppe | Rosenkohl | Karotten | Udonnudeln",
+        "photo": "",
+        "nutrition": {
+         "p100": {},
+         "total": {}
+        },
+        "price": [
+         {
+          "label": "INT&STUD",
+          "value": 10.8
+         },
+         {
+          "label": "EXT",
+          "value": 13.5
+         }
+        ],
+        "priceUnit": "Portion"
+       }
+      ],
       "Dinner": []
      }
     },
@@ -19686,7 +19699,6 @@
   }
  },
  "availableDates": [
-  "2026-08-18",
   "2026-08-19",
   "2026-08-20",
   "2026-08-21",
@@ -19700,6 +19712,7 @@
   "2026-08-29",
   "2026-08-30",
   "2026-08-31",
-  "2026-09-01"
+  "2026-09-01",
+  "2026-09-02"
  ]
 }

@@ -1,24 +1,56 @@
-name: Daily Menu Fetch
+name: Build and deploy daily menus
 
 on:
   schedule:
     - cron: '0 4 * * *'  # 04:00 UTC
   workflow_dispatch:
+    inputs:
+      allow_empty_today:
+        description: Allow an empty weekday menu for a known holiday or closure
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
-  fetch:
+  build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
+      pages: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Fetch menus
         run: python3 menu.py
-      - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Verify generated menu data
+        env:
+          ALLOW_EMPTY_TODAY: ${{ inputs.allow_empty_today || 'false' }}
+        run: |
+          args=()
+          if [ "$ALLOW_EMPTY_TODAY" = "true" ]; then
+            args+=(--allow-empty-today)
+          fi
+          python3 scripts/verify-menu-data.py output/data.json "${args[@]}"
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./output
-          publish_branch: gh-pages
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
+          path: ./output
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

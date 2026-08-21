@@ -22,6 +22,7 @@ Static site: no tracking.
 - [CONTRACT.md](CONTRACT.md) — `data.json` schema, DOM class contract, and the animation contract
 - [AGENTS.md](AGENTS.md) — mandatory rules for any agent/human editing this repo (animation architecture, prohibitions, workflow)
 - `scripts/verify-anim-contract.py` — machine-checkable animation contract; run after any frontend change
+- `scripts/verify-menu-data.py` — deployment guard for the generated menu data
 
 ## Data sources
 
@@ -52,8 +53,9 @@ template/
   app.js                    Selection state, date picker, groups, settings, rendering
 scripts/
   verify-anim-contract.py   Machine-checkable animation contract; run after frontend changes
+  verify-menu-data.py       Blocks malformed or unexpectedly empty weekday data
 .github/workflows/
-  menu.yml                  Daily cron + manual dispatch, deploys to gh-pages
+  menu.yml                  Daily cron + manual dispatch, builds and deploys a Pages artifact
 AGENTS.md                   Rules for any agent or human editing this repo
 CONTRACT.md                 data.json schema, DOM class contract, animation contract
 ```
@@ -77,7 +79,15 @@ Open <http://localhost:8000>.
 
 ## Deployment
 
-GitHub Actions runs `menu.py` on a cron schedule (04:00 UTC) and deploys `output/` to the `gh-pages` branch with [peaceiris/actions-gh-pages](https://github.com/peaceiris/actions-gh-pages). You can also trigger it manually from the Actions tab.
+GitHub Actions runs `menu.py` on a cron schedule (04:00 UTC), validates
+`output/data.json`, uploads `output/` as a GitHub Pages artifact, and deploys
+that artifact. The workflow has read-only repository access while it builds;
+only the separate deployment job can publish to Pages.
+
+In **Settings → Pages**, set the publishing source to **GitHub Actions** once
+before using this workflow. A weekday result with no dishes is blocked before
+deployment. For a known holiday or closure, use **Run workflow** and enable
+`allow_empty_today` to publish the intentionally empty menu.
 
 ## License
 

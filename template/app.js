@@ -537,30 +537,32 @@ function animateEnter(node) {
     node.style.height = h + 'px';
     node.style.paddingTop = '';
     node.style.paddingBottom = '';
-    node.style.overflow = '';
-    // Drop the inline height once grown so layout stays responsive.
-    const onEnd = (e) => {
-      if (e.propertyName === 'height') {
-        node.style.height = '';
-        node.style.transition = '';
-        delete node.dataset.entering;
-        node.removeEventListener('transitionend', onEnd);
-        if (node._enterTimer) { clearTimeout(node._enterTimer); node._enterTimer = null; }
-      }
+    // Keep the node clipped for the complete grow. Releasing overflow in
+    // this frame exposes its full child content while the outer height is
+    // still 0, which reads as an instant meal replacement instead of an
+    // enter transition.
+    const finishEnter = () => {
+      if (!node._enterEnd) return;
+      node.removeEventListener('transitionend', node._enterEnd);
+      node._enterEnd = null;
+      if (node._enterTimer) { clearTimeout(node._enterTimer); node._enterTimer = null; }
+      // Drop the inline sizing only once growth has completed so layout
+      // stays responsive without ever leaving content clipped.
+      node.style.height = '';
+      node.style.overflow = '';
+      node.style.transition = '';
+      delete node.dataset.entering;
     };
+    const onEnd = (e) => {
+      if (e.target === node && e.propertyName === 'height') finishEnter();
+    };
+    node._enterEnd = onEnd;
     node.addEventListener('transitionend', onEnd);
     // Fallback: transitionend may never fire (interrupted transition,
-    // background tab) — clear the enter state anyway (same pattern as
-    // animateExit / glide / expandBody). The timeout scales with the
-    // transition duration so it can never fire mid-grow.
-    node._enterTimer = setTimeout(() => {
-      if (node.dataset.entering) {
-        node.style.height = '';
-        node.style.transition = '';
-        node.style.overflow = '';
-        delete node.dataset.entering;
-      }
-    }, dur + 150); // transitionend is the normal path
+    // background tab) — run the same cleanup so overflow cannot remain
+    // pinned. The timeout scales with the transition duration, so it
+    // cannot fire mid-grow.
+    node._enterTimer = setTimeout(finishEnter, dur + 150);
   });
 }
 
@@ -578,8 +580,13 @@ function animateExit(node) {
   if (node.dataset.exiting) return; // already exiting — let it finish
   if (node.dataset.entering) {
     // An entering node is being removed (rapid toggling): hand over to
-    // the exit cleanly — the enter timer/state must not linger.
+    // the exit cleanly — neither the enter timer nor its height-end
+    // listener may later release this exit's clipping mid-shrink.
     if (node._enterTimer) { clearTimeout(node._enterTimer); node._enterTimer = null; }
+    if (node._enterEnd) {
+      node.removeEventListener('transitionend', node._enterEnd);
+      node._enterEnd = null;
+    }
     delete node.dataset.entering;
   }
   if (!animationsAllowed()) { node.remove(); return; }

@@ -218,15 +218,22 @@ check("glide target includes photos (applyPhotos before newH, fresh at natural h
       "delete dishEl.dataset.fresh" in JS)
 
 print("== C2. enter/exit symmetry (pipeline default, not per-feature) ==")
+enter_sec = JS[JS.index("function animateEnter"):JS.index("function animateExit")]
 check("animateEnter exists and grows from 0 height",
       "function animateEnter(node)" in JS and
-      "node.style.height = '0'" in JS[JS.index("function animateEnter"):JS.index("function reconcileChildren")])
+      "node.style.height = '0'" in enter_sec)
+check("enter keeps overflow clipped through grow, then restores it on end/fallback",
+      "node.style.overflow = 'hidden';" in enter_sec and
+      "const finishEnter = () => {" in enter_sec and
+      "node.style.overflow = '';" in enter_sec and
+      "if (e.target === node && e.propertyName === 'height') finishEnter();" in enter_sec and
+      "setTimeout(finishEnter, dur + 150)" in enter_sec)
 check("reconcileChildren calls animateEnter for added nodes",
       "animateEnter(node)" in JS[JS.index("function reconcileChildren"):JS.index("function updatePhotoToggle")])
 check("nested-enter guard (closest data-entering)",
       "closest('[data-entering]')" in JS)
 check("no per-feature enter fades elsewhere",
-      "opacity" not in JS[JS.index("function animateEnter"):JS.index("function reconcileChildren")])
+      "opacity" not in enter_sec)
 # Deferred removal (AnimatePresence / Vue TransitionGroup "leave" hook):
 # removed nodes shrink to 0 height first, then are physically removed —
 # siblings slide up during the shrink (no jump); a key that reappears
@@ -258,7 +265,6 @@ check("enter/exit duration scales with node height (expandDuration)",
       "const dur = expandDuration(node, h)" in exit_sec and
       "dur + 150" in exit_sec and
       "dur + 150" in JS[JS.index("function animateEnter"):JS.index("function animateExit")])
-enter_sec = JS[JS.index("function animateEnter"):JS.index("function animateExit")]
 check("animateEnter scales duration + symmetric curve (no fixed .45s)",
       "expandDuration(node, h)" in enter_sec and
       "'height ' + dur + 'ms ' + ENTER_EXIT_EASE" in enter_sec and
@@ -307,7 +313,9 @@ check("enter state has fallback timer (transitionend may never fire)",
       "_enterTimer = setTimeout" in JS and
       "clearTimeout(node._enterTimer)" in JS)
 check("animateExit takes over entering nodes cleanly (rapid toggles)",
-      "delete node.dataset.entering" in JS[JS.index("function animateExit"):JS.index("function reviveExit")])
+      "delete node.dataset.entering" in JS[JS.index("function animateExit"):JS.index("function reviveExit")] and
+      "node.removeEventListener('transitionend', node._enterEnd);" in
+      JS[JS.index("function animateExit"):JS.index("function reviveExit")])
 check("closing photo revived on reopen (photoClosing guard)",
       "img.dataset.photoClosing" in JS and
       "delete img.dataset.photoClosing" in JS and
